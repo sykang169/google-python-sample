@@ -19,17 +19,19 @@ Google ADK (Agent Development Kit)를 활용한 한국 금융 데이터 분석 A
 |----------|------|----------|--------|-----------|----------|
 | **[DART Analytics](./dart_analytics/)** | 한국 기업 공시 데이터 분석 | 단일 에이전트 | ⭐⭐⭐ | DART API, XBRL, SQLite | [📖 가이드](./dart_analytics/README.md) |
 | **[ECOS Analytics](./ecos_analytics/)** | 한국은행 경제통계 분석 | 단일 에이전트 | ⭐⭐☆ | ECOS API, 시계열 분석 | [📖 가이드](./ecos_analytics/README.md) |
+| **[Stock Analytics](./stock_analytics/)** | 금융위원회 주식시세 분석 | 단일 에이전트 | ⭐⭐☆ | Stock API, SSL 호환성 | [📖 가이드](./stock_analytics/README.md) |
 | **[Financial Advisor](./financial_advisor/)** | 멀티 에이전트 금융 자문 | 멀티 에이전트 | ⭐⭐⭐⭐ | Google Search, AgentTool | [📖 가이드](./financial_advisor/README.md) |
 
 ### 🔧 기술 스택 비교
 
-| 기술 요소 | DART Analytics | ECOS Analytics | Financial Advisor |
-|-----------|----------------|----------------|-------------------|
-| **Gemini 모델** | 2.5-pro, 2.5-flash | 2.5-pro | 2.5-pro |
-| **데이터 소스** | 금융감독원 API | 한국은행 API | Google Search |
-| **캐싱 전략** | SQLite + 메모리 | 기본 캐싱 | 상태 관리 |
-| **문서 처리** | XBRL, XML, ZIP | JSON | 없음 |
-| **에이전트 수** | 1개 | 1개 | 5개 (1+4) |
+| 기술 요소 | DART Analytics | ECOS Analytics | Stock Analytics | Financial Advisor |
+|-----------|----------------|----------------|-----------------|-------------------|
+| **Gemini 모델** | 2.5-pro, 2.5-flash | 2.5-pro | 2.5-flash | 2.5-pro |
+| **데이터 소스** | 금융감독원 API | 한국은행 API | 금융위원회 API | Google Search |
+| **캐싱 전략** | SQLite + 메모리 | 기본 캐싱 | 없음 | 상태 관리 |
+| **문서 처리** | XBRL, XML, ZIP | JSON | JSON/XML | 없음 |
+| **특수 기술** | XBRL 파싱 | 통계 분석 | SSL 호환성 | 멀티 에이전트 |
+| **에이전트 수** | 1개 | 1개 | 1개 | 5개 (1+4) |
 
 ## 🚀 빠른 시작
 
@@ -61,6 +63,9 @@ adk run dart_analytics
 # ECOS 에이전트  
 adk run ecos_analytics
 
+# Stock 에이전트
+adk run stock_analytics
+
 # Financial Advisor (멀티 에이전트)
 adk run financial_advisor
 ```
@@ -71,6 +76,7 @@ adk run financial_advisor
 |-----|------|--------|-----------|
 | **DART API** | 한국 기업 공시 데이터 | [DART 홈페이지](https://opendart.fss.or.kr) | DART/Financial Advisor |
 | **ECOS API** | 한국은행 경제통계 | [ECOS 홈페이지](https://ecos.bok.or.kr) | ECOS |
+| **STOCK API** | 금융위원회 주식시세 | [공공데이터포털](https://www.data.go.kr/data/15094808/openapi.do) | Stock Analytics |
 | **Google AI** | Gemini 모델 사용 | [AI Studio](https://aistudio.google.com) | 모든 에이전트 |
 
 ## 📚 학습 경로 추천
