@@ -1,0 +1,677 @@
+openapi: 3.0.0
+info:
+  title: 금융위원회 주식시세정보 OpenAPI 서비스 명세서
+  description: |
+    금융위원회에서 제공하는 주식 및 증권 시세정보 조회 API입니다.
+    KOSPI, KOSDAQ, KONEX 시장의 주식 및 증권 정보를 제공합니다.
+  version: 1.0.0
+servers:
+  - url: https://apis.data.go.kr/1160100/service/GetStockSecuritiesInfoService
+    description: 금융위원회 주식시세정보 OpenAPI 기본 URL
+
+paths:
+  /getStockPriceInfo:
+    get:
+      summary: 주식시세정보 조회
+      description: |
+        KOSPI, KOSDAQ, KONEX 시장의 주식 시세정보를 조회합니다.
+        일자별, 종목별로 주식의 시가, 고가, 저가, 종가, 거래량 등의 정보를 제공합니다.
+      operationId: get_stock_price_info
+      parameters:
+        - name: serviceKey
+          in: query
+          description: "공공데이터포털에서 받은 인증키"
+          required: true
+          schema:
+            type: string
+        - name: numOfRows
+          in: query
+          description: "한 페이지 결과 수 (기본값: 10, 최대: 100)"
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+        - name: pageNo
+          in: query
+          description: "페이지 번호 (기본값: 1)"
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: resultType
+          in: query
+          description: "결과 형식 (XML 또는 JSON, 기본값: XML)"
+          required: false
+          schema:
+            type: string
+            enum: [XML, JSON]
+            default: XML
+        - name: basDt
+          in: query
+          description: "기준일자 (YYYYMMDD 형식)"
+          required: false
+          schema:
+            type: string
+            pattern: '^[0-9]{8}$'
+        - name: beginBasDt
+          in: query
+          description: "시작 기준일자 (YYYYMMDD 형식)"
+          required: false
+          schema:
+            type: string
+            pattern: '^[0-9]{8}$'
+        - name: endBasDt
+          in: query
+          description: "종료 기준일자 (YYYYMMDD 형식)"
+          required: false
+          schema:
+            type: string
+            pattern: '^[0-9]{8}$'
+        - name: isinCd
+          in: query
+          description: "ISIN 코드 (예: KR7005930003)"
+          required: false
+          schema:
+            type: string
+        - name: itmsNm
+          in: query
+          description: "종목명 (예: 삼성전자)"
+          required: false
+          schema:
+            type: string
+        - name: mrktCtg
+          in: query
+          description: "시장구분 (KOSPI/KOSDAQ/KONEX)"
+          required: false
+          schema:
+            type: string
+            enum: [KOSPI, KOSDAQ, KONEX]
+      responses:
+        "200":
+          description: 성공적인 주식시세정보 조회
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockPriceInfoResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/StockPriceInfoResponse'
+        "default":
+          description: 오류 응답
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /getSecuritiesPriceInfo:
+    get:
+      summary: 증권시세정보 조회
+      description: |
+        각종 증권(채권, 파생상품 등)의 시세정보를 조회합니다.
+      operationId: get_securities_price_info
+      parameters:
+        - name: serviceKey
+          in: query
+          description: "공공데이터포털에서 받은 인증키"
+          required: true
+          schema:
+            type: string
+        - name: numOfRows
+          in: query
+          description: "한 페이지 결과 수 (기본값: 10, 최대: 100)"
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+        - name: pageNo
+          in: query
+          description: "페이지 번호 (기본값: 1)"
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: resultType
+          in: query
+          description: "결과 형식 (XML 또는 JSON, 기본값: XML)"
+          required: false
+          schema:
+            type: string
+            enum: [XML, JSON]
+            default: XML
+        - name: basDt
+          in: query
+          description: "기준일자 (YYYYMMDD 형식)"
+          required: false
+          schema:
+            type: string
+            pattern: '^[0-9]{8}$'
+        - name: beginBasDt
+          in: query
+          description: "시작 기준일자 (YYYYMMDD 형식)"
+          required: false
+          schema:
+            type: string
+            pattern: '^[0-9]{8}$'
+        - name: endBasDt
+          in: query
+          description: "종료 기준일자 (YYYYMMDD 형식)"
+          required: false
+          schema:
+            type: string
+            pattern: '^[0-9]{8}$'
+        - name: isinCd
+          in: query
+          description: "ISIN 코드"
+          required: false
+          schema:
+            type: string
+        - name: itmsNm
+          in: query
+          description: "종목명"
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: 성공적인 증권시세정보 조회
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecuritiesPriceInfoResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SecuritiesPriceInfoResponse'
+        "default":
+          description: 오류 응답
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /getPreemptiveRightSecuritiesPriceInfo:
+    get:
+      summary: 신주인수권 증권 시세정보 조회
+      description: |
+        신주인수권 증권의 시세정보를 조회합니다.
+      operationId: get_preemptive_right_securities_price_info
+      parameters:
+        - name: serviceKey
+          in: query
+          description: "공공데이터포털에서 받은 인증키"
+          required: true
+          schema:
+            type: string
+        - name: numOfRows
+          in: query
+          description: "한 페이지 결과 수 (기본값: 10, 최대: 100)"
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+        - name: pageNo
+          in: query
+          description: "페이지 번호 (기본값: 1)"
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: resultType
+          in: query
+          description: "결과 형식 (XML 또는 JSON, 기본값: XML)"
+          required: false
+          schema:
+            type: string
+            enum: [XML, JSON]
+            default: XML
+        - name: basDt
+          in: query
+          description: "기준일자 (YYYYMMDD 형식)"
+          required: false
+          schema:
+            type: string
+            pattern: '^[0-9]{8}$'
+        - name: beginBasDt
+          in: query
+          description: "시작 기준일자 (YYYYMMDD 형식)"
+          required: false
+          schema:
+            type: string
+            pattern: '^[0-9]{8}$'
+        - name: endBasDt
+          in: query
+          description: "종료 기준일자 (YYYYMMDD 형식)"
+          required: false
+          schema:
+            type: string
+            pattern: '^[0-9]{8}$'
+        - name: isinCd
+          in: query
+          description: "ISIN 코드"
+          required: false
+          schema:
+            type: string
+        - name: itmsNm
+          in: query
+          description: "종목명"
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: 성공적인 신주인수권 증권 시세정보 조회
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PreemptiveRightSecuritiesPriceInfoResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PreemptiveRightSecuritiesPriceInfoResponse'
+        "default":
+          description: 오류 응답
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /getPreemptiveRightCertificatePriceInfo:
+    get:
+      summary: 신주인수권 증서 시세정보 조회
+      description: |
+        신주인수권 증서의 시세정보를 조회합니다.
+      operationId: get_preemptive_right_certificate_price_info
+      parameters:
+        - name: serviceKey
+          in: query
+          description: "공공데이터포털에서 받은 인증키"
+          required: true
+          schema:
+            type: string
+        - name: numOfRows
+          in: query
+          description: "한 페이지 결과 수 (기본값: 10, 최대: 100)"
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+        - name: pageNo
+          in: query
+          description: "페이지 번호 (기본값: 1)"
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: resultType
+          in: query
+          description: "결과 형식 (XML 또는 JSON, 기본값: XML)"
+          required: false
+          schema:
+            type: string
+            enum: [XML, JSON]
+            default: XML
+        - name: basDt
+          in: query
+          description: "기준일자 (YYYYMMDD 형식)"
+          required: false
+          schema:
+            type: string
+            pattern: '^[0-9]{8}$'
+        - name: beginBasDt
+          in: query
+          description: "시작 기준일자 (YYYYMMDD 형식)"
+          required: false
+          schema:
+            type: string
+            pattern: '^[0-9]{8}$'
+        - name: endBasDt
+          in: query
+          description: "종료 기준일자 (YYYYMMDD 형식)"
+          required: false
+          schema:
+            type: string
+            pattern: '^[0-9]{8}$'
+        - name: isinCd
+          in: query
+          description: "ISIN 코드"
+          required: false
+          schema:
+            type: string
+        - name: itmsNm
+          in: query
+          description: "종목명"
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: 성공적인 신주인수권 증서 시세정보 조회
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PreemptiveRightCertificatePriceInfoResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PreemptiveRightCertificatePriceInfoResponse'
+        "default":
+          description: 오류 응답
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        response:
+          type: object
+          properties:
+            header:
+              type: object
+              properties:
+                resultCode:
+                  type: string
+                  description: 결과 코드
+                resultMsg:
+                  type: string
+                  description: 결과 메시지
+
+    StockPriceInfoResponse:
+      type: object
+      properties:
+        response:
+          type: object
+          properties:
+            header:
+              type: object
+              properties:
+                resultCode:
+                  type: string
+                  description: 결과 코드 (00: 성공)
+                resultMsg:
+                  type: string
+                  description: 결과 메시지
+            body:
+              type: object
+              properties:
+                numOfRows:
+                  type: integer
+                  description: 한 페이지 결과 수
+                pageNo:
+                  type: integer
+                  description: 페이지 번호
+                totalCount:
+                  type: integer
+                  description: 전체 결과 수
+                items:
+                  type: object
+                  properties:
+                    item:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          basDt:
+                            type: string
+                            description: 기준일자
+                          srtnCd:
+                            type: string
+                            description: 단축코드
+                          isinCd:
+                            type: string
+                            description: ISIN 코드
+                          itmsNm:
+                            type: string
+                            description: 종목명
+                          mrktCtg:
+                            type: string
+                            description: 시장구분
+                          clpr:
+                            type: string
+                            description: 종가
+                          vs:
+                            type: string
+                            description: 대비
+                          fltRt:
+                            type: string
+                            description: 등락률
+                          mkp:
+                            type: string
+                            description: 시가
+                          hipr:
+                            type: string
+                            description: 고가
+                          lopr:
+                            type: string
+                            description: 저가
+                          trqu:
+                            type: string
+                            description: 거래량
+                          trPrc:
+                            type: string
+                            description: 거래대금
+                          lstgStCnt:
+                            type: string
+                            description: 상장주식수
+                          mrktTotAmt:
+                            type: string
+                            description: 시가총액
+
+    SecuritiesPriceInfoResponse:
+      type: object
+      properties:
+        response:
+          type: object
+          properties:
+            header:
+              type: object
+              properties:
+                resultCode:
+                  type: string
+                  description: 결과 코드 (00: 성공)
+                resultMsg:
+                  type: string
+                  description: 결과 메시지
+            body:
+              type: object
+              properties:
+                numOfRows:
+                  type: integer
+                  description: 한 페이지 결과 수
+                pageNo:
+                  type: integer
+                  description: 페이지 번호
+                totalCount:
+                  type: integer
+                  description: 전체 결과 수
+                items:
+                  type: object
+                  properties:
+                    item:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          basDt:
+                            type: string
+                            description: 기준일자
+                          isinCd:
+                            type: string
+                            description: ISIN 코드
+                          itmsNm:
+                            type: string
+                            description: 종목명
+                          clpr:
+                            type: string
+                            description: 종가
+                          vs:
+                            type: string
+                            description: 대비
+                          fltRt:
+                            type: string
+                            description: 등락률
+                          mkp:
+                            type: string
+                            description: 시가
+                          hipr:
+                            type: string
+                            description: 고가
+                          lopr:
+                            type: string
+                            description: 저가
+                          trqu:
+                            type: string
+                            description: 거래량
+                          trPrc:
+                            type: string
+                            description: 거래대금
+
+    PreemptiveRightSecuritiesPriceInfoResponse:
+      type: object
+      properties:
+        response:
+          type: object
+          properties:
+            header:
+              type: object
+              properties:
+                resultCode:
+                  type: string
+                  description: 결과 코드 (00: 성공)
+                resultMsg:
+                  type: string
+                  description: 결과 메시지
+            body:
+              type: object
+              properties:
+                numOfRows:
+                  type: integer
+                  description: 한 페이지 결과 수
+                pageNo:
+                  type: integer
+                  description: 페이지 번호
+                totalCount:
+                  type: integer
+                  description: 전체 결과 수
+                items:
+                  type: object
+                  properties:
+                    item:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          basDt:
+                            type: string
+                            description: 기준일자
+                          isinCd:
+                            type: string
+                            description: ISIN 코드
+                          itmsNm:
+                            type: string
+                            description: 종목명
+                          clpr:
+                            type: string
+                            description: 종가
+                          vs:
+                            type: string
+                            description: 대비
+                          fltRt:
+                            type: string
+                            description: 등락률
+                          mkp:
+                            type: string
+                            description: 시가
+                          hipr:
+                            type: string
+                            description: 고가
+                          lopr:
+                            type: string
+                            description: 저가
+                          trqu:
+                            type: string
+                            description: 거래량
+                          trPrc:
+                            type: string
+                            description: 거래대금
+
+    PreemptiveRightCertificatePriceInfoResponse:
+      type: object
+      properties:
+        response:
+          type: object
+          properties:
+            header:
+              type: object
+              properties:
+                resultCode:
+                  type: string
+                  description: 결과 코드 (00: 성공)
+                resultMsg:
+                  type: string
+                  description: 결과 메시지
+            body:
+              type: object
+              properties:
+                numOfRows:
+                  type: integer
+                  description: 한 페이지 결과 수
+                pageNo:
+                  type: integer
+                  description: 페이지 번호
+                totalCount:
+                  type: integer
+                  description: 전체 결과 수
+                items:
+                  type: object
+                  properties:
+                    item:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          basDt:
+                            type: string
+                            description: 기준일자
+                          isinCd:
+                            type: string
+                            description: ISIN 코드
+                          itmsNm:
+                            type: string
+                            description: 종목명
+                          clpr:
+                            type: string
+                            description: 종가
+                          vs:
+                            type: string
+                            description: 대비
+                          fltRt:
+                            type: string
+                            description: 등락률
+                          mkp:
+                            type: string
+                            description: 시가
+                          hipr:
+                            type: string
+                            description: 고가
+                          lopr:
+                            type: string
+                            description: 저가
+                          trqu:
+                            type: string
+                            description: 거래량
+                          trPrc:
+                            type: string
+                            description: 거래대금
