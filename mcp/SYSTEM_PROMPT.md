@@ -1,13 +1,13 @@
 # Gemini Enterprise 시스템 지시
 
-`mcp/` 아래 MCP 서버 4종(도구 20개)을 쓰는 어시스턴트용 시스템 지시다.
+`mcp/` 아래 MCP 서버 4종(도구 20개)을 쓰는 어시스턴트용 시스템 지시입니다.
 
 ## 적용 위치
 
 Gemini Enterprise 앱의 `default_assistant` →
 `generationConfig.systemInstruction.additionalSystemInstruction`
 
-콘솔에서는 앱 설정의 시스템 지시 입력란, API로는:
+콘솔에서는 앱 설정의 시스템 지시 입력란에 넣으시고, API로 넣으실 때는 다음과 같습니다.
 
 ```bash
 PROJECT=<프로젝트 ID>
@@ -21,18 +21,17 @@ curl -X PATCH -H "Authorization: Bearer $(gcloud auth print-access-token)" \
 JSON
 ```
 
-이 프로젝트에는 앱이 여러 개 있으므로 **사용 중인 앱에만** 적용한다.
+앱이 여러 개라면 **사용 중인 앱에만** 적용해 주세요.
 
-> `additionalSystemInstruction`은 GE 기본 프롬프트에 **덧붙는** 것이다. 내부
-> 지시와 충돌할 때 어느 쪽이 이기는지는 문서화되어 있지 않으므로, 적용 후
-> 아래 "검증 질문"으로 실제 동작을 확인할 것.
+> `additionalSystemInstruction`은 GE 기본 프롬프트에 **덧붙는** 것입니다. 내부
+> 지시와 충돌할 때 어느 쪽이 우선하는지는 문서화되어 있지 않으므로, 적용하신 뒤
+> 아래 "검증 질문"으로 실제 동작을 확인해 주세요.
 
 ## 줄여 쓰기
 
-길이가 부담되면 **「원칙」·「어느 도구를 쓰는가」·「집계 규칙」만** 넣어도
-웹 검색 우선순위와 집계 오류라는 두 실제 문제는 해결된다.
-「데이터 한계」와 「DART 사용 규칙」은 이미 각 도구의 docstring에 들어 있어
-중복이다.
+길이가 부담되시면 **「원칙」·「어느 도구를 쓰는가」·「집계 규칙」만** 넣어도
+웹 검색 우선순위와 집계 오류라는 두 문제는 해결됩니다. 「데이터 한계」와
+「DART 사용 규칙」은 이미 각 도구의 설명에 들어 있어 중복입니다.
 
 ---
 
@@ -145,7 +144,7 @@ FINLIFE 권역
 
 ## 검증 질문
 
-적용 후 아래로 실제 동작을 확인한다.
+적용하신 뒤 아래 질문으로 실제 동작을 확인해 주세요.
 
 | 질문 | 기대 동작 |
 |---|---|
@@ -155,8 +154,8 @@ FINLIFE 권역
 | "기준금리랑 예금금리 차이 얼마야" | ecos + finlife 둘 다 호출 |
 | "삼성전자 어제 종가" | stock 호출, 기준일자 명시 |
 
-세 번째가 가장 중요한 시험이다 — 데이터 한계를 아는지, 그럴듯한 답을 지어내는지
-갈린다.
+세 번째가 가장 중요한 시험입니다. 데이터 한계를 아는지, 그럴듯한 답을 지어내는지가
+갈립니다.
 
 ## 도구 목록 (20개)
 
@@ -167,8 +166,8 @@ FINLIFE 권역
 | `stock-mcp` | `get_stock_price`, `get_fund_price`, `get_warrant_price`, `get_subscription_right_price` |
 | `finlife-mcp` | `search_deposit_products`, `search_savings_products`, `search_mortgage_loans`, `search_rent_house_loans`, `search_credit_loans`, `list_financial_companies` |
 
-도구를 추가하거나 이름을 바꾸면 이 문서와 시스템 지시를 함께 갱신한다.
-현재 목록은 이렇게 확인한다:
+도구를 추가하거나 이름을 바꾸시면 이 문서와 시스템 지시를 함께 갱신해 주세요.
+현재 목록은 이렇게 확인하실 수 있습니다.
 
 ```bash
 TOKEN=$(gcloud auth print-identity-token)

@@ -1,155 +1,88 @@
 # MCP 서버 인프라 (Terraform)
 
-`mcp/` 아래 MCP 서버 4종을 Cloud Run에 배포하고 Gemini Enterprise에 연결한다.
-**신규 프로젝트에서 처음부터 세울 수 있게** 구성돼 있다.
+MCP 서버 4종의 Cloud Run 배포와 Gemini Enterprise 연결을 관리합니다.
 
-| 서비스 | 소스 | 도구 | API 키 |
-|---|---|---|---|
-| `ecos-mcp` | `../ecos-mcp-server` | 6 | 한국은행 ECOS |
-| `dart-mcp` | `../dart-mcp-server` | 4 (82개 API 커버) | 금감원 OPEN DART |
-| `stock-mcp` | `../stock-mcp-server` | 4 | 공공데이터포털 주식시세 |
-| `finlife-mcp` | `../finlife-mcp-server` | 6 | 금감원 금융상품통합비교공시 |
+처음 배포하시는 경우 [`../README.md`](../README.md)의 단계별 안내를 먼저 봐 주세요.
+이 문서는 구성 요소와 운영 방법을 다룹니다.
 
----
+## 스크립트
 
-## 처음부터 배포하기
+| 스크립트 | 하는 일 |
+|---|---|
+| `setup_keys.sh` | API 키를 Secret Manager에 저장합니다. `--apply` 없이 실행하면 점검만 합니다 |
+| `build.sh` | 컨테이너 이미지를 빌드해 Artifact Registry에 올립니다. 서비스명을 주면 그것만 빌드합니다 |
+| `connect_ge.sh` | Gemini Enterprise 데이터 커넥터를 만듭니다. `--status`로 상태를 봅니다 |
 
-### 1. API 키를 Secret Manager에
+## 관리 대상
+
+| 리소스 | 설명 |
+|---|---|
+| `google_project_service.required` | 필요한 API 6종 (`enable_apis`) |
+| `data.google_secret_manager_secret.api_key` | 시크릿 존재 확인 (값은 관리하지 않습니다) |
+| `google_artifact_registry_repository.mcp` | `mcp-servers` 도커 저장소 |
+| `google_service_account.mcp[*]` | 서비스별 전용 런타임 서비스 계정 |
+| `google_cloud_run_v2_service.mcp[*]` | 서비스 4종 |
+| `google_secret_manager_secret_iam_member.runtime[*]` | 각 계정이 **자기 키만** 읽습니다 |
+| `google_project_iam_member.runtime_telemetry[*]` | 로그·메트릭 쓰기 |
+| `google_project_iam_member.vertex_ai[*]` | `dart-mcp`의 `ask_dart`용 |
+| `google_cloud_run_v2_service_iam_member.gemini_enterprise[*]` | **GE 접근 (핵심)** |
+| `google_cloud_run_v2_service_iam_member.public[*]` | `allUsers` (기본 비활성) |
+
+서비스 계정을 서비스별로 나눈 이유는 시크릿 격리입니다. 하나로 묶으면 `ecos-mcp`가
+DART·주식 키까지 읽을 수 있습니다.
+
+## API 키는 Terraform이 관리하지 않습니다
+
+Terraform이 시크릿 값을 다루면 상태 파일(tfstate)에 평문으로 저장됩니다. 그래서
+`setup_keys.sh`가 Secret Manager에 직접 넣고, Terraform은 존재를 확인한 뒤 IAM만
+겁니다.
 
 ```bash
-cp .env.example .env
-vi .env                      # 실제 키 입력 (.gitignore에 있음)
 set -a && . ./.env && set +a
-./setup_keys.sh --apply      # Secret Manager에 생성/갱신
+./setup_keys.sh            # 점검만
+./setup_keys.sh --apply    # 생성 또는 새 버전 추가
 ```
 
-| 환경변수 | 시크릿 | 발급처 |
-|---|---|---|
-| `TF_VAR_ecos_api_key` | `ECOS_API_KEY` | ecos.bok.or.kr |
-| `TF_VAR_dart_api_key` | `DART_API_KEY` | opendart.fss.or.kr |
-| `TF_VAR_stock_api_key` | `STOCK_API_KEY` | data.go.kr |
-| `TF_VAR_finlife_api_key` | `FINLIFE_API_KEY` | finlife.fss.or.kr |
+값이 기존과 같으면 새 버전을 만들지 않으므로 여러 번 실행하셔도 됩니다.
 
-> **키는 Terraform이 관리하지 않는다.** Terraform이 시크릿 값을 만들면 tfstate에
-> 평문으로 저장되기 때문이다. `setup_keys.sh`가 Terraform 밖에서 Secret Manager에
-> 넣고, Terraform은 존재를 확인한 뒤 IAM만 건다. **키가 tfstate에 남을 일이 없다.**
+## Cloud Run을 공개하지 않습니다
 
-`--apply` 없이 실행하면 아무것도 바꾸지 않고 현재 상태만 점검한다:
-
-```bash
-./setup_keys.sh
-#   OK  ECOS_API_KEY  존재 (최신 버전 1)
-#   ...
-```
-
-값이 기존과 같으면 새 버전을 만들지 않으므로 여러 번 실행해도 안전하다.
-
-### 2. 프로젝트 지정
-
-```bash
-cp terraform.tfvars.example terraform.tfvars
-vi terraform.tfvars          # project_id 입력
-```
-
-### 3. init (백엔드는 부분 구성)
-
-```bash
-terraform init \
-  -backend-config="bucket=MY-TFSTATE-BUCKET" \
-  -backend-config="prefix=mcp-servers"
-```
-
-state 버킷이 없으면 먼저 만든다:
-
-```bash
-gcloud storage buckets create gs://MY-TFSTATE-BUCKET --location=US
-gcloud storage buckets update gs://MY-TFSTATE-BUCKET --versioning
-```
-
-로컬 state로 시작하려면 `versions.tf`의 `backend "gcs" {}`를 주석 처리한다.
-
-### 4. 이미지 저장소 먼저, 그다음 빌드, 그다음 전체
-
-```bash
-terraform apply -target=google_artifact_registry_repository.mcp
-cd ../dart-mcp-server && python build_assets.py && cd ../terraform   # dart 전용 자산
-./build.sh
-terraform apply
-```
-
-`build.sh`는 타임스탬프 태그로 이미지를 올리고 `image.auto.tfvars`에 기록한다.
-태그를 `latest`로 두면 Terraform이 변경을 감지하지 못해 새 리비전이 생기지 않으므로
-이 방식을 쓴다.
-
-### 5. Gemini Enterprise 연결
-
-```bash
-./connect_ge.sh            # 데이터 커넥터 4개 생성
-./connect_ge.sh --status   # 상태 확인
-```
-
-그다음 콘솔에서 데이터 스토어마다:
-
-```
-Gemini Enterprise → 데이터 스토어 → 해당 항목 → Actions
-  → Reload custom actions      (MCP 서버에 tools/list 호출)
-  → 도구 선택 → Enable actions
-```
-
-**Reload를 누르기 전에는 도구 목록이 비어 있는 것이 정상이다.**
-
----
-
-## ⭐ Cloud Run을 공개할 필요가 없다
-
-문서만 보면 GE 연동에 공개 엔드포인트가 필수처럼 읽히지만(Private Service Connect
-미지원 언급 때문에 더욱), **실측 결과 그렇지 않다.**
-
-Gemini Enterprise는 다음 신원으로 MCP 엔드포인트를 호출한다:
+Gemini Enterprise는 다음 신원으로 MCP 엔드포인트를 호출합니다.
 
 ```
 service-<PROJECT_NUMBER>@gcp-sa-discoveryengine.iam.gserviceaccount.com
 ```
 
-이 서비스 에이전트에 `roles/run.invoker`만 주면 **비공개 Cloud Run에서도
-`tools/list`가 정상 동작한다.** `grant_gemini_enterprise_access = true`(기본값)가
-이 바인딩을 건다.
+이 서비스 에이전트에 `roles/run.invoker`만 부여하면 비공개 Cloud Run에서도
+동작합니다. `grant_gemini_enterprise_access = true`(기본값)가 이 바인딩을 겁니다.
 
-의미하는 바:
+덕분에 `allUsers` 공개가 불필요하고, 조직의 도메인 제한 정책(Domain restricted
+sharing)을 건드리지 않아도 됩니다. 서비스 에이전트는 조직 내부 주체라 해당 정책에
+걸리지 않습니다.
 
-- `allUsers` 공개가 **불필요** → API 키 할당량 무단 소진 위험 없음
-- Domain restricted sharing(`iam.allowedPolicyMemberDomains`)을 **건드릴 필요 없음**
-  — 서비스 에이전트는 조직 내부 주체라 DRS에 걸리지 않는다
-- VPC / PSC network attachment / Cloud NAT **전부 불필요**
-
-`public_access` 변수는 GE 외의 공개 클라이언트에도 열어야 할 때만 쓴다.
-
----
+`public_access` 변수는 GE 외의 공개 클라이언트에도 열어야 할 때만 씁니다.
 
 ## 조직 정책
 
-Custom MCP 데이터 스토어 생성은 기본적으로 차단돼 있다:
+Custom MCP 데이터 스토어 생성은 기본적으로 차단되어 있습니다.
 
 ```
-constraints/discoveryengine.managed.disableCustomMcpServerConnector   기본 enforce
+constraints/discoveryengine.managed.disableCustomMcpServerConnector
 ```
 
-`roles/orgpolicy.policyAdmin`이 있으면 Terraform이 해제할 수 있다:
+`roles/orgpolicy.policyAdmin`이 있으시면 Terraform이 해제할 수 있습니다.
 
 ```hcl
 disable_custom_mcp_org_policy_override = true
 ```
 
-권한이 없으면 `false`로 두고 조직 관리자에게 요청한다. **정책 전파에 약 2분이
-걸리므로** 해제 직후 실패했다고 설정이 잘못됐다고 판단하지 말 것.
+권한이 없으시면 `false`로 두고 조직 관리자에게 요청하세요. 정책이 실제로 적용되기까지
+2분 정도 걸리므로, 해제 직후 실패한다고 설정이 잘못됐다고 판단하지 마세요.
 
----
+## 데이터 커넥터 페이로드
 
-## 데이터 커넥터 페이로드 (문서 미공개)
-
-`connect_ge.sh`가 쓰는 형태다. Terraform 프로바이더에 리소스가 없고 gcloud에도
-`discovery-engine` 명령군이 없어 REST로만 만들 수 있다. 네 가지가 전부 필요하며
-하나라도 빠지면 실패한다:
+`connect_ge.sh`가 쓰는 형태입니다. Terraform 프로바이더에 해당 리소스가 없고
+`gcloud`에도 `discovery-engine` 명령군이 없어 REST로만 만들 수 있습니다.
 
 ```json
 {
@@ -172,90 +105,63 @@ disable_custom_mcp_org_policy_override = true
 }
 ```
 
-| 항목 | 빠뜨리면 |
+네 가지가 모두 필요하며 하나라도 빠지면 실패합니다.
+
+| 항목 | 빠뜨렸을 때 |
 |---|---|
-| `connectorModes: ["FEDERATED"]` | `connectorType`이 `THIRD_PARTY`가 되어 데이터 수집 파이프라인을 돌리려다 `INITIALIZATION_FAILED` |
-| `params.oauth_access_token: ""` | `Missing Parameter Private App Access Token` (빈 문자열이어도 키가 있어야 한다) |
-| `actionParams.auth_type: "NO_AUTH"` | `For auth_type: OAUTH, Connector params must contain client_id`. **`params`가 아니라 `actionParams`에 넣는다** |
-| `entities` | 백킹 데이터 스토어가 만들어지지 않는다 |
-
----
-
-## 관리 대상
-
-| 리소스 | 설명 |
-|---|---|
-| `google_project_service.required` | 필요한 API 6종 (`enable_apis`) |
-| `data.google_secret_manager_secret.api_key` | 시크릿 존재 확인 (값은 관리하지 않음) |
-| `google_artifact_registry_repository.mcp` | `mcp-servers` 도커 저장소 |
-| `google_service_account.mcp[*]` | 서비스별 전용 런타임 SA |
-| `google_cloud_run_v2_service.mcp[*]` | 서비스 4종 |
-| `google_secret_manager_secret_iam_member.runtime[*]` | 각 SA가 **자기 키만** 읽는다 |
-| `google_project_iam_member.runtime_telemetry[*]` | 로그·메트릭 쓰기 |
-| `google_project_iam_member.vertex_ai[*]` | `dart-mcp`의 `ask_dart` |
-| `google_cloud_run_v2_service_iam_member.gemini_enterprise[*]` | **GE 접근 (핵심)** |
-| `google_cloud_run_v2_service_iam_member.public[*]` | `allUsers` (기본 비활성) |
-
-서비스 계정을 서비스별로 나눈 이유는 시크릿 격리다. 하나로 묶으면 `ecos-mcp`가
-DART·주식 키까지 읽을 수 있다.
-
----
+| `connectorModes: ["FEDERATED"]` | 데이터 수집 파이프라인을 돌리려다 `INITIALIZATION_FAILED` |
+| `params.oauth_access_token: ""` | `Missing Parameter Private App Access Token` (빈 문자열이어도 키는 있어야 합니다) |
+| `actionParams.auth_type: "NO_AUTH"` | `For auth_type: OAUTH, Connector params must contain client_id`. `params`가 아니라 `actionParams`에 넣습니다 |
+| `entities` | 백킹 데이터 스토어가 만들어지지 않습니다 |
 
 ## 운영
 
-### 코드 변경 배포
+### 코드 수정 후 배포
 
 ```bash
-./build.sh dart-mcp     # 하나만
+./build.sh dart-mcp     # 수정한 서비스만 빌드할 수 있습니다
 terraform apply
 ```
+
+`build.sh`는 빌드한 서비스의 태그만 `image.auto.tfvars`에 기록하므로, 일부만 다시
+빌드해도 나머지가 깨지지 않습니다.
 
 ### 키 교체
 
 ```bash
-vi .env                      # 새 키로 수정
+vi .env                       # 새 키로 수정
 set -a && . ./.env && set +a
-./setup_keys.sh --apply      # 새 시크릿 버전 추가
-./build.sh && terraform apply # 새 리비전이 :latest를 집어가게
+./setup_keys.sh --apply       # 새 시크릿 버전 추가
+./build.sh && terraform apply # 새 리비전이 새 키를 읽도록
 ```
 
-Cloud Run은 시크릿을 `:latest`로 참조하며 값은 **컨테이너 기동 시점에** 읽는다.
-새 버전을 만들어도 이미 떠 있는 인스턴스는 옛 키를 계속 쓰므로, 새 리비전을
-만들어야 확실히 반영된다.
+Cloud Run은 시크릿을 `:latest`로 참조하고 값은 컨테이너가 시작할 때 읽습니다. 이미
+실행 중인 인스턴스는 이전 키를 계속 쓰므로 마지막 줄이 필요합니다.
 
 ### 검증
 
 ```bash
 TOKEN=$(gcloud auth print-identity-token)
 for u in $(terraform output -json mcp_urls | jq -r '.[]'); do
-  bash ~/.claude/skills/gemini-enterprise-custom-mcp/scripts/probe_mcp_server.sh "$u" "$TOKEN"
+  curl -sN --max-time 30 -X POST "$u" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json, text/event-stream" \
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}' | head -c 200
+  echo
 done
+
+./connect_ge.sh --status
 ```
 
----
+## 알아 두실 점
 
-## 알려진 이슈
+**프로바이더 버전** — `~> 6.0`으로 고정되어 있고 6.50.0이 설치됩니다. 최신은
+8.x이며 메이저 두 단계 차이라 업그레이드는 별도 작업으로 잡으시는 편이 좋습니다.
 
-**Cloud Run 호스트명이 2개다.** `<service>-<project_number>.<region>.run.app`과
-canonical `<service>-<hash>-<region>.a.run.app`이 모두 서비스된다. 해시는 생성 전에
-알 수 없어 MCP SDK의 `MCP_ALLOWED_HOSTS` 허용목록에 미리 넣을 수 없고, 한쪽만
-넣으면 다른 쪽 요청이 `421 Invalid Host header`로 거부된다 — 그런데 GE 쪽에서는
-"도구 0개"로만 보여 원인을 찾기 어렵다. 그래서 `MCP_ALLOWED_HOSTS`를 설정하지 않고,
-서버가 `K_SERVICE`(Cloud Run 주입 변수)를 보고 DNS 리바인딩 보호를 끄게 했다.
+**트래픽 라우팅** — `traffic` 블록으로 최신 리비전에 고정해 두었습니다. 이 선언이
+없으면 `gcloud run services update --no-traffic` 같은 명령으로 특정 리비전에 묶여도
+drift로 잡히지 않아, apply가 성공해도 새 코드가 서비스되지 않습니다.
 
-**`scaling` drift.** 프로바이더 6.50.0은 Cloud Run API가 돌려주는 서비스 단위
-`scaling`(min/manual_instance_count = 0)을 "설정 안 함"과 구별하지 못해 apply 직후에도
-drift를 만든다. `lifecycle { ignore_changes = [scaling] }`로 억제했다.
-
-**프로바이더 버전.** `~> 6.0`으로 고정돼 있고 6.50.0이 설치된다. 최신은 8.x이며
-메이저 2단계 차이라 업그레이드는 별도 작업으로 잡는 편이 좋다.
-
----
-
-## 인증
-
-Terraform은 ADC를 쓴다. `invalid_grant` / `invalid_rapt` 오류가 나면:
-
-```bash
-gcloud auth application-default login
-```
+**인증** — Terraform은 ADC를 씁니다. `invalid_grant`나 `invalid_rapt` 오류가 나면
+`gcloud auth application-default login`으로 재인증해 주세요.

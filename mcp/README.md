@@ -214,7 +214,7 @@ Gemini Enterprise → 데이터 스토어 → 해당 항목 선택 → Actions �
 |---|---|
 | 데이터 스토어 생성이 거부됩니다 | 조직 정책([7단계](#7-조직-정책-확인))이 아직 적용되지 않았을 수 있습니다. 해제 후 2분 정도 기다려 주세요 |
 | `Reload custom actions`에 도구가 안 나옵니다 | MCP 서버에 도달하지 못하는 경우입니다. 아래 검증 명령으로 서버부터 확인해 보세요 |
-| 모델이 "도구를 호출하겠습니다"만 반복합니다 | 세션 문제입니다. 서버가 최신 코드로 배포되었는지 확인해 주세요 (`stateless_http` 적용 필요) |
+| 모델이 "도구를 호출하겠습니다"만 반복합니다 | 서버가 최신 코드로 배포되었는지 확인해 주세요. `./build.sh && terraform apply` |
 | `terraform apply`는 성공했는데 변경이 반영되지 않습니다 | Cloud Run 트래픽이 이전 리비전에 고정되었을 수 있습니다. `gcloud run services update-traffic SVC --to-latest` |
 
 서버가 정상인지 직접 확인하시려면:
@@ -291,24 +291,14 @@ Enterprise가 사용자 확인 없이 호출합니다.
 
 ---
 
-## 연동하며 확인한 것들
+## Cloud Run을 인터넷에 공개하지 않습니다
 
-공식 문서에 없거나 문서와 다른 내용입니다. 근거와 재현 방법은
-[`terraform/README.md`](./terraform/README.md)와 각 서버 README에 있습니다.
+Gemini Enterprise 문서만 보면 `allUsers` 권한이 필요한 것처럼 읽히지만, 실제로는
+Discovery Engine 서비스 에이전트 신원으로 호출합니다. 이 서비스 에이전트에
+`roles/run.invoker`만 부여하면 비공개 서비스에서도 동작합니다.
 
-**Cloud Run을 인터넷에 공개할 필요가 없습니다.** 문서만 보면 `allUsers` 권한이
-필수인 것처럼 읽히지만, Gemini Enterprise는 Discovery Engine 서비스 에이전트
-신원으로 호출합니다. 이 서비스 에이전트에 `roles/run.invoker`만 부여하면
-비공개 서비스에서도 동작합니다. 덕분에 VPC나 Private Service Connect 구성,
-조직의 도메인 제한 정책 해제가 모두 불필요합니다.
-
-**`stateless_http` 설정이 필요합니다.** MCP StreamableHTTP는 기본적으로 세션을
-서버 메모리에 유지하는데, Cloud Run은 요청을 여러 인스턴스에 분산합니다. 이
-설정이 없으면 세션을 잃고, Gemini Enterprise 화면에서는 모델이 도구를
-호출하겠다는 말만 반복하는 것처럼 보입니다.
-
-**데이터 커넥터는 REST로만 만들 수 있습니다.** Terraform 리소스도 `gcloud` 명령도
-없습니다. `connect_ge.sh`가 검증된 요청 형식을 담고 있습니다.
+덕분에 VPC나 Private Service Connect 구성, 조직의 도메인 제한 정책 해제가 모두
+불필요합니다. Terraform이 기본으로 이 권한을 부여하므로 별도로 하실 일은 없습니다.
 
 ---
 
