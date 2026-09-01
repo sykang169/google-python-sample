@@ -1,0 +1,16 @@
+# cp terraform.tfvars.example terraform.tfvars 후 project_id를 채운다.
+# ⚠️ API 키는 여기 적지 않는다. Secret Manager에 두고 ./setup_keys.sh 로 관리한다.
+
+project_id = "MY-PROJECT-ID"
+region     = "us-central1"
+
+# 신규 프로젝트라면 필요한 API를 Terraform이 켜게 둔다.
+enable_apis = true
+
+# Gemini Enterprise가 비공개 Cloud Run에 도달하게 해준다.
+# 이것만으로 충분하며 서비스를 인터넷에 공개할 필요가 없다.
+grant_gemini_enterprise_access = true
+
+# Custom MCP 데이터 스토어 생성 차단을 해제한다.
+# roles/orgpolicy.policyAdmin이 있을 때만 true로 한다.
+disable_custom_mcp_org_policy_override = false

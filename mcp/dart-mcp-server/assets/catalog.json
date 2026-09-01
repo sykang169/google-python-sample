@@ -1,0 +1,3139 @@
+[
+ {
+  "endpoint": "company",
+  "api_id": "2019002",
+  "group": "DS001",
+  "group_name": "공시정보",
+  "name": "기업개황",
+  "desc": "DART에 등록되어있는 기업의 개황정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   }
+  ]
+ },
+ {
+  "endpoint": "list",
+  "api_id": "2019001",
+  "group": "DS001",
+  "group_name": "공시정보",
+  "name": "공시검색",
+  "desc": "공시 유형별, 회사별, 날짜별 등 여러가지 조건으로 공시보고서 검색기능을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": false,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일",
+    "type": "STRING(8)",
+    "required": false,
+    "desc": "검색시작 접수일자(YYYYMMDD) 1) 기본값 : 종료일(end_de)2) 고유번호(corp_code)가 없는 경우 검색기간은 3개월로 제한"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일",
+    "type": "STRING(8)",
+    "required": false,
+    "desc": "검색종료 접수일자(YYYYMMDD)※ 일자를 지정하지 않을 경우 당일 기준으로 조회"
+   },
+   {
+    "name": "last_reprt_at",
+    "ko": "최종보고서 검색여부",
+    "type": "STRING(1)",
+    "required": false,
+    "desc": "최종보고서만 검색여부(Y or N)1) 기본값: N (N지정시 정정보고서를 포함한 제출 보고서 전체를 검색함)"
+   },
+   {
+    "name": "pblntf_ty",
+    "ko": "공시유형",
+    "type": "STRING(1)",
+    "required": false,
+    "desc": "A : 정기공시B : 주요사항보고C : 발행공시D : 지분공시E : 기타공시F : 외부감사관련G : 펀드공시H : 자산유동화I : 거래소공시J : 공정위공시"
+   },
+   {
+    "name": "pblntf_detail_ty",
+    "ko": "공시상세유형",
+    "type": "STRING(4)",
+    "required": false,
+    "desc": "(※ 상세 유형 참조 : pblntf_detail_ty)"
+   },
+   {
+    "name": "corp_cls",
+    "ko": "법인구분",
+    "type": "STRING(1)",
+    "required": false,
+    "desc": "법인구분 : Y(유가), K(코스닥), N(코넥스), E(기타)※ 없으면 전체조회, 복수조건 불가"
+   },
+   {
+    "name": "sort",
+    "ko": "정렬",
+    "type": "STRING(4)",
+    "required": false,
+    "desc": "접수일자: date회사명 : crp보고서명 : rpt ※ 기본값 : date"
+   },
+   {
+    "name": "sort_mth",
+    "ko": "정렬방법",
+    "type": "STRING(4)",
+    "required": false,
+    "desc": "오름차순(asc), 내림차순(desc)※ 기본값 : desc"
+   },
+   {
+    "name": "page_no",
+    "ko": "페이지 번호",
+    "type": "STRING(5)",
+    "required": false,
+    "desc": "페이지 번호(1~n) 기본값 : 1"
+   },
+   {
+    "name": "page_count",
+    "ko": "페이지 별 건수",
+    "type": "STRING(3)",
+    "required": false,
+    "desc": "페이지당 건수(1~100) 기본값 : 10, 최대값 : 100"
+   }
+  ]
+ },
+ {
+  "endpoint": "accnutAdtorNmNdAdtOpinion",
+  "api_id": "2020009",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "회계감사인의 명칭 및 감사의견",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 회계감사인의 명칭 및 감사의견을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(1)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "accnutAdtorNonAdtServcCnclsSttus",
+  "api_id": "2020011",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "회계감사인과의 비감사용역 계약체결 현황",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 회계감사인과의 비감사용역 계약체결 현황을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(1)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "adtServcCnclsSttus",
+  "api_id": "2020010",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "감사용역체결현황",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 감사용역체결현황을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(1)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "alotMatter",
+  "api_id": "2019005",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "배당에 관한 사항",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 배당에 관한 사항을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(4)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "cndlCaplScritsNrdmpBlce",
+  "api_id": "2020008",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "조건부 자본증권 미상환 잔액",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 조건부 자본증권 미상환 잔액을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(1)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "cprndNrdmpBlce",
+  "api_id": "2020006",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "회사채 미상환 잔액",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 회사채 미상환 잔액을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(1)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "detScritsIsuAcmslt",
+  "api_id": "2020003",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "채무증권 발행실적",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 채무증권 발행실적을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(1)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "drctrAdtAllMendngSttusGmtsckConfmAmount",
+  "api_id": "2020014",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "이사·감사 전체의 보수현황(주주총회 승인금액)",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 이사·감사 전체의 보수현황(주주총회 승인금액)을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(1)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "drctrAdtAllMendngSttusMendngPymntamtTyCl",
+  "api_id": "2020015",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "이사·감사 전체의 보수현황(보수지급금액 - 유형별)",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 이사·감사 전체의 보수현황(보수지급금액 - 유형별)을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(1)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "empSttus",
+  "api_id": "2019011",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "직원 현황",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 직원 현황을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(4)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "entrprsBilScritsNrdmpBlce",
+  "api_id": "2020004",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "기업어음증권 미상환 잔액",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 기업어음증권 미상환 잔액을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(1)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "exctvSttus",
+  "api_id": "2019010",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "임원 현황",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 임원 현황을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(4)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "hmvAuditAllSttus",
+  "api_id": "2019013",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "이사·감사 전체의 보수현황(보수지급금액 - 이사·감사 전체)",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 이사·감사 전체의 보수현황(보수지급금액 - 이사·감사 전체)을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(4)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "hmvAuditIndvdlBySttus",
+  "api_id": "2019012",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "이사·감사의 개인별 보수현황(5억원 이상)",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 이사·감사의 개인별 보수현황(5억원 이상)을 제공합니다.\n※ 2026년 4월까지 제출된 보고서해당",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(4)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "hmvAuditIndvdlBySttusV2",
+  "api_id": "2026001",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "이사·감사의 개인별 보수현황(5억원 이상) (Ver 2.0)",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 이사·감사의 개인별 보수현황(5억원 이상)을 제공합니다.\n※ 2026년 5월 이후부터 제출된 보고서해당",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(4)",
+    "required": true,
+    "desc": "사업연도(4자리)※ 2026년 5월 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "hyslrChgSttus",
+  "api_id": "2019008",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "최대주주 변동현황",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 최대주주 변동현황을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(4)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "hyslrSttus",
+  "api_id": "2019007",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "최대주주 현황",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 최대주주 현황을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(4)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "indvdlByPay",
+  "api_id": "2019014",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "개인별 보수지급 금액(5억이상 상위5인)",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 개인별 보수지급 금액(5억이상 상위5인)을 제공합니다.\n※ 2026년 4월까지 제출된 보고서해당",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(4)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "indvdlByPayV2",
+  "api_id": "2026002",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "개인별 보수지급 금액(5억이상 상위5인)  (Ver 2.0)",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 이사·감사의 개인별 보수현황(5억원 이상)을 제공합니다.\n※ 2026년 5월 이후부터 제출된 보고서해당",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(4)",
+    "required": true,
+    "desc": "사업연도(4자리)※ 2026년 5월 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "irdsSttus",
+  "api_id": "2019004",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "증자(감자) 현황",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 증자(감자) 현황을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(4)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "mrhlSttus",
+  "api_id": "2019009",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "소액주주 현황",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 소액주주 현황을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(4)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "newCaplScritsNrdmpBlce",
+  "api_id": "2020007",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "신종자본증권 미상환 잔액",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 신종자본증권 미상환 잔액을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(1)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "otrCprInvstmntSttus",
+  "api_id": "2019015",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "타법인 출자현황",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 타법인 출자현황을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(4)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "outcmpnyDrctrNdChangeSttus",
+  "api_id": "2020012",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "독립(사외)이사 및 그 변동현황",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 독립(사외)이사 및 그 변동현황을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(1)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "prvsrpCptalUseDtls",
+  "api_id": "2020017",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "사모자금의 사용내역",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 사모자금의 사용내역을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(1)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "pssrpCptalUseDtls",
+  "api_id": "2020016",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "공모자금의 사용내역",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 공모자금의 사용내역을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(1)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "srtpdPsndbtNrdmpBlce",
+  "api_id": "2020005",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "단기사채 미상환 잔액",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 단기사채 미상환 잔액을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(1)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "stockTotqySttus",
+  "api_id": "2020002",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "주식의 총수 현황",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 주식의총수현황을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(1)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "tesstkAcqsDspsSttus",
+  "api_id": "2019006",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "자기주식 취득 및 처분 현황",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 자기주식 취득 및 처분 현황을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(4)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "unrstExctvMendngSttus",
+  "api_id": "2020013",
+  "group": "DS002",
+  "group_name": "정기보고서 주요정보",
+  "name": "미등기임원 보수현황",
+  "desc": "정기보고서(사업, 분기, 반기보고서) 내에 미등기임원 보수현황을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(1)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "fnlttCmpnyIndx",
+  "api_id": "2022002",
+  "group": "DS003",
+  "group_name": "정기보고서 재무정보",
+  "name": "다중회사 주요 재무지표",
+  "desc": "상장법인(유가증권, 코스닥) 및 주요 비상장법인(사업보고서 제출대상 & IFRS 적용)이 제출한 정기보고서 내에 XBRL재무제표의 주요 재무지표를 제공합니다.(대상법인 복수조회 가능)",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(4)",
+    "required": true,
+    "desc": "사업연도(4자리)※ 2023년 3분기 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   },
+   {
+    "name": "idx_cl_code",
+    "ko": "지표분류코드",
+    "type": "STRING(7)",
+    "required": true,
+    "desc": "수익성지표 : M210000 안정성지표 : M220000 성장성지표 : M230000 활동성지표 : M240000"
+   }
+  ]
+ },
+ {
+  "endpoint": "fnlttMultiAcnt",
+  "api_id": "2019017",
+  "group": "DS003",
+  "group_name": "정기보고서 재무정보",
+  "name": "다중회사 주요계정",
+  "desc": "상장법인(유가증권, 코스닥) 및 주요 비상장법인(사업보고서 제출대상 & IFRS 적용)이 제출한 정기보고서 내에 XBRL재무제표의 주요계정과목(재무상태표, 손익계산서)을 제공합니다.\n(대상법인 복수조회 복수조회 가능)",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(4)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "fnlttSinglAcnt",
+  "api_id": "2019016",
+  "group": "DS003",
+  "group_name": "정기보고서 재무정보",
+  "name": "단일회사 주요계정",
+  "desc": "상장법인(유가증권, 코스닥) 및 주요 비상장법인(사업보고서 제출대상 & IFRS 적용)이 제출한 정기보고서 내에 XBRL재무제표의 주요계정과목(재무상태표, 손익계산서)을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(4)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   }
+  ]
+ },
+ {
+  "endpoint": "fnlttSinglAcntAll",
+  "api_id": "2019020",
+  "group": "DS003",
+  "group_name": "정기보고서 재무정보",
+  "name": "단일회사 전체 재무제표",
+  "desc": "상장법인(유가증권, 코스닥) 및 주요 비상장법인(사업보고서 제출대상 & IFRS 적용)이 제출한 정기보고서 내에 XBRL재무제표의 모든계정과목을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(4)",
+    "required": true,
+    "desc": "사업연도(4자리) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   },
+   {
+    "name": "fs_div",
+    "ko": "개별/연결구분",
+    "type": "STRING(3)",
+    "required": true,
+    "desc": "OFS:재무제표, CFS:연결재무제표"
+   }
+  ]
+ },
+ {
+  "endpoint": "fnlttSinglIndx",
+  "api_id": "2022001",
+  "group": "DS003",
+  "group_name": "정기보고서 재무정보",
+  "name": "단일회사 주요 재무지표",
+  "desc": "상장법인(유가증권, 코스닥) 및 주요 비상장법인(사업보고서 제출대상 & IFRS 적용)이 제출한 정기보고서 내에 XBRL재무제표의 주요 재무지표를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bsns_year",
+    "ko": "사업연도",
+    "type": "STRING(4)",
+    "required": true,
+    "desc": "사업연도(4자리)※ 2023년 3분기 이후 부터 정보제공"
+   },
+   {
+    "name": "reprt_code",
+    "ko": "보고서 코드",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "1분기보고서 : 11013반기보고서 : 110123분기보고서 : 11014사업보고서 : 11011"
+   },
+   {
+    "name": "idx_cl_code",
+    "ko": "지표분류코드",
+    "type": "STRING(7)",
+    "required": true,
+    "desc": "수익성지표 : M210000 안정성지표 : M220000 성장성지표 : M230000 활동성지표 : M240000"
+   }
+  ]
+ },
+ {
+  "endpoint": "xbrlTaxonomy",
+  "api_id": "2020001",
+  "group": "DS003",
+  "group_name": "정기보고서 재무정보",
+  "name": "XBRL택사노미재무제표양식",
+  "desc": "금융감독원 회계포탈에서 제공하는 IFRS 기반 XBRL 재무제표 공시용 표준계정과목체계(계정과목) 을 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "sj_div",
+    "ko": "재무제표구분",
+    "type": "STRING(5)",
+    "required": true,
+    "desc": "(※재무제표구분 참조)"
+   }
+  ]
+ },
+ {
+  "endpoint": "elestock",
+  "api_id": "2019022",
+  "group": "DS004",
+  "group_name": "지분공시",
+  "name": "임원ㆍ주요주주 소유보고",
+  "desc": "임원ㆍ주요주주특정증권등 소유상황보고서 내에 임원ㆍ주요주주 소유보고 \n정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   }
+  ]
+ },
+ {
+  "endpoint": "majorstock",
+  "api_id": "2019021",
+  "group": "DS004",
+  "group_name": "지분공시",
+  "name": "대량보유 상황보고",
+  "desc": "주식등의 대량보유상황보고서 내에 대량보유 상황보고 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   }
+  ]
+ },
+ {
+  "endpoint": "astInhtrfEtcPtbkOpt",
+  "api_id": "2020018",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "자산양수도(기타), 풋백옵션",
+  "desc": "주요사항보고서(자산양수도(기타), 풋백옵션) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "bdwtIsDecsn",
+  "api_id": "2020034",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "신주인수권부사채권 발행결정",
+  "desc": "주요사항보고서(신주인수권부사채권 발행결정) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "bnkMngtPcbg",
+  "api_id": "2020027",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "채권은행 등의 관리절차 개시",
+  "desc": "주요사항보고서(채권은행 등의 관리절차 개시) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "bnkMngtPcsp",
+  "api_id": "2020036",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "채권은행 등의 관리절차 중단",
+  "desc": "주요사항보고서(채권은행 등의 관리절차 중단) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "bsnInhDecsn",
+  "api_id": "2020042",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "영업양수 결정",
+  "desc": "주요사항보고서(영업양수 결정) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "bsnSp",
+  "api_id": "2020020",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "영업정지",
+  "desc": "주요사항보고서(영업정지) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "bsnTrfDecsn",
+  "api_id": "2020043",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "영업양도 결정",
+  "desc": "주요사항보고서(영업양도 결정) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "cmpDvDecsn",
+  "api_id": "2020051",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "회사분할 결정",
+  "desc": "주요사항보고서(회사분할 결정) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "cmpDvmgDecsn",
+  "api_id": "2020052",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "회사분할합병 결정",
+  "desc": "주요사항보고서(회사분할합병 결정) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "cmpMgDecsn",
+  "api_id": "2020050",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "회사합병 결정",
+  "desc": "주요사항보고서(회사합병 결정) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "crDecsn",
+  "api_id": "2020026",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "감자 결정",
+  "desc": "주요사항보고서(감자 결정) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "ctrcvsBgrq",
+  "api_id": "2020021",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "회생절차 개시신청",
+  "desc": "주요사항보고서(회생절차 개시신청) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "cvbdIsDecsn",
+  "api_id": "2020033",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "전환사채권 발행결정",
+  "desc": "주요사항보고서(전환사채권 발행결정) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "dfOcr",
+  "api_id": "2020019",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "부도발생",
+  "desc": "주요사항보고서(부도발생) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "dsRsOcr",
+  "api_id": "2020022",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "해산사유 발생",
+  "desc": "주요사항보고서(해산사유 발생) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "exbdIsDecsn",
+  "api_id": "2020035",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "교환사채권 발행결정",
+  "desc": "주요사항보고서(교환사채권 발행결정) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "fricDecsn",
+  "api_id": "2020024",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "무상증자 결정",
+  "desc": "주요사항보고서(무상증자 결정) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "lwstLg",
+  "api_id": "2020028",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "소송 등의 제기",
+  "desc": "주요사항보고서(소송 등의 제기) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "otcprStkInvscrInhDecsn",
+  "api_id": "2020046",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "타법인 주식 및 출자증권 양수결정",
+  "desc": "주요사항보고서(타법인 주식 및 출자증권 양수결정) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "otcprStkInvscrTrfDecsn",
+  "api_id": "2020047",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "타법인 주식 및 출자증권 양도결정",
+  "desc": "주요사항보고서(타법인 주식 및 출자증권 양도결정) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "ovDlst",
+  "api_id": "2020032",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "해외 증권시장 주권등 상장폐지",
+  "desc": "주요사항보고서(해외 증권시장 주권등 상장폐지) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "ovDlstDecsn",
+  "api_id": "2020030",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "해외 증권시장 주권등 상장폐지 결정",
+  "desc": "주요사항보고서(해외 증권시장 주권등 상장폐지 결정) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "ovLst",
+  "api_id": "2020031",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "해외 증권시장 주권등 상장",
+  "desc": "주요사항보고서(해외 증권시장 주권등 상장) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "ovLstDecsn",
+  "api_id": "2020029",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "해외 증권시장 주권등 상장 결정",
+  "desc": "주요사항보고서(해외 증권시장 주권등 상장 결정) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "pifricDecsn",
+  "api_id": "2020025",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "유무상증자 결정",
+  "desc": "주요사항보고서(유무상증자 결정) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "piicDecsn",
+  "api_id": "2020023",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "유상증자 결정",
+  "desc": "주요사항보고서(유상증자 결정) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "stkExtrDecsn",
+  "api_id": "2020053",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "주식교환·이전 결정",
+  "desc": "주요사항보고서(주식교환·이전 결정) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "stkrtbdInhDecsn",
+  "api_id": "2020048",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "주권 관련 사채권 양수 결정",
+  "desc": "주요사항보고서(주권 관련 사채권 양수 결정) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "stkrtbdTrfDecsn",
+  "api_id": "2020049",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "주권 관련 사채권 양도 결정",
+  "desc": "주요사항보고서(주권 관련 사채권 양도 결정) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "tgastInhDecsn",
+  "api_id": "2020044",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "유형자산 양수 결정",
+  "desc": "주요사항보고서(유형자산 양수 결정) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "tgastTrfDecsn",
+  "api_id": "2020045",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "유형자산 양도 결정",
+  "desc": "주요사항보고서(유형자산 양도 결정) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "tsstkAqDecsn",
+  "api_id": "2020038",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "자기주식 취득 결정",
+  "desc": "주요사항보고서(자기주식 취득 결정) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "tsstkAqTrctrCcDecsn",
+  "api_id": "2020041",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "자기주식취득 신탁계약 해지 결정",
+  "desc": "주요사항보고서(자기주식취득 신탁계약 해지 결정) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "tsstkAqTrctrCnsDecsn",
+  "api_id": "2020040",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "자기주식취득 신탁계약 체결 결정",
+  "desc": "주요사항보고서(자기주식취득 신탁계약 체결 결정) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "tsstkDpDecsn",
+  "api_id": "2020039",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "자기주식 처분 결정",
+  "desc": "주요사항보고서(자기주식 처분 결정) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "wdCocobdIsDecsn",
+  "api_id": "2020037",
+  "group": "DS005",
+  "group_name": "주요사항보고서",
+  "name": "상각형 조건부자본증권 발행결정",
+  "desc": "주요사항보고서(상각형 조건부자본증권 발행결정) 내에 주요 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "bdRs",
+  "api_id": "2020055",
+  "group": "DS006",
+  "group_name": "증권신고서",
+  "name": "채무증권",
+  "desc": "증권신고서(채무증권) 내에 요약 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "dvRs",
+  "api_id": "2020059",
+  "group": "DS006",
+  "group_name": "증권신고서",
+  "name": "분할",
+  "desc": "증권신고서(분할) 내에 요약 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "estkRs",
+  "api_id": "2020054",
+  "group": "DS006",
+  "group_name": "증권신고서",
+  "name": "지분증권",
+  "desc": "증권신고서(지분증권) 내에 요약 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "extrRs",
+  "api_id": "2020058",
+  "group": "DS006",
+  "group_name": "증권신고서",
+  "name": "주식의포괄적교환·이전",
+  "desc": "증권신고서(주식의포괄적교환·이전) 내에 요약 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "mgRs",
+  "api_id": "2020057",
+  "group": "DS006",
+  "group_name": "증권신고서",
+  "name": "합병",
+  "desc": "증권신고서(합병) 내에 요약 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ },
+ {
+  "endpoint": "stkdpRs",
+  "api_id": "2020056",
+  "group": "DS006",
+  "group_name": "증권신고서",
+  "name": "증권예탁증권",
+  "desc": "증권신고서(증권예탁증권) 내에 요약 정보를 제공합니다.",
+  "params": [
+   {
+    "name": "crtfc_key",
+    "ko": "API 인증키",
+    "type": "STRING(40)",
+    "required": true,
+    "desc": "발급받은 인증키(40자리)"
+   },
+   {
+    "name": "corp_code",
+    "ko": "고유번호",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "공시대상회사의 고유번호(8자리)※ 개발가이드 > 공시정보 > 고유번호 참고"
+   },
+   {
+    "name": "bgn_de",
+    "ko": "시작일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색시작 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   },
+   {
+    "name": "end_de",
+    "ko": "종료일(최초접수일)",
+    "type": "STRING(8)",
+    "required": true,
+    "desc": "검색종료 접수일자(YYYYMMDD) ※ 2015년 이후 부터 정보제공"
+   }
+  ]
+ }
+]
