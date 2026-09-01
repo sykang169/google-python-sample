@@ -1,0 +1,36 @@
+# mcp/ 전용 규칙. terraform/ 하위까지 여기서 함께 다룬다.
+#
+# 루트 .gitignore가 범위가 넓어 이 디렉터리의 의도한 파일까지 삼키는 경우가 있어
+# (예: *.xls), 아래에서 되살린다.
+
+# ── 비밀 ────────────────────────────────────────────────────────────────────
+# 실제 API 키가 들어가는 파일. 예시 파일은 커밋한다.
+.env
+!.env.example
+
+# 프로젝트 ID 등 환경별 설정. 비밀은 없지만 배포 대상마다 다르다.
+terraform/terraform.tfvars
+!terraform/terraform.tfvars.example
+
+# ── Terraform ───────────────────────────────────────────────────────────────
+terraform/.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfplan
+
+# .terraform.lock.hcl은 **커밋한다.** 프로바이더 버전을 고정해 다른 머신에서도
+# 같은 버전이 설치되게 한다. 루트 .gitignore가 아니라 예전 이 파일에서 막고
+# 있었다.
+
+# image.auto.tfvars도 **커밋한다.** build.sh가 기록하는 서비스별 이미지 태그로,
+# 없으면 새로 클론한 곳에서 apply가 존재하지 않는 `latest` 태그를 가리켜 깨진다.
+
+# ── Python ──────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+
+# ── 루트 .gitignore가 잘못 삼키는 것 되살리기 ───────────────────────────────
+# 루트의 `*.xls`가 ECOS 공식 API 개발명세서를 제외시킨다. 이 파일들은 참고
+# 문서로 의도적으로 넣은 것이다.
+!ecos-mcp-server/openapi_spec/*.xls
