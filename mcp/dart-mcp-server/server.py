@@ -78,7 +78,14 @@ RETRYABLE_STATUS = {
     "900",  # 정의되지 않은 오류
 }
 
-mcp = FastMCP("dart-mcp")
+# 서버 단위 전제. MCP initialize 응답으로 나간다.
+INSTRUCTIONS = """금융감독원 전자공시(OPEN DART) — 공시 원문·사업보고서·재무제표·XBRL.
+
+엔드포인트 82개를 resolve_company → search_dart_apis → call_dart_api 순으로 연다.
+corp_code를 먼저 확정하지 않으면 동명 법인이 섞인다. 국내 공시 전용이며 SEC
+EDGAR 같은 해외 공시는 다루지 않는다."""
+
+mcp = FastMCP("dart-mcp", instructions=INSTRUCTIONS)
 
 
 class DartError(RuntimeError):

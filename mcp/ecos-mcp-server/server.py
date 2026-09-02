@@ -26,7 +26,14 @@ API_KEY = os.environ.get("ECOS_API_KEY", "")
 # readOnlyHint=True 이면 Gemini Enterprise가 호출 전 확인 단계를 건너뛴다.
 READ_ONLY = {"readOnlyHint": True, "destructiveHint": False, "idempotentHint": True}
 
-mcp = FastMCP("ecos-mcp")
+# 서버 단위 전제. MCP initialize 응답으로 나간다.
+INSTRUCTIONS = """한국은행 ECOS 거시경제 시계열 — 기준금리·환율·물가·GDP·국고채 금리.
+
+통계표가 약 840종이라 코드를 기억으로 지어내면 조용히 틀린 표를 읽는다.
+search_statistic_tables로 먼저 코드를 확정한다. 개별 금융회사가 파는 예금·대출
+금리는 이 서버가 아니라 FINLIFE에 있다."""
+
+mcp = FastMCP("ecos-mcp", instructions=INSTRUCTIONS)
 
 
 class EcosError(RuntimeError):

@@ -30,6 +30,9 @@
 | `get_etf_price` | ETF 시세를 조회한다. 주식시세 API에는 ETF가 없으므로 여기를 쓴다. |
 | `get_etn_price` | ETN 시세를 조회한다. |
 | `get_bond_price` | 채권 시세를 조회한다. 개별 채권의 수익률·가격 흐름을 볼 때 쓴다. |
+| `get_fund_price` | 수익증권(자산운용사 공모펀드) 시세를 조회한다. |
+| `get_warrant_price` | 신주인수권증권(워런트) 시세를 조회한다. |
+| `get_subscription_right_price` | 신주인수권증서 시세를 조회한다. 유상증자 때 배정되어 짧게 거래되는 증서다. |
 | `find_listed_item` | KRX 상장종목 마스터에서 종목을 찾는다. 종목코드·ISIN·시장구분 해석의 기준. |
 
 이름 있는 도구는 자주 쓰는 경로만 감싼 것이다. 나머지는 `search_apis` →

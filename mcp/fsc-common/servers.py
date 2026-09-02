@@ -35,6 +35,19 @@ SERVERS = {
      {"name": "get_bond_price", "svc": "GetBondSecuritiesInfoService", "op": "getBondPriceInfo",
       "doc": "채권 시세를 조회한다. 개별 채권의 수익률·가격 흐름을 볼 때 쓴다.\n\n"
              "거시 금리(기준금리·국고채)는 이 API가 아니라 한국은행 ECOS다."},
+     {"name": "get_fund_price", "svc": "GetStockSecuritiesInfoService", "op": "getSecuritiesPriceInfo",
+      "doc": "수익증권(자산운용사 공모펀드) 시세를 조회한다.\n\n"
+             "ETF가 아니다. ETF는 get_etf_price, ETN은 get_etn_price를 쓴다.\n"
+             "여기 담긴 것은 \"한투한미핵심성장포커스1(A)\" 같은 공모펀드이고 일자당 100건 안팎이다."},
+     {"name": "get_warrant_price", "svc": "GetStockSecuritiesInfoService", "op": "getPreemptiveRightSecuritiesPriceInfo",
+      "doc": "신주인수권증권(워런트) 시세를 조회한다.\n\n"
+             "증권(WR)과 증서(R)는 다르다. 증서는 get_subscription_right_price다.\n"
+             "purRgtScrtItmsNm/purRgtScrtItmsClpr가 기초가 되는 주권의 이름과 종가이므로,\n"
+             "행사가(exertPric)와 함께 보면 내가격 여부를 가늠할 수 있다."},
+     {"name": "get_subscription_right_price", "svc": "GetStockSecuritiesInfoService", "op": "getPreemptiveRightCertificatePriceInfo",
+      "doc": "신주인수권증서 시세를 조회한다. 유상증자 때 배정되어 짧게 거래되는 증서다.\n\n"
+             "증권(WR)이 아니라 증서(R)다. 증권은 get_warrant_price다.\n"
+             "dltDt(상장폐지일)가 가까우면 거래 가능 기간이 얼마 남지 않았다는 뜻이다."},
      {"name": "find_listed_item", "svc": "GetKrxListedInfoService", "op": "getItemInfo",
       "doc": "KRX 상장종목 마스터에서 종목을 찾는다. 종목코드·ISIN·시장구분 해석의 기준.\n\n"
              "시세를 조회하기 전에 여기서 isinCd를 확정해 두면 동명 종목이나 우선주로\n"

@@ -27,12 +27,21 @@ from fsc_core import READ_ONLY, FscError
 
 CATALOG = fsc_core.load_catalog('research')
 
-mcp = FastMCP('fsc-research-mcp')
+# 서버 단위 전제. MCP initialize 응답으로 나가며, 도구 목록과 달리 매 호출
+# 컨텍스트를 차지하지 않는다. 클라이언트가 이걸 모델에 넘기지 않을 수도 있어
+# search_apis 설명에도 같은 문장을 넣어 둔다.
+INSTRUCTIONS = """기업분석·공시 — 기업 개요·계열사·종속기업, 정규화 재무제표, 공시 32종, 지배구조, ESG 지수
+
+DART(전자공시)와 겹치는 영역이 있다. 이 서버는 정규화된 표 형태라 계산에 바로 쓰기 좋고, 원문 공시 전문이나 XBRL이 필요하면 DART 쪽을 쓴다."""
+
+mcp = FastMCP('fsc-research-mcp', instructions=INSTRUCTIONS)
 
 
 @mcp.tool(annotations=READ_ONLY)
 def search_apis(query: str = "", limit: int = 8) -> dict:
     """이 서버가 다루는 API와 오퍼레이션을 찾는다. call_api 이전 단계다.
+
+    이 서버의 전제: DART(전자공시)와 겹치는 영역이 있다. 이 서버는 정규화된 표 형태라 계산에 바로 쓰기 좋고, 원문 공시 전문이나 XBRL이 필요하면 DART 쪽을 쓴다.
 
     이름 있는 도구로 나와 있지 않은 데이터가 필요할 때 여기서 먼저 찾는다.
     반환되는 fields가 그 오퍼레이션의 응답 필드이자 **필터 파라미터 후보**다

@@ -56,7 +56,14 @@ BACKOFF_CAP = 6.0
 # FINLIFE 오류 코드 중 재시도할 가치가 있는 것.
 RETRYABLE_CODES = {"900"}  # 기타 오류
 
-mcp = FastMCP("finlife-mcp")
+# 서버 단위 전제. MCP initialize 응답으로 나간다.
+INSTRUCTIONS = """금융감독원 금융상품통합비교공시 — 예금·적금·주담대·전세·신용대출 금리.
+
+금융회사가 매월 금감원에 제출한 실제 판매 금리다. 한국은행 기준금리 같은 거시
+지표가 아니다. 금리를 제시할 때는 우대조건·기간·상환방식을 함께 밝힌다 —
+최고우대금리만 말하면 답이 틀린 것과 같다."""
+
+mcp = FastMCP("finlife-mcp", instructions=INSTRUCTIONS)
 
 
 class FinlifeError(RuntimeError):

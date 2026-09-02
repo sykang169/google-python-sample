@@ -71,6 +71,37 @@ RESULT_CODES = {
     "33": "서명되지 않은 호출",
 }
 
+# 코드별 "다음에 무엇을 할 것인가". 증상만 돌려주면 모델이 03(데이터 없음)과
+# 30(권한 미승인)을 똑같이 "조회 실패"로 뭉뚱그린다. 03은 조건을 넓혀 다시
+# 물어야 하고 30은 재시도가 무의미하다 — 대응이 정반대다.
+NEXT_STEP = {
+    "03": "기간·필터를 넓혀 다시 조회한다. 그래도 없으면 '해당 기간에 데이터 없음'으로"
+          " 답한다. 사고주권·배당처럼 업무를 가르는 조회는 '해당 없음'으로 단정하지"
+          " 않는다.",
+    "10": "파라미터 이름을 지어내지 말고 search_apis가 돌려준 fields에서 고른다.",
+    "11": "필수 파라미터가 빠졌다. search_apis의 fields를 확인한다.",
+    "12": "미승인이 아니라 경로 오류다. search_apis로 서비스·오퍼레이션명을 다시 확인한다.",
+    "20": "재시도해도 같다. 데이터를 가져오지 못했다고 답하고 추측으로 채우지 않는다.",
+    "22": "호출 한도를 넘었다. 같은 호출을 즉시 반복하지 않는다. 잠시 뒤 풀린다.",
+    "30": "이 API는 활용신청이 승인되지 않았다. 재시도해도 같으므로 다른 도구를 쓰거나"
+          " 가져오지 못했다고 답한다.",
+    "31": "서비스키 활용기간이 만료됐다. 재시도해도 같다.",
+    "32": "등록되지 않은 IP다. 재시도해도 같다.",
+    "33": "서명되지 않은 호출이다. 재시도해도 같다.",
+}
+
+
+def result_message(code: str, fallback: str = "") -> str:
+    """오류 코드를 "증상 — 다음 행동"으로 만든다.
+
+    이 문자열은 사람이 아니라 모델이 읽는다. 증상만 주면 03과 30을 똑같이
+    다루게 되고, 그 차이가 답을 가른다.
+    """
+    what = RESULT_CODES.get(code) or fallback or "알 수 없는 오류"
+    step = NEXT_STEP.get(code)
+    return f"{what} — {step}" if step else what
+
+
 # 재시도 정책. 서버측 일시 오류(resultCode)에만 적용한다.
 MAX_ATTEMPTS = 3
 BACKOFF_BASE = 1.0
@@ -285,7 +316,7 @@ def _parse_xml(text: str) -> dict:
     root = ET.fromstring(text)
     code = root.findtext(".//resultCode") or root.findtext(".//returnReasonCode")
     if code and code != "00":
-        raise FscError(f"금융위 API {code}: {RESULT_CODES.get(code, '알 수 없는 오류')}")
+        raise FscError(f"금융위 API {code}: {result_message(code)}")
     rows = [{c.tag: (c.text or "") for c in item} for item in root.iter("item")]
     return {
         "total_count": root.findtext(".//totalCount"),
@@ -301,13 +332,14 @@ def _check_json(data: dict) -> None:
         header = envelope.get("cmmMsgHeader", {})
         code = str(header.get("returnReasonCode", ""))
         raise FscError(
-            f"금융위 API {code}: {RESULT_CODES.get(code) or header.get('errMsg', '')}"
+            f"금융위 API {code}: {result_message(code, header.get('errMsg', ''))}"
         )
     header = (data.get("response") or {}).get("header") or {}
     code = str(header.get("resultCode", ""))
     if code and code != "00":
-        message = RESULT_CODES.get(code) or header.get("resultMsg", "")
-        raise FscError(f"금융위 API {code}: {message}")
+        raise FscError(
+            f"금융위 API {code}: {result_message(code, header.get('resultMsg', ''))}"
+        )
 
 
 def call(
