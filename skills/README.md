@@ -3,9 +3,12 @@
 국내 금융 업무에서 **AI가 자주 틀리는 것들을 정리한 규칙 모음**입니다.
 
 스킬(Agent Skill)은 AI가 필요할 때 꺼내 읽는 참고 문서입니다. 질문에 맞는 스킬이
-자동으로 선택되어, AI가 답하기 전에 그 분야의 규칙을 먼저 확인하게 됩니다. Claude
-Code, Gemini CLI, Gemini Enterprise처럼 [Agent Skills
-표준](https://agentskills.io/specification)을 지원하는 도구에서 쓸 수 있습니다.
+자동으로 선택되어, AI가 답하기 전에 그 분야의 규칙을 먼저 확인하게 됩니다.
+
+[Agent Skills 표준](https://agentskills.io/specification)을 따르므로 **특정 도구에
+묶여 있지 않습니다.** Antigravity, Gemini CLI, Claude Code, Cursor, Codex CLI,
+GitHub Copilot, Gemini Enterprise에서 같은 파일을 그대로 씁니다 — 두는 위치만
+다릅니다([설치](#설치) 참고). 스킬 기능이 없는 도구를 위한 경로도 있습니다.
 
 여기 담은 8종은 **데이터를 어떻게 가져오는지가 아니라, 가져온 다음 어떻게 읽어야
 하는지**를 다룹니다.
@@ -116,20 +119,53 @@ Code, Gemini CLI, Gemini Enterprise처럼 [Agent Skills
 실제 질문이 이 스킬들을 어떻게 넘나드는지는
 [`../mcp/SCENARIOS.md`](../mcp/SCENARIOS.md)에 데스크별 시나리오 13개로 있습니다.
 
-## 사용 방법
+## 설치
 
-### Claude Code
+스킬 형식([Agent Skills](https://agentskills.io/specification))은 도구마다 같고
+**두는 위치만 다릅니다.** 스크립트에 경로를 주면 8종을 연결합니다.
 
 ```bash
-ln -s "$(pwd)" ~/.claude/skills/kr-finance
+cd skills
+./scripts/install.sh                    # 설치 가능한 위치를 보여줍니다
+./scripts/install.sh .agents/skills     # 그 경로에 연결
 ```
 
-또는 `.claude/skills/` 아래로 복사하셔도 됩니다.
+기본은 심볼릭 링크입니다. 저장소를 업데이트하면 스킬도 함께 갱신됩니다. 저장소를
+지우거나 옮길 예정이면 `--copy`를 쓰세요.
 
-### Gemini CLI 등 스킬 표준을 지원하는 에이전트
+### 어느 경로에 넣나
 
-스킬 폴더를 그대로 두거나 심볼릭 링크로 연결하면 됩니다. 각 `SKILL.md` 맨 위의
-설명(frontmatter)을 읽어 목록에 자동으로 올립니다.
+**`.agents/skills/`가 가장 넓게 통합니다** — Antigravity와 Gemini CLI가 같은
+경로를 봅니다.
+
+| 경로 | 도구 |
+| --- | --- |
+| `.agents/skills` | [Antigravity](https://antigravity.google/docs/ide/skills/), [Gemini CLI](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/using-agent-skills.md) — 이 프로젝트에서만 |
+| `~/.agents/skills` | Gemini CLI — 모든 프로젝트 |
+| `.claude/skills` | Claude Code — 이 프로젝트에서만 |
+| `~/.claude/skills` | Claude Code — 모든 프로젝트 |
+| `.gemini/skills` | Gemini CLI 구 경로. `.agents` 쪽이 우선합니다 |
+
+Cursor, Codex CLI, GitHub Copilot도 `SKILL.md`를 읽습니다. 경로만 각 도구 문서에서
+확인해 인자로 주면 되고, **파일은 고칠 필요가 없습니다.**
+
+> [!NOTE]
+> 경로는 2026년 9월 기준입니다. 도구가 바뀌면 위 표보다 각 도구 문서가 맞습니다.
+
+### 스킬 기능이 없는 도구라면
+
+저장소 루트의 [`AGENTS.md`](../AGENTS.md)에 **질문 유형 → 읽을 파일** 표를 넣어
+두었습니다. `AGENTS.md`는 여러 도구가 공통으로 읽는 파일이라, 스킬을 지원하지
+않는 환경에서도 라우팅이 됩니다.
+
+그것도 안 되면 해당 `SKILL.md`를 대화에 그대로 붙여넣어도 됩니다. 스킬은 특별한
+실행 형식이 아니라 **마크다운 문서**입니다.
+
+### API를 직접 호출한다면
+
+시스템 프롬프트에 스킬 8종의 `description`만 목록으로 넣고, 모델이 고른 스킬의
+본문을 그때 이어붙이는 방식이 가장 효율적입니다. 8종 전부를 항상 넣으면 약
+23,000토큰을 매 호출 지불하게 됩니다(`description`만이면 2,000토큰 남짓).
 
 ### Gemini Enterprise
 
