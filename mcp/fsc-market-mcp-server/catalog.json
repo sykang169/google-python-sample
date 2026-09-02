@@ -1,0 +1,412 @@
+{
+ "GetStockSecuritiesInfoService": {
+  "name": "주식시세정보",
+  "server": "market",
+  "desk": "시세·트레이딩",
+  "tier": "core",
+  "purpose": "주식 일별 확정시세. 모든 종목 분석의 기준선",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "public_data_pk": "15094808",
+  "operations": {
+   "getPreemptiveRightCertificatePriceInfo": {
+    "fields": [
+     "basDt",
+     "clpr",
+     "dltDt",
+     "fltRt",
+     "hipr",
+     "isinCd",
+     "itmsNm",
+     "lopr",
+     "lstgCtfCnt",
+     "mkp",
+     "mrktCtg",
+     "mrktTotAmt",
+     "nstIssPrc",
+     "purRgtScrtItmsCd",
+     "purRgtScrtItmsClpr",
+     "purRgtScrtItmsNm",
+     "srtnCd",
+     "trPrc",
+     "trqu",
+     "vs"
+    ],
+    "param_style": "resultType",
+    "total_count": 2016
+   },
+   "getPreemptiveRightSecuritiesPriceInfo": {
+    "fields": [
+     "basDt",
+     "clpr",
+     "exertPric",
+     "fltRt",
+     "hipr",
+     "isinCd",
+     "itmsNm",
+     "lopr",
+     "lstgScrtCnt",
+     "mkp",
+     "mrktCtg",
+     "mrktTotAmt",
+     "purRgtScrtItmsCd",
+     "purRgtScrtItmsClpr",
+     "purRgtScrtItmsNm",
+     "srtnCd",
+     "subtPdEdDt",
+     "subtPdSttgDt",
+     "trPrc",
+     "trqu",
+     "vs"
+    ],
+    "param_style": "resultType",
+    "total_count": 33681
+   },
+   "getSecuritiesPriceInfo": {
+    "fields": [
+     "basDt",
+     "clpr",
+     "fltRt",
+     "hipr",
+     "isinCd",
+     "itmsNm",
+     "lopr",
+     "mkp",
+     "mrktTotAmt",
+     "srtnCd",
+     "stLstgCnt",
+     "trPrc",
+     "trqu",
+     "vs"
+    ],
+    "param_style": "resultType",
+    "total_count": 135210
+   },
+   "getStockPriceInfo": {
+    "fields": [
+     "basDt",
+     "clpr",
+     "fltRt",
+     "hipr",
+     "isinCd",
+     "itmsNm",
+     "lopr",
+     "lstgStCnt",
+     "mkp",
+     "mrktCtg",
+     "mrktTotAmt",
+     "srtnCd",
+     "trPrc",
+     "trqu",
+     "vs"
+    ],
+    "param_style": "resultType",
+    "total_count": 4423369
+   }
+  }
+ },
+ "GetMarketIndexInfoService": {
+  "name": "지수시세정보",
+  "server": "market",
+  "desk": "시세·트레이딩",
+  "tier": "core",
+  "purpose": "KOSPI/KOSDAQ 및 섹터지수. 초과수익률·벤치마크 산출",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "public_data_pk": "15094807",
+  "operations": {
+   "getBondMarketIndex": {
+    "fields": [
+     "basDt",
+     "clRinvIdxClpr",
+     "clRinvIdxVs",
+     "cnvt",
+     "durt",
+     "idxNm",
+     "mrktPrcIdxClpr",
+     "mrktPrcIdxVs",
+     "nPrcIdxClpr",
+     "nPrcIdxVs",
+     "totBnfIdxClpr",
+     "totBnfIdxVs",
+     "ytm",
+     "zrRinvIdxClpr",
+     "zrRinvIdxVs"
+    ],
+    "param_style": "resultType",
+    "total_count": 4904
+   },
+   "getDerivationProductMarketIndex": {
+    "fields": [
+     "basDt",
+     "clpr",
+     "fltRt",
+     "hipr",
+     "idxNm",
+     "lopr",
+     "mkp",
+     "trPrc",
+     "trqu",
+     "vs"
+    ],
+    "param_style": "resultType",
+    "total_count": 356464
+   },
+   "getStockMarketIndex": {
+    "fields": [
+     "basDt",
+     "basIdx",
+     "basPntm",
+     "clpr",
+     "epyItmsCnt",
+     "fltRt",
+     "hipr",
+     "idxCsf",
+     "idxNm",
+     "lopr",
+     "lsYrEdVsFltRg",
+     "lsYrEdVsFltRt",
+     "lstgMrktTotAmt",
+     "mkp",
+     "trPrc",
+     "trqu",
+     "vs",
+     "yrWRcrdHgst",
+     "yrWRcrdHgstDt",
+     "yrWRcrdLwst",
+     "yrWRcrdLwstDt"
+    ],
+    "param_style": "resultType",
+    "total_count": 252657
+   }
+  }
+ },
+ "GetSecuritiesProductInfoService": {
+  "name": "증권상품시세정보",
+  "server": "market",
+  "desk": "시세·트레이딩",
+  "tier": "core",
+  "purpose": "ETF·ETN·ELW 시세. 리테일 주력 상품군",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "public_data_pk": "15094806",
+  "operations": {
+   "getELWPriceInfo": {
+    "fields": [
+     "basDt",
+     "clpr",
+     "hipr",
+     "isinCd",
+     "itmsNm",
+     "lopr",
+     "lstgScrtCnt",
+     "mkp",
+     "mrktTotAmt",
+     "srtnCd",
+     "trPrc",
+     "trqu",
+     "udasAstClpr",
+     "udasAstNm",
+     "vs"
+    ],
+    "param_style": "resultType",
+    "total_count": 5286020
+   },
+   "getETFPriceInfo": {
+    "fields": [
+     "basDt",
+     "bssIdxClpr",
+     "bssIdxIdxNm",
+     "clpr",
+     "fltRt",
+     "hipr",
+     "isinCd",
+     "itmsNm",
+     "lopr",
+     "mkp",
+     "mrktTotAmt",
+     "nPptTotAmt",
+     "nav",
+     "srtnCd",
+     "stLstgCnt",
+     "trPrc",
+     "trqu",
+     "vs"
+    ],
+    "param_style": "resultType",
+    "total_count": 1191172
+   },
+   "getETNPriceInfo": {
+    "fields": [
+     "basDt",
+     "bssIdxClpr",
+     "bssIdxIdxNm",
+     "clpr",
+     "fltRt",
+     "hipr",
+     "indcVal",
+     "indcValTotAmt",
+     "isinCd",
+     "itmsNm",
+     "lopr",
+     "lstgScrtCnt",
+     "mkp",
+     "mrktTotAmt",
+     "srtnCd",
+     "trPrc",
+     "trqu",
+     "vs"
+    ],
+    "param_style": "resultType",
+    "total_count": 516385
+   }
+  }
+ },
+ "GetDerivativeProductInfoService": {
+  "name": "파생상품시세정보",
+  "server": "market",
+  "desk": "시세·트레이딩",
+  "tier": "core",
+  "purpose": "선물·옵션 시세. 헤지·차익 데스크",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "public_data_pk": "15094802",
+  "operations": {
+   "getStockFuturesPriceInfo": {
+    "fields": [
+     "basDt",
+     "clpr",
+     "hipr",
+     "isinCd",
+     "itmsNm",
+     "lopr",
+     "mkp",
+     "opnint",
+     "prdCtg",
+     "sptPrc",
+     "srtnCd",
+     "stmPrc",
+     "trPrc",
+     "trqu",
+     "vs"
+    ],
+    "param_style": "resultType",
+    "total_count": 5422273
+   }
+  }
+ },
+ "GetBondSecuritiesInfoService": {
+  "name": "채권시세정보",
+  "server": "market",
+  "desk": "시세·트레이딩",
+  "tier": "core",
+  "purpose": "채권 시세",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "public_data_pk": "15094784",
+  "operations": {
+   "getBondPriceInfo": {
+    "fields": [
+     "basDt",
+     "clprBnfRt",
+     "clprPrc",
+     "clprVs",
+     "hiprBnfRt",
+     "hiprPrc",
+     "isinCd",
+     "itmsCtg",
+     "itmsNm",
+     "loprBnfRt",
+     "loprPrc",
+     "mkpBnfRt",
+     "mkpPrc",
+     "mrktCtg",
+     "srtnCd",
+     "trPrc",
+     "trqu",
+     "xpYrCnt"
+    ],
+    "param_style": "resultType",
+    "total_count": 563236
+   }
+  }
+ },
+ "GetKrxListedInfoService": {
+  "name": "KRX상장종목정보",
+  "server": "market",
+  "desk": "시세·트레이딩",
+  "tier": "core",
+  "purpose": "상장종목 마스터. 종목코드 해석의 기준 테이블",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "public_data_pk": "15094775",
+  "operations": {
+   "getItemInfo": {
+    "fields": [
+     "basDt",
+     "corpNm",
+     "crno",
+     "isinCd",
+     "itmsNm",
+     "mrktCtg",
+     "srtnCd"
+    ],
+    "param_style": "resultType",
+    "total_count": 4197242
+   }
+  }
+ },
+ "GetGeneralProductInfoService": {
+  "name": "일반상품시세정보",
+  "server": "market",
+  "desk": "시세·트레이딩",
+  "tier": "useful",
+  "purpose": "석유·금·배출권. 원자재 ETN 기초자산 검증",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "public_data_pk": "15094805",
+  "operations": {
+   "getCertifiedEmissionReductionPriceInfo": {
+    "fields": [
+     "basDt",
+     "clpr",
+     "fltRt",
+     "hipr",
+     "isinCd",
+     "itmsNm",
+     "lopr",
+     "mkp",
+     "srtnCd",
+     "trPrc",
+     "trqu",
+     "vs"
+    ],
+    "param_style": "resultType",
+    "total_count": 20151
+   },
+   "getGoldPriceInfo": {
+    "fields": [
+     "basDt",
+     "clpr",
+     "fltRt",
+     "hipr",
+     "isinCd",
+     "itmsNm",
+     "lopr",
+     "mkp",
+     "srtnCd",
+     "trPrc",
+     "trqu",
+     "vs"
+    ],
+    "param_style": "resultType",
+    "total_count": 3270
+   },
+   "getOilPriceInfo": {
+    "fields": [
+     "basDt",
+     "oilCtg",
+     "trPrc",
+     "trqu",
+     "wtAvgPrcCptn",
+     "wtAvgPrcDisc"
+    ],
+    "param_style": "resultType",
+    "total_count": 4902
+   }
+  }
+ }
+}

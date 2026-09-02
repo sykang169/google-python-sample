@@ -2,7 +2,7 @@
 # 배포된 MCP 서버를 Gemini Enterprise Custom MCP 데이터 스토어로 연결한다.
 #
 #   usage: ./connect_ge.sh [서비스명 ...]
-#          ./connect_ge.sh                 # 3개 전부
+#          ./connect_ge.sh                 # 9개 전부
 #          ./connect_ge.sh dart-mcp        # 하나만
 #
 # Terraform이 Cloud Run 배포와 IAM까지 끝낸 뒤에 실행한다.
@@ -27,7 +27,8 @@ fi
 LOCATION="${GE_LOCATION:-global}"
 BASE="https://discoveryengine.googleapis.com/v1alpha"
 
-ALL=(ecos-mcp dart-mcp stock-mcp finlife-mcp)
+ALL=(ecos-mcp dart-mcp stock-mcp finlife-mcp
+     fsc-market-mcp fsc-ficc-mcp fsc-research-mcp fsc-equity-ops-mcp fsc-industry-mcp)
 TARGETS=("${@:-}")
 [[ -z "${TARGETS[0]:-}" ]] && TARGETS=("${ALL[@]}")
 
@@ -69,7 +70,10 @@ for svc in "${TARGETS[@]}"; do
     continue
   fi
 
-  cid="${svc}-connector"
+  # 커넥터의 instance_uri는 생성 후 변경할 수 없다. PATCH가 오류 없이 무시된다.
+  # 서비스 URL이 바뀌면(리전 이전 등) 새 ID로 다시 만들어야 하므로 접미사를 둔다.
+  #   CONNECTOR_SUFFIX=-kr ./connect_ge.sh fsc-market-mcp
+  cid="${svc}${CONNECTOR_SUFFIX:-}-connector"
   printf '%-12s %s\n' "$svc" "$url"
 
   # 페이로드의 네 가지가 전부 필요하다. 하나라도 빠지면 실패한다:

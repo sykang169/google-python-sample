@@ -1,6 +1,7 @@
 # MCP 서버 인프라 (Terraform)
 
-MCP 서버 4종의 Cloud Run 배포와 Gemini Enterprise 연결을 관리합니다.
+MCP 서버 9종의 Cloud Run 배포와 Gemini Enterprise 연결을 관리합니다.
+모두 서울 리전(`asia-northeast3`)에 있고, 전용 이그레스 IP를 함께 씁니다.
 
 처음 배포하시는 경우 [`../README.md`](../README.md)의 단계별 안내를 먼저 봐 주세요.
 이 문서는 구성 요소와 운영 방법을 다룹니다.
@@ -27,6 +28,9 @@ MCP 서버 4종의 Cloud Run 배포와 Gemini Enterprise 연결을 관리합니�
 | `google_project_iam_member.vertex_ai[*]` | `dart-mcp`의 `ask_dart`용 |
 | `google_cloud_run_v2_service_iam_member.gemini_enterprise[*]` | **GE 접근 (핵심)** |
 | `google_cloud_run_v2_service_iam_member.public[*]` | `allUsers` (기본 비활성) |
+| `google_compute_network.mcp` / `subnetwork` | 전용 이그레스용 VPC |
+| `google_compute_address.nat[*]` | **고정 이그레스 IP** |
+| `google_compute_router_nat.mcp[*]` | Cloud NAT |
 
 서비스 계정을 서비스별로 나눈 이유는 시크릿 격리입니다. 하나로 묶으면 `ecos-mcp`가
 DART·주식 키까지 읽을 수 있습니다.
@@ -61,6 +65,25 @@ sharing)을 건드리지 않아도 됩니다. 서비스 에이전트는 조직 �
 걸리지 않습니다.
 
 `public_access` 변수는 GE 외의 공개 클라이언트에도 열어야 할 때만 씁니다.
+
+## 전용 이그레스 IP를 씁니다
+
+`apis.data.go.kr`은 Cloud Run **공유 이그레스 풀의 특정 IP를 거부합니다.**
+같은 시각·같은 이미지로 인스턴스 13개를 동시에 띄워 같은 요청을 보냈더니
+하나(`34.96.43.204`)만 `ConnectTimeout`이고 나머지 12개는 HTTP 200이었습니다.
+리전이나 코드 문제가 아니라 IP 문제입니다.
+
+MCP 서버는 인스턴스가 오래 살아 있어서, 한 번 거부되는 IP를 받으면 그 인스턴스가
+재활용될 때까지 계속 실패합니다. 그래서 Cloud NAT로 우리가 소유한 고정 IP 하나를
+통해 나갑니다.
+
+```bash
+terraform output egress_ips
+```
+
+공공 API가 IP 등록을 요구하거나(`resultCode 32`) 차단을 문의할 때 제출할 주소가
+이 값입니다. NAT가 필요 없으시면 `nat_regions = []`로 두시면 되지만, 그러면 위
+문제에 다시 노출됩니다.
 
 ## 조직 정책
 
@@ -107,6 +130,18 @@ disable_custom_mcp_org_policy_override = true
 
 네 가지가 모두 필요하며 하나라도 빠지면 실패합니다.
 
+> **`instance_uri`는 만든 뒤 바꿀 수 없습니다.** `PATCH`가 오류 없이 무시되므로
+> 바뀐 줄 알기 쉽습니다. Cloud Run URL이 달라지면(리전 이전 등) 커넥터를 새로
+> 만들어야 하고, 컬렉션 ID는 재사용까지 시간이 걸립니다. `CONNECTOR_SUFFIX`로
+> 다른 ID를 주세요.
+>
+> ```bash
+> CONNECTOR_SUFFIX=-kr ./connect_ge.sh stock-mcp
+> ```
+>
+> 새로 만든 커넥터는 콘솔에서 **Reload custom actions → Enable actions**를 거쳐야
+> 도구가 활성화됩니다. 옛 커넥터는 삭제해 주세요.
+
 | 항목 | 빠뜨렸을 때 |
 |---|---|
 | `connectorModes: ["FEDERATED"]` | 데이터 수집 파이프라인을 돌리려다 `INITIALIZATION_FAILED` |
@@ -121,6 +156,14 @@ disable_custom_mcp_org_policy_override = true
 ```bash
 ./build.sh dart-mcp     # 수정한 서비스만 빌드할 수 있습니다
 terraform apply
+```
+
+`build.sh`는 어느 서비스가 어느 리전인지 `terraform output service_regions`에서
+읽습니다. 리전을 옮기는 중이라면 그 값이 아직 옛 리전을 가리키므로
+`FORCE_REGION`으로 새 리전에 먼저 이미지를 올린 뒤 apply 하세요.
+
+```bash
+FORCE_REGION=asia-northeast3 ./build.sh stock-mcp
 ```
 
 `build.sh`는 빌드한 서비스의 태그만 `image.auto.tfvars`에 기록하므로, 일부만 다시

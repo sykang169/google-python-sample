@@ -3,10 +3,26 @@ variable "project_id" {
   type        = string
 }
 
+# 서버 전체가 한국 공공 API(한국은행·금감원·공공데이터포털)만 호출하므로
+# 서울에 둔다. 왕복이 짧고, 전용 이그레스 IP(network.tf)도 이 리전에 있다.
 variable "region" {
-  description = "Cloud Run과 Artifact Registry 리전."
+  description = "Cloud Run·Artifact Registry 리전."
   type        = string
-  default     = "us-central1"
+  default     = "asia-northeast3"
+}
+
+# 전용 이그레스 IP를 붙일 리전. 빈 리스트면 Cloud NAT를 만들지 않고
+# Cloud Run 공유 이그레스 풀을 그대로 쓴다(그러면 위 문제에 다시 노출된다).
+variable "nat_regions" {
+  description = "Cloud NAT로 고정 이그레스 IP를 붙일 리전 목록."
+  type        = list(string)
+  default     = ["asia-northeast3"]
+}
+
+variable "nat_subnet_cidr_base" {
+  description = "NAT용 서브넷을 잘라 쓸 대역. 리전마다 /24를 하나씩 쓴다."
+  type        = string
+  default     = "10.90.0.0/16"
 }
 
 # ── API 키 ─────────────────────────────────────────────────────────────────

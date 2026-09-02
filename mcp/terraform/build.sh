@@ -28,24 +28,50 @@ if [[ -z "$PROJECT_ID" ]]; then
   echo "project_id를 찾지 못했습니다. terraform.tfvars에 넣거나 PROJECT_ID=... 로 지정하세요." >&2
   exit 1
 fi
-REPO="${REGION}-docker.pkg.dev/${PROJECT_ID}/mcp-servers"
+# 서비스마다 리전이 다르다. apis.data.go.kr을 쓰는 서버들(fsc-* 5종과
+# stock-mcp)은 전용 이그레스 IP가 있는 서울에 있다. 이미지는 각자의 리전
+# 저장소로 올린다 — Cloud Run이 타 리전에서 당길 수는 있지만 콜드 스타트마다
+# 대륙을 건넌다.
+#
+# 어느 서비스가 어느 리전인지는 Terraform이 정답을 갖고 있으므로 여기서
+# 추측하지 않고 output에서 읽는다. apply 전이라 output이 없으면 fsc-* 규칙으로
+# 넘어간다.
+SVC_REGIONS_JSON="$(terraform output -json service_regions 2>/dev/null || echo '{}')"
+
+# 리전을 옮기는 중이라면 output이 아직 옛 리전을 가리킨다(output은 마지막
+# apply 상태다). 그때는 FORCE_REGION으로 새 리전에 먼저 이미지를 올린 뒤
+# apply한다: FORCE_REGION=asia-northeast3 ./build.sh stock-mcp
+svc_region() {
+  if [[ -n "${FORCE_REGION:-}" ]]; then echo "$FORCE_REGION"; return; fi
+  local r
+  r="$(python3 -c "
+import json,sys
+try: print(json.loads(sys.argv[1]).get(sys.argv[2],''))
+except Exception: print('')
+" "$SVC_REGIONS_JSON" "$1" 2>/dev/null)"
+  if [[ -n "$r" ]]; then echo "$r"; else echo "$REGION"; fi
+}
+svc_repo() { echo "$(svc_region "$1")-docker.pkg.dev/${PROJECT_ID}/mcp-servers"; }
+
 TAG="$(date -u +%Y%m%d-%H%M%S)"
 
-ALL=(ecos-mcp dart-mcp stock-mcp finlife-mcp)
+ALL=(ecos-mcp dart-mcp stock-mcp finlife-mcp
+     fsc-market-mcp fsc-ficc-mcp fsc-research-mcp fsc-equity-ops-mcp fsc-industry-mcp)
 TARGETS=("${@:-}")
 [[ -z "${TARGETS[0]:-}" ]] && TARGETS=("${ALL[@]}")
 
-echo "project=$PROJECT_ID region=$REGION tag=$TAG"
-echo "repo=$REPO"
+echo "project=$PROJECT_ID  region=$REGION  tag=$TAG"
 echo
 
 # Artifact Registry 저장소는 Terraform이 만든다. 없으면 먼저 apply 해야 한다.
-if ! gcloud artifacts repositories describe mcp-servers \
-      --location="$REGION" --project="$PROJECT_ID" >/dev/null 2>&1; then
-  echo "Artifact Registry 'mcp-servers'가 없습니다." >&2
-  echo "먼저 'terraform apply -target=google_artifact_registry_repository.mcp'를 실행하세요." >&2
-  exit 1
-fi
+for _r in $(for _s in "${TARGETS[@]}"; do svc_region "$_s"; done | sort -u); do
+  if ! gcloud artifacts repositories describe mcp-servers \
+        --location="$_r" --project="$PROJECT_ID" >/dev/null 2>&1; then
+    echo "Artifact Registry 'mcp-servers'가 $_r 에 없습니다." >&2
+    echo "먼저 'terraform apply -target=google_artifact_registry_repository.mcp'를 실행하세요." >&2
+    exit 1
+  fi
+done
 
 for svc in "${TARGETS[@]}"; do
   src="../${svc}-server"
@@ -56,9 +82,9 @@ for svc in "${TARGETS[@]}"; do
     exit 1
   fi
 
-  echo "[$svc] 빌드 중..."
+  echo "[$svc] 빌드 중... -> $(svc_region "$svc")"
   gcloud builds submit "$src" \
-    --tag="${REPO}/${svc}:${TAG}" \
+    --tag="$(svc_repo "$svc")/${svc}:${TAG}" \
     --project="$PROJECT_ID" \
     --quiet
 done

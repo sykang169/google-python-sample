@@ -19,7 +19,7 @@
 
 ```
 Gemini Enterprise
-  └─ Custom MCP 데이터 스토어 4개
+  └─ Custom MCP 데이터 스토어 9개
        │  Discovery Engine 서비스 에이전트 신원으로 호출
        ↓
   Cloud Run (비공개 — 인터넷에 열지 않습니다)
@@ -37,7 +37,7 @@ Gemini Enterprise
 - **Google Cloud 프로젝트** — 결제가 활성화되어 있어야 합니다
 - **Gemini Enterprise 앱** — 이미 만들어져 있어야 합니다
 - **로컬 도구** — `gcloud`, `terraform`(1.5 이상), `python3`
-- **API 키 4개** — 아래에서 발급받습니다
+- **API 키 4개** — 아래에서 발급받습니다 (금융위 5종은 주식시세 키를 공유합니다)
 
 ### API 키 발급
 
@@ -159,7 +159,7 @@ disable_custom_mcp_org_policy_override = true
 ### 8. Gemini Enterprise에 연결합니다
 
 ```bash
-./connect_ge.sh            # 데이터 커넥터 4개를 만듭니다
+./connect_ge.sh            # 데이터 커넥터 9개를 만듭니다
 ./connect_ge.sh --status   # 상태를 확인합니다
 ```
 
@@ -168,7 +168,7 @@ disable_custom_mcp_org_policy_override = true
 **이 단계를 빠뜨리기 쉽습니다.** 데이터 스토어를 만들어도 도구는 하나도 켜져
 있지 않습니다.
 
-데이터 스토어 4개 각각에 대해:
+데이터 스토어 9개 각각에 대해:
 
 ```
 Gemini Enterprise → 데이터 스토어 → 해당 항목 선택 → Actions 탭
