@@ -14,17 +14,24 @@
 |---|---|---|
 | [`ecos-mcp-server`](./ecos-mcp-server) | 한국은행 경제통계시스템(ECOS) | 6 |
 | [`dart-mcp-server`](./dart-mcp-server) | 금융감독원 전자공시(OPEN DART) | 4 (82개 API 커버) |
-| [`stock-mcp-server`](./stock-mcp-server) | 금융위원회 주식시세정보 | 4 |
 | [`finlife-mcp-server`](./finlife-mcp-server) | 금융감독원 금융상품통합비교공시 | 6 |
+| [`fsc-market-mcp-server`](./fsc-market-mcp-server) | 금융위 — 주식·지수·ETF/ETN·채권·수익증권·종목마스터 | 11 |
+| [`fsc-ficc-mcp-server`](./fsc-ficc-mcp-server) | 금융위 — 채권 발행조건·이자일정·CP/CD | 8 |
+| [`fsc-equity-ops-mcp-server`](./fsc-equity-ops-mcp-server) | 금융위 — 배당·권리일정·대차·REPO | 7 |
+| [`fsc-industry-mcp-server`](./fsc-industry-mcp-server) | 금융위 — 펀드·증권사·업계통계 | 7 |
+| [`fsc-research-mcp-server`](./fsc-research-mcp-server) | 금융위 — 재무제표·기업개요·계열사 | 6 |
+
+금융위 5종은 [`fsc-common`](./fsc-common)의 공용 클라이언트를 공유합니다.
+`sync.py`가 각 서버 디렉터리로 복사하므로 사본을 직접 고치지 마세요.
 
 ```
 Gemini Enterprise
-  └─ Custom MCP 데이터 스토어 9개
+  └─ Custom MCP 데이터 스토어 8개
        │  Discovery Engine 서비스 에이전트 신원으로 호출
        ↓
   Cloud Run (비공개 — 인터넷에 열지 않습니다)
-       ├─ ecos-mcp     ├─ dart-mcp
-       ├─ stock-mcp    └─ finlife-mcp
+       ├─ ecos-mcp   ├─ dart-mcp   ├─ finlife-mcp
+       └─ fsc-market / fsc-ficc / fsc-equity-ops / fsc-industry / fsc-research
             └─ Secret Manager (서버별 전용 서비스 계정으로 격리)
 ```
 
@@ -159,7 +166,7 @@ disable_custom_mcp_org_policy_override = true
 ### 8. Gemini Enterprise에 연결합니다
 
 ```bash
-./connect_ge.sh            # 데이터 커넥터 9개를 만듭니다
+./connect_ge.sh            # 데이터 커넥터 8개를 만듭니다
 ./connect_ge.sh --status   # 상태를 확인합니다
 ```
 
@@ -168,7 +175,7 @@ disable_custom_mcp_org_policy_override = true
 **이 단계를 빠뜨리기 쉽습니다.** 데이터 스토어를 만들어도 도구는 하나도 켜져
 있지 않습니다.
 
-데이터 스토어 9개 각각에 대해:
+데이터 스토어 8개 각각에 대해:
 
 ```
 Gemini Enterprise → 데이터 스토어 → 해당 항목 선택 → Actions 탭
@@ -327,7 +334,6 @@ mcp/
 ├── dart-mcp-server/        전자공시
 │   ├── assets/             빌드 시점에 준비하는 카탈로그와 회사 인덱스
 │   └── build_assets.py     자산 생성 스크립트
-├── stock-mcp-server/       주식시세
 ├── finlife-mcp-server/     금융상품 금리
 └── terraform/              인프라 정의와 배포 스크립트
     ├── setup_keys.sh       API 키를 Secret Manager에 저장

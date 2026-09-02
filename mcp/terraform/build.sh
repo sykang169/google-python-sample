@@ -29,7 +29,7 @@ if [[ -z "$PROJECT_ID" ]]; then
   exit 1
 fi
 # 서비스마다 리전이 다르다. apis.data.go.kr을 쓰는 서버들(fsc-* 5종과
-# stock-mcp)은 전용 이그레스 IP가 있는 서울에 있다. 이미지는 각자의 리전
+# 모두 전용 이그레스 IP가 있는 서울에 있다. 이미지는 각자의 리전
 # 저장소로 올린다 — Cloud Run이 타 리전에서 당길 수는 있지만 콜드 스타트마다
 # 대륙을 건넌다.
 #
@@ -40,7 +40,7 @@ SVC_REGIONS_JSON="$(terraform output -json service_regions 2>/dev/null || echo '
 
 # 리전을 옮기는 중이라면 output이 아직 옛 리전을 가리킨다(output은 마지막
 # apply 상태다). 그때는 FORCE_REGION으로 새 리전에 먼저 이미지를 올린 뒤
-# apply한다: FORCE_REGION=asia-northeast3 ./build.sh stock-mcp
+# apply한다: FORCE_REGION=asia-northeast3 ./build.sh fsc-market-mcp
 svc_region() {
   if [[ -n "${FORCE_REGION:-}" ]]; then echo "$FORCE_REGION"; return; fi
   local r
@@ -55,7 +55,7 @@ svc_repo() { echo "$(svc_region "$1")-docker.pkg.dev/${PROJECT_ID}/mcp-servers";
 
 TAG="$(date -u +%Y%m%d-%H%M%S)"
 
-ALL=(ecos-mcp dart-mcp stock-mcp finlife-mcp
+ALL=(ecos-mcp dart-mcp finlife-mcp
      fsc-market-mcp fsc-ficc-mcp fsc-research-mcp fsc-equity-ops-mcp fsc-industry-mcp)
 TARGETS=("${@:-}")
 [[ -z "${TARGETS[0]:-}" ]] && TARGETS=("${ALL[@]}")

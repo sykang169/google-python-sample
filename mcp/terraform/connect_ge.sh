@@ -27,8 +27,28 @@ fi
 LOCATION="${GE_LOCATION:-global}"
 BASE="https://discoveryengine.googleapis.com/v1alpha"
 
-ALL=(ecos-mcp dart-mcp stock-mcp finlife-mcp
+ALL=(ecos-mcp dart-mcp finlife-mcp
      fsc-market-mcp fsc-ficc-mcp fsc-research-mcp fsc-equity-ops-mcp fsc-industry-mcp)
+
+# 콘솔 목록에 보이는 이름. 목록이 가나다순으로 정렬되므로 주제를 앞에 둔다 —
+# 기관을 앞에 두면 금감원이 공시와 금융상품 두 곳으로 흩어지고, 정작 무엇을
+# 묻는 데이터인지가 뒤로 밀린다.
+#
+# 이 이름은 모델의 도구 선택에 쓰이지 않는다. 라우팅은 MCP 서버가 주는 도구
+# 이름과 설명으로 결정된다. 여기는 사람이 콘솔에서 찾기 위한 이름이다.
+#
+# 이미 만들어진 커넥터에는 영향이 없다(생성 시에만 쓰인다). 기존 것을 바꾸려면
+# collections.patch로 displayName을 갱신한다 — instance_uri와 달리 변경 가능하다.
+declare -A DISPLAY_NAME=(
+  [ecos-mcp]="거시경제 — 한국은행 ECOS"
+  [dart-mcp]="공시·재무 — 금감원 DART"
+  [finlife-mcp]="금융상품 금리 — 금감원"
+  [fsc-research-mcp]="기업재무 — 금융위"
+  [fsc-equity-ops-mcp]="배당·권리사무 — 금융위"
+  [fsc-market-mcp]="주식·지수·ETF·채권 시세 — 금융위"
+  [fsc-ficc-mcp]="채권·단기금리 — 금융위"
+  [fsc-industry-mcp]="펀드·증권업계 — 금융위"
+)
 TARGETS=("${@:-}")
 [[ -z "${TARGETS[0]:-}" ]] && TARGETS=("${ALL[@]}")
 
@@ -86,7 +106,7 @@ for svc in "${TARGETS[@]}"; do
     -H "Authorization: Bearer ${TOKEN}" -H "Content-Type: application/json" \
     -d "{
       \"collectionId\": \"${cid}\",
-      \"collectionDisplayName\": \"${svc}\",
+      \"collectionDisplayName\": \"${DISPLAY_NAME[$svc]:-$svc}\",
       \"dataConnector\": {
         \"dataSource\": \"custom_mcp\",
         \"refreshInterval\": \"86400s\",

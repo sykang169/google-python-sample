@@ -1,6 +1,0 @@
-__pycache__/
-*.pyc
-.env
-.venv/
-README.md
-deploy.sh

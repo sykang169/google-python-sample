@@ -1,6 +1,6 @@
 # MCP 서버 인프라 (Terraform)
 
-MCP 서버 9종의 Cloud Run 배포와 Gemini Enterprise 연결을 관리합니다.
+MCP 서버 8종의 Cloud Run 배포와 Gemini Enterprise 연결을 관리합니다.
 모두 서울 리전(`asia-northeast3`)에 있고, 전용 이그레스 IP를 함께 씁니다.
 
 처음 배포하시는 경우 [`../README.md`](../README.md)의 단계별 안내를 먼저 봐 주세요.
@@ -136,7 +136,7 @@ disable_custom_mcp_org_policy_override = true
 > 다른 ID를 주세요.
 >
 > ```bash
-> CONNECTOR_SUFFIX=-kr ./connect_ge.sh stock-mcp
+> CONNECTOR_SUFFIX=-kr ./connect_ge.sh fsc-market-mcp
 > ```
 >
 > 새로 만든 커넥터는 콘솔에서 **Reload custom actions → Enable actions**를 거쳐야
@@ -163,7 +163,7 @@ terraform apply
 `FORCE_REGION`으로 새 리전에 먼저 이미지를 올린 뒤 apply 하세요.
 
 ```bash
-FORCE_REGION=asia-northeast3 ./build.sh stock-mcp
+FORCE_REGION=asia-northeast3 ./build.sh fsc-market-mcp
 ```
 
 `build.sh`는 빌드한 서비스의 태그만 `image.auto.tfvars`에 기록하므로, 일부만 다시

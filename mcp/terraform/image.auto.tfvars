@@ -6,7 +6,7 @@ image_tags = {
   fsc-equity-ops-mcp = "20260902-041001"
   fsc-ficc-mcp = "20260902-041001"
   fsc-industry-mcp = "20260902-041001"
-  fsc-market-mcp = "20260902-041001"
+  fsc-market-mcp = "20260902-052655"
   fsc-research-mcp = "20260902-041001"
   stock-mcp = "20260902-045801"
 }

@@ -53,13 +53,6 @@ locals {
         GOOGLE_CLOUD_LOCATION = "global"
       }
     }
-    stock-mcp = {
-      secret_id       = "STOCK_API_KEY"
-      secret_env      = "STOCK_API_KEY"
-      memory          = "512Mi"
-      needs_vertex_ai = false
-      extra_env       = {}
-    }
     finlife-mcp = {
       secret_id       = "FINLIFE_API_KEY"
       secret_env      = "FINLIFE_API_KEY"
