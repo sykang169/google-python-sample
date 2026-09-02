@@ -18,7 +18,7 @@ Google AI 기술들을 활용한 다양한 예제와 실험 프로젝트들의 �
 | **[Grounding 튜토리얼](./gemini-grounding/)** | Gemini grounding 기능 학습 예제 | ⭐⭐☆ | Gemini, Google Gen AI SDK, LangChain | [📖 가이드](./gemini-grounding/README.md) |
 | **[ADK Finance Agent](./adk-finance-agent/)** | 한국 금융 데이터 활용 ADK 샘플 | ⭐⭐⭐ | Google ADK, DART API, ECOS API | [📖 가이드](./adk-finance-agent/README.md) |
 | **[금융 데이터 MCP 서버](./mcp/)** | 한국 금융 공공데이터 MCP 서버 8종·도구 55개를 Cloud Run에 배포하고 Gemini Enterprise에 연결 | ⭐⭐⭐ | MCP, FastMCP, Cloud Run, Terraform, Gemini Enterprise | [📖 가이드](./mcp/README.md) |
-| **[금융권 Agent Skills](./skills/)** | 국내 금융 도메인 Agent Skills 11종 — 데이터 8(시세·채권·기업분석·권리업무·업계·DART·ECOS·상품) + 횡단 3(캘린더·식별자·규제) | ⭐⭐☆ | Agent Skills, Gemini Enterprise, Claude Code | [📖 가이드](./skills/README.md) |
+| **[금융권 Agent Skills](./skills/)** | 국내 금융 도메인 Agent Skills 8종 — 업무 5(주식분석·금리·기업재무·상품비교·권리업무) + 횡단 3(캘린더·식별자·규제) | ⭐⭐☆ | Agent Skills, Gemini Enterprise, Claude Code | [📖 가이드](./skills/README.md) |
 
 ### 🔮 향후 추가 예정
 - **A2A (Agent-to-Agent)** 관련 샘플

@@ -161,6 +161,6 @@ metadata:
 ## 관련 스킬
 
 - [kr-entity-resolution](../kr-entity-resolution/SKILL.md) — 종목·법인 식별자 확정
-- [krx-stock-quote-analysis](../krx-stock-quote-analysis/SKILL.md) — 시세 조회와 수익률
+- [kr-equity-analysis](../kr-equity-analysis/SKILL.md) — 시세 조회와 수익률
 - [kr-equity-operations](../kr-equity-operations/SKILL.md) — 배당·권리업무 처리
 - [kr-financial-ai-compliance](../kr-financial-ai-compliance/SKILL.md) — 대고객 안내 시 규제 경계

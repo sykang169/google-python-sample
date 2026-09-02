@@ -135,7 +135,7 @@ DART 사업보고서 (corp_code, bsns_year, reprt_code)
 ## 관련 스킬
 
 - [kr-market-calendar](../kr-market-calendar/SKILL.md) — 날짜·기간 규칙
-- [krx-stock-quote-analysis](../krx-stock-quote-analysis/SKILL.md) — 상장종목 마스터와 시세
-- [kr-corporate-research](../kr-corporate-research/SKILL.md) — 법인등록번호 기반 재무 조회
-- [dart-disclosure-analysis](../dart-disclosure-analysis/SKILL.md) — `corp_code` 기반 공시 조회
-- [kr-securities-industry-benchmark](../kr-securities-industry-benchmark/SKILL.md) — 회사명 표기 차이와 펀드 표준코드
+- [kr-equity-analysis](../kr-equity-analysis/SKILL.md) — 상장종목 마스터와 시세
+- [kr-corporate-financials](../kr-corporate-financials/SKILL.md) — 법인등록번호 기반 재무 조회
+- [kr-corporate-financials](../kr-corporate-financials/SKILL.md) — `corp_code` 기반 공시 조회
+- [kr-product-comparison](../kr-product-comparison/SKILL.md) — 회사명 표기 차이와 펀드 표준코드
