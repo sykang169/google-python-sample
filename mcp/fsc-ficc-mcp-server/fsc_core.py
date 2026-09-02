@@ -37,6 +37,8 @@ import xml.etree.ElementTree as ET
 from collections import OrderedDict
 from typing import Any
 
+import difflib
+
 import httpx
 
 TIMEOUT = httpx.Timeout(30.0, connect=10.0)
@@ -342,6 +344,45 @@ def _check_json(data: dict) -> None:
         )
 
 
+def _known_params(fields: list[str]) -> set[str]:
+    """이 오퍼레이션이 실제로 거르는 파라미터 이름.
+
+    금융위 API는 응답 필드명을 그대로 필터로 쓰고, 여기에 부분 일치(like~)와
+    기간(begin~/end~) 변형이 붙는다.
+    """
+    ok = set(fields) | {"numOfRows", "pageNo"}
+    for f in fields:
+        cap = f[:1].upper() + f[1:]
+        ok |= {f"like{cap}", f"begin{cap}", f"end{cap}"}
+    return ok
+
+
+def _param_warning(fields: list[str], params: dict[str, Any] | None) -> str | None:
+    """모르는 파라미터 이름을 잡아낸다.
+
+    금융위 API는 모르는 파라미터를 **오류 없이 무시한다.** 그래서 필터를 걸었다고
+    믿은 채 전체 결과를 받게 되고, 그 숫자를 그대로 답하면 다른 대상의 값을
+    제시하게 된다. 상류가 침묵하므로 여기서 대신 말해 준다.
+    """
+    if not params or not fields:
+        return None
+    ok = _known_params(fields)
+    unknown = [k for k in params if k not in ok]
+    if not unknown:
+        return None
+    parts = []
+    for k in unknown:
+        near = difflib.get_close_matches(k, sorted(ok), n=2, cutoff=0.6)
+        parts.append(f"{k}" + (f" (혹시 {' 또는 '.join(near)}?)" if near else ""))
+    return (
+        "필터가 걸리지 않았을 수 있습니다 — 이 오퍼레이션에 없는 파라미터: "
+        + ", ".join(parts)
+        + ". 금융위 API는 모르는 파라미터를 오류 없이 무시하므로 아래 rows는 "
+        "의도한 필터가 적용되지 않은 결과일 수 있습니다. 결과 행의 값을 실제로 "
+        "확인하고, 파라미터 이름은 search_apis가 돌려주는 fields에서 고르세요."
+    )
+
+
 def call(
     catalog: dict[str, Any],
     service: str,
@@ -371,6 +412,8 @@ def call(
             f"'{service}'에 '{operation}' 오퍼레이션이 없습니다. "
             f"가능한 값: {', '.join(spec['operations'])}"
         )
+
+    warning = _param_warning(op_spec.get("fields") or [], params)
 
     query: dict[str, Any] = {"serviceKey": API_KEY, "numOfRows": rows, "pageNo": page}
     style = op_spec.get("param_style", "resultType")
@@ -448,6 +491,8 @@ def call(
                 result = _parse_xml(body)
             except ET.ParseError as exc:
                 raise FscError(f"XML 파싱 실패: {body[:200]}") from exc
+            if warning:
+                result["warning"] = warning
             _throttle.record_success()
             _cache.put(cache_key, result)
             return result
@@ -473,6 +518,8 @@ def call(
             "num_of_rows": payload.get("numOfRows"),
             "rows": _dig_items(payload),
         }
+        if warning:
+            result["warning"] = warning
         _throttle.record_success()
         _cache.put(cache_key, result)
         return result
