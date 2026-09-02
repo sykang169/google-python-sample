@@ -124,7 +124,12 @@ def _call(operation: str, group_code: str, page: int) -> dict:
         result = payload.get("result") or {}
         code = str(result.get("err_cd", ""))
         if code and code != "000":
-            message = f"FINLIFE {code}: {result.get('err_msg', '')}"
+            # 증상만 주면 "이 권역에 그 상품군이 없다"를 조회 실패로 다루게 된다.
+            message = (
+                f"FINLIFE {code}: {result.get('err_msg', '')} — 재시도해도 같으면"
+                " 금융권역과 상품군의 조합을 확인한다. 권역에 따라 해당 상품이"
+                " 아예 없을 수 있다(예: 정기예금은 은행·저축은행에만 있다)."
+            )
             if code in RETRYABLE_CODES:
                 last_error = message
                 continue
