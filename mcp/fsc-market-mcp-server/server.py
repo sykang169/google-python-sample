@@ -169,6 +169,61 @@ def get_bond_price(params: dict | None = None, rows: int = 20, page: int = 1) ->
 
 
 @mcp.tool(annotations=READ_ONLY)
+def get_fund_price(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
+    """수익증권(자산운용사 공모펀드) 시세를 조회한다.
+
+ETF가 아니다. ETF는 get_etf_price, ETN은 get_etn_price를 쓴다.
+여기 담긴 것은 "한투한미핵심성장포커스1(A)" 같은 공모펀드이고 일자당 100건 안팎이다.
+
+    필터로 쓸 수 있는 필드(응답 필드와 같다):
+        basDt, clpr, fltRt, hipr, isinCd, itmsNm, lopr, mkp, mrktTotAmt, srtnCd, stLstgCnt, trPrc, trqu, vs
+
+    Args:
+        params: 필터 딕셔너리 (예: {"basDt": "20260831"}). 비우면 최신부터 반환한다.
+        rows: 페이지당 건수 (최대 권장 100).
+        page: 페이지 번호.
+    """
+    return fsc_core.call(CATALOG, 'GetStockSecuritiesInfoService', 'getSecuritiesPriceInfo', params, rows, page)
+
+
+@mcp.tool(annotations=READ_ONLY)
+def get_warrant_price(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
+    """신주인수권증권(워런트) 시세를 조회한다.
+
+증권(WR)과 증서(R)는 다르다. 증서는 get_subscription_right_price다.
+purRgtScrtItmsNm/purRgtScrtItmsClpr가 기초가 되는 주권의 이름과 종가이므로,
+행사가(exertPric)와 함께 보면 내가격 여부를 가늠할 수 있다.
+
+    필터로 쓸 수 있는 필드(응답 필드와 같다):
+        basDt, clpr, exertPric, fltRt, hipr, isinCd, itmsNm, lopr, lstgScrtCnt, mkp, mrktCtg, mrktTotAmt, purRgtScrtItmsCd, purRgtScrtItmsClpr, purRgtScrtItmsNm, srtnCd, subtPdEdDt, subtPdSttgDt, trPrc, trqu, vs
+
+    Args:
+        params: 필터 딕셔너리 (예: {"basDt": "20260831"}). 비우면 최신부터 반환한다.
+        rows: 페이지당 건수 (최대 권장 100).
+        page: 페이지 번호.
+    """
+    return fsc_core.call(CATALOG, 'GetStockSecuritiesInfoService', 'getPreemptiveRightSecuritiesPriceInfo', params, rows, page)
+
+
+@mcp.tool(annotations=READ_ONLY)
+def get_subscription_right_price(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
+    """신주인수권증서 시세를 조회한다. 유상증자 때 배정되어 짧게 거래되는 증서다.
+
+증권(WR)이 아니라 증서(R)다. 증권은 get_warrant_price다.
+dltDt(상장폐지일)가 가까우면 거래 가능 기간이 얼마 남지 않았다는 뜻이다.
+
+    필터로 쓸 수 있는 필드(응답 필드와 같다):
+        basDt, clpr, dltDt, fltRt, hipr, isinCd, itmsNm, lopr, lstgCtfCnt, mkp, mrktCtg, mrktTotAmt, nstIssPrc, purRgtScrtItmsCd, purRgtScrtItmsClpr, purRgtScrtItmsNm, srtnCd, trPrc, trqu, vs
+
+    Args:
+        params: 필터 딕셔너리 (예: {"basDt": "20260831"}). 비우면 최신부터 반환한다.
+        rows: 페이지당 건수 (최대 권장 100).
+        page: 페이지 번호.
+    """
+    return fsc_core.call(CATALOG, 'GetStockSecuritiesInfoService', 'getPreemptiveRightCertificatePriceInfo', params, rows, page)
+
+
+@mcp.tool(annotations=READ_ONLY)
 def find_listed_item(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
     """KRX 상장종목 마스터에서 종목을 찾는다. 종목코드·ISIN·시장구분 해석의 기준.
 
