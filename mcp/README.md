@@ -10,6 +10,9 @@
 > "카카오 임원이 몇 명이야?"
 > "최근 기준금리 추이 보여줘"
 
+서버를 넘나들어야 답이 되는 실무 질문은 [`SCENARIOS.md`](./SCENARIOS.md)에
+데스크별로 13개 정리해 두었습니다.
+
 | 서버 | 데이터 원천 | 도구 수 |
 |---|---|---|
 | [`ecos-mcp-server`](./ecos-mcp-server) | 한국은행 경제통계시스템(ECOS) | 6 |
@@ -191,13 +194,17 @@ Gemini Enterprise → 데이터 스토어 → 해당 항목 선택 → Actions �
 ./connect_ge.sh --status
 ```
 
-네 개 모두 `state=ACTIVE`이고 `tools`와 `enabled` 숫자가 같으면 완료입니다.
+여덟 개 모두 `state=ACTIVE`이고 `tools`와 `enabled` 숫자가 같으면 완료입니다.
 
 ```
-  ecos-mcp-connector      state=ACTIVE tools=6 enabled=6
-  dart-mcp-connector      state=ACTIVE tools=4 enabled=4
-  stock-mcp-connector     state=ACTIVE tools=4 enabled=4
-  finlife-mcp-connector   state=ACTIVE tools=6 enabled=6
+  mcp-ecos              state=ACTIVE tools=6  enabled=6
+  mcp-dart              state=ACTIVE tools=4  enabled=4
+  mcp-finlife           state=ACTIVE tools=6  enabled=6
+  mcp-fsc-market        state=ACTIVE tools=11 enabled=11
+  mcp-fsc-ficc          state=ACTIVE tools=8  enabled=8
+  mcp-fsc-research      state=ACTIVE tools=6  enabled=6
+  mcp-fsc-equity-ops    state=ACTIVE tools=7  enabled=7
+  mcp-fsc-industry      state=ACTIVE tools=7  enabled=7
 ```
 
 이제 Gemini Enterprise 채팅에서 질문해 보세요.
@@ -212,6 +219,11 @@ Gemini Enterprise → 데이터 스토어 → 해당 항목 선택 → Actions �
 
 [`SYSTEM_PROMPT.md`](./SYSTEM_PROMPT.md)에 바로 붙여 넣을 수 있는 초안과, 적용
 후 확인해 볼 검증 질문이 정리되어 있습니다.
+
+적용한 뒤에는 [`SCENARIOS.md`](./SCENARIOS.md)로 검증해 보세요. 데스크별 시나리오
+13개에 호출 체인과 함정이 붙어 있고, **답할 수 없는 질문에서 어떻게 행동해야
+하는지**(투자권유 유도, 편향 비교 요청, 전 종목 스크리닝)를 기대 동작과 함께
+정리했습니다. 도구가 도는 것보다 이쪽이 도입 판단을 가릅니다.
 
 ---
 
@@ -284,7 +296,7 @@ cd ../terraform && ./build.sh dart-mcp && terraform apply
 도구 목록만으로 약 3.7만 토큰을 차지합니다. 에이전트에 MCP 서버를 여러 개
 붙이는 순간 컨텍스트 예산을 모두 소모하게 됩니다. 그래서 `search_dart_apis`로
 필요한 엔드포인트를 찾고 `call_dart_api`로 실행하는 방식으로 4개까지 줄였습니다.
-네 서버를 합쳐도 도구 20개, 약 3,400토큰입니다.
+여덟 서버를 합쳐도 도구 55개입니다.
 
 **집계는 서버에서 처리합니다.** "임원이 몇 명인가" 같은 질문에서 모델이 JSON
 수십 행을 직접 세면 틀립니다(실제로 틀렸습니다). DART 응답에 건수와 범주형 필드
@@ -293,7 +305,7 @@ cd ../terraform && ./build.sh dart-mcp && terraform apply
 **조인도 서버에서 처리합니다.** FINLIFE는 상품 정보와 금리를 별도 배열로
 주는데, 서버가 합쳐서 상품 하나에 금리 옵션이 붙은 형태로 반환합니다.
 
-**모두 조회 전용입니다.** 20개 도구 전부 `readOnlyHint`가 붙어 있어 Gemini
+**모두 조회 전용입니다.** 55개 도구 전부 `readOnlyHint`가 붙어 있어 Gemini
 Enterprise가 사용자 확인 없이 호출합니다.
 
 ---
@@ -329,12 +341,21 @@ Discovery Engine 서비스 에이전트 신원으로 호출합니다. 이 서비
 mcp/
 ├── README.md               이 문서
 ├── SYSTEM_PROMPT.md        Gemini Enterprise 시스템 지시 + 검증 질문
+├── SCENARIOS.md            데스크별 질문 시나리오 13종 + 시연 순서
 ├── ecos-mcp-server/        한국은행 경제통계
 │   └── openapi_spec/       공식 API 개발명세서
 ├── dart-mcp-server/        전자공시
 │   ├── assets/             빌드 시점에 준비하는 카탈로그와 회사 인덱스
 │   └── build_assets.py     자산 생성 스크립트
 ├── finlife-mcp-server/     금융상품 금리
+├── fsc-common/             금융위 5종의 공용 클라이언트 (사본의 원본)
+│   ├── servers.py          서버 정의 — 여기를 고치고 sync.py를 돌립니다
+│   └── catalog.json        금융위 API 카탈로그
+├── fsc-market-mcp-server/       시세·종목마스터
+├── fsc-ficc-mcp-server/         채권·단기자금
+├── fsc-equity-ops-mcp-server/   권리·대차
+├── fsc-industry-mcp-server/     상품·업계
+├── fsc-research-mcp-server/     기업분석·공시
 └── terraform/              인프라 정의와 배포 스크립트
     ├── setup_keys.sh       API 키를 Secret Manager에 저장
     ├── build.sh            컨테이너 이미지 빌드
