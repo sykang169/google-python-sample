@@ -35,11 +35,23 @@ Google 공식 스킬 카탈로그를 먼저 찾아봤는데, **금융 도메인 
 | [`dart-disclosure-analysis`](dart-disclosure-analysis/) | 전자공시 원문·XBRL·사업보고서 | `mcp/dart-mcp-server` |
 | [`ecos-macro-analysis`](ecos-macro-analysis/) | 한국은행 ECOS — 기준금리·환율·물가 시계열 | `mcp/ecos-mcp-server` |
 | [`finlife-product-comparison`](finlife-product-comparison/) | 예적금·대출 금리 비교 | `mcp/finlife-mcp-server` |
+| [`kr-market-calendar`](kr-market-calendar/) | 휴장일·영업일, 배당락·권리락, 결산월과 공시 기한 | (없음, 횡단 스킬) |
+| [`kr-entity-resolution`](kr-entity-resolution/) | ISIN·단축코드·`crno`·`corp_code`·펀드 표준코드 확정 | (없음, 횡단 스킬) |
 | [`kr-financial-ai-compliance`](kr-financial-ai-compliance/) | 금융권 AI 규제 가드레일 | (없음, 횡단 스킬) |
 
-앞의 넷은 **데이터 스킬**이고 마지막 하나는 **횡단 스킬**입니다. 데이터 스킬은 각자
-마지막 절에서 규제 스킬을 참조합니다. 금융 수치를 사용자에게 내보내는 순간 규제
-경계가 걸리기 때문입니다.
+앞의 여덟은 **데이터 스킬**로 MCP 서버와 짝을 이루고, 뒤의 셋은 **횡단
+스킬**입니다.
+
+횡단 스킬은 어느 데이터 소스를 쓰든 똑같이 걸리는 것을 모았습니다. 날짜와
+식별자는 거의 모든 질문의 밑바닥에 깔려 있고 **틀려도 오류가 나지 않기** 때문에
+따로 뽑았습니다 — 휴장일을 0으로 세거나 우선주를 섞어도 API는 아무 말도 하지
+않습니다. 데이터 스킬은 이 셋을 참조만 하고 내용을 옮겨 적지 않습니다.
+
+> [!NOTE]
+> `kr-financial-ai-compliance`는 **에이전트를 설계할 때 읽는 문서**입니다.
+> 런타임 가드레일(투자권유 경계, 편향 비교 금지)은 스킬이 아니라 시스템
+> 프롬프트가 담당합니다 — 스킬은 질문에 따라 선택적으로 로드되므로, 규제 경계를
+> 스킬에만 두면 그 스킬을 부르지 않는 질문에서 빠집니다.
 
 ## 설계 원칙
 

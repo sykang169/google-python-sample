@@ -29,7 +29,9 @@ DART와 **겹치는 영역**이다. 어느 쪽을 쓸지 먼저 정하는 것이
 ## 핵심 규칙
 
 1. **법인등록번호(`crno`)가 열쇠다.** 회사명으로는 조회되지 않는다.
-   `get_corp_outline`으로 먼저 확정한다. DART의 `corp_code`(8자리)와는
+   `get_corp_outline`으로 먼저 확정한다 —
+   [kr-entity-resolution](../kr-entity-resolution/SKILL.md).
+   DART의 `corp_code`(8자리)와는
    **다른 식별자**이므로 서로 넘기지 않는다.
 2. **연결/별도를 확인한다.** 재무제표 응답의 `fnclDcd`가
    `FS_ifrs_Consolidated`(연결) / 개별을 구분한다. 어느 쪽인지 밝히지 않은
@@ -97,8 +99,7 @@ call_api(service, operation, params)
 | `basDt` | 기준일자 `YYYYMMDD` (하루) |
 | `beginBasDt` / `endBasDt` | 기간 조회 |
 | `itmsNm` / `likeItmsNm` | 종목명 정확 일치 / 부분 일치 |
-| `isinCd` | ISIN 12자리. **가장 정확하다** |
-| `crno` | 법인등록번호 13자리 (기업 정보 계열) |
+| `isinCd` / `crno` | ISIN·법인등록번호 — 확정 방법은 [kr-entity-resolution](../kr-entity-resolution/SKILL.md) |
 | `basYm` | 기준월 `YYYYMM` (통계 계열) |
 
 ## 오류 코드
@@ -132,12 +133,13 @@ call_api(service, operation, params)
 ## 시점을 반드시 밝힌다
 
 > [!CAUTION]
-> **이 데이터는 실시간이 아니다.** 금융위 제공 서비스는 전부 기준일
-> **다음 영업일 13시 이후**에 갱신된다. 장중 값이 아니며, 오늘 날짜로 조회하면
-> 데이터가 없는 것이 정상이다. "최근" 값을 물으면 하루를 집지 말고 최근
-> 7~10일을 기간으로 조회해 가장 최신 `basDt`의 행을 쓴다.
+> **이 데이터는 실시간이 아니다.** 금융위 제공 서비스는 기준일 다음 영업일
+> 13시 이후에 갱신된다. 오늘 날짜로 조회해 데이터가 없는 것은 정상이다.
 
 숫자를 인용할 때는 항상 **출처 · 기준일 · 단위**를 함께 쓴다.
+
+휴장일 처리, "최근"을 구간으로 바꾸는 법, 기간 계산의 함정은
+[kr-market-calendar](../kr-market-calendar/SKILL.md)에 있다.
 값은 전부 문자열이므로 계산 전에 숫자로 바꾸고, 빈 문자열은 0이 아니라 결측이다.
 
 ## 이 서버가 다루는 API

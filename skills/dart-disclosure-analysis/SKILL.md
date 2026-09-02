@@ -48,7 +48,7 @@ summary.field_distributions로 집계, list로 개별 값 인용
 
 | 파라미터 | 값 |
 | --- | --- |
-| `corp_code` | 8자리. `resolve_company`로만 획득. 회사명 금지 |
+| `corp_code` | 8자리. `resolve_company`로만 획득. 회사명 금지 ([kr-entity-resolution](../kr-entity-resolution/SKILL.md)) |
 | `bsns_year` | 4자리. **2015년 이후만 제공** |
 | `reprt_code` | 1분기 `11013`, 반기 `11012`, 3분기 `11014`, 사업보고서 `11011` |
 | `bgn_de` / `end_de` | `YYYYMMDD` |
