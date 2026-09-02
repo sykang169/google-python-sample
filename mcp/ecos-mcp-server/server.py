@@ -26,7 +26,14 @@ API_KEY = os.environ.get("ECOS_API_KEY", "")
 # readOnlyHint=True 이면 Gemini Enterprise가 호출 전 확인 단계를 건너뛴다.
 READ_ONLY = {"readOnlyHint": True, "destructiveHint": False, "idempotentHint": True}
 
-mcp = FastMCP("ecos-mcp")
+# 서버 단위 전제. MCP initialize 응답으로 나간다.
+INSTRUCTIONS = """한국은행 ECOS 거시경제 시계열 — 기준금리·환율·물가·GDP·국고채 금리.
+
+통계표가 약 840종이라 코드를 기억으로 지어내면 조용히 틀린 표를 읽는다.
+search_statistic_tables로 먼저 코드를 확정한다. 개별 금융회사가 파는 예금·대출
+금리는 이 서버가 아니라 FINLIFE에 있다."""
+
+mcp = FastMCP("ecos-mcp", instructions=INSTRUCTIONS)
 
 
 class EcosError(RuntimeError):
@@ -106,10 +113,18 @@ def _call(*segments: str) -> Any:
             if code in RETRYABLE_CODES:
                 last_error = f"ECOS {code}: {msg}"
                 continue
-            # 공식 명세의 오류 코드 중 호출자가 대응을 달리해야 하는 것들.
+            # 코드별 "다음에 무엇을 할 것인가". 증상만 주면 INFO-200(데이터 없음)을
+            # 그대로 "데이터가 없습니다"로 옮겨 답하게 되는데, 대부분은 주기·기간
+            # 형식이 어긋났거나 그 항목의 수록 기간을 벗어난 것이다.
             hint = {
-                "INFO-200": " (조건에 맞는 데이터 없음 — 기간/코드를 넓혀 다시 시도)",
-                "ERROR-400": " (검색범위 초과로 60초 타임아웃 — 기간을 좁힐 것)",
+                "INFO-200": " — 조건에 맞는 데이터가 없다. 그대로 '없다'고 답하지 말고"
+                            " list_statistic_items로 주기(cycle)와 수록 기간을 확인한 뒤"
+                            " 기간을 넓혀 재시도한다.",
+                "ERROR-400": " — 검색범위 초과로 60초 타임아웃. 기간을 좁혀 나눠 조회한다.",
+                "ERROR-100": " — 필수 인자가 빠졌다. 통계표 코드와 주기를"
+                             " search_statistic_tables로 다시 확인한다.",
+                "ERROR-602": " — 과도한 호출로 이용이 제한됐다. 같은 호출을 즉시"
+                             " 반복하지 않는다.",
             }.get(code, "")
             raise EcosError(f"ECOS {code}: {msg}{hint}")
         break

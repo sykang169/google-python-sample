@@ -37,6 +37,8 @@ import xml.etree.ElementTree as ET
 from collections import OrderedDict
 from typing import Any
 
+import difflib
+
 import httpx
 
 TIMEOUT = httpx.Timeout(30.0, connect=10.0)
@@ -57,7 +59,7 @@ RESULT_CODES = {
     "00": None,
     "01": "애플리케이션 에러",
     "02": "데이터베이스 에러",
-    "03": "데이터 없음 (조건에 맞는 행이 없다 — 오류가 아니다)",
+    "03": "데이터 없음. 오류가 아니다",
     "04": "HTTP 에러",
     "05": "서비스 연결 실패",
     "10": "잘못된 요청 파라미터",
@@ -70,6 +72,37 @@ RESULT_CODES = {
     "32": "등록되지 않은 IP",
     "33": "서명되지 않은 호출",
 }
+
+# 코드별 "다음에 무엇을 할 것인가". 증상만 돌려주면 모델이 03(데이터 없음)과
+# 30(권한 미승인)을 똑같이 "조회 실패"로 뭉뚱그린다. 03은 조건을 넓혀 다시
+# 물어야 하고 30은 재시도가 무의미하다 — 대응이 정반대다.
+NEXT_STEP = {
+    "03": "휴장일이거나, 종목명이 어긋났거나, 수록 범위 밖이다. 기간·필터를 넓혀"
+          " 다시 조회하고 그래도 없으면 '해당 기간에 데이터 없음'으로 답한다."
+          " 사고주권·배당처럼 업무를 가르는 조회는 '해당 없음'으로 단정하지 않는다.",
+    "10": "파라미터 이름을 지어내지 말고 search_apis가 돌려준 fields에서 고른다.",
+    "11": "필수 파라미터가 빠졌다. search_apis의 fields를 확인한다.",
+    "12": "미승인이 아니라 경로 오류다. search_apis로 서비스·오퍼레이션명을 다시 확인한다.",
+    "20": "재시도해도 같다. 데이터를 가져오지 못했다고 답하고 추측으로 채우지 않는다.",
+    "22": "호출 한도를 넘었다. 같은 호출을 즉시 반복하지 않는다. 잠시 뒤 풀린다.",
+    "30": "이 API는 활용신청이 승인되지 않았다. 재시도해도 같으므로 다른 도구를 쓰거나"
+          " 가져오지 못했다고 답한다.",
+    "31": "서비스키 활용기간이 만료됐다. 재시도해도 같다.",
+    "32": "등록되지 않은 IP다. 재시도해도 같다.",
+    "33": "서명되지 않은 호출이다. 재시도해도 같다.",
+}
+
+
+def result_message(code: str, fallback: str = "") -> str:
+    """오류 코드를 "증상 — 다음 행동"으로 만든다.
+
+    이 문자열은 사람이 아니라 모델이 읽는다. 증상만 주면 03과 30을 똑같이
+    다루게 되고, 그 차이가 답을 가른다.
+    """
+    what = RESULT_CODES.get(code) or fallback or "알 수 없는 오류"
+    step = NEXT_STEP.get(code)
+    return f"{what} — {step}" if step else what
+
 
 # 재시도 정책. 서버측 일시 오류(resultCode)에만 적용한다.
 MAX_ATTEMPTS = 3
@@ -285,7 +318,7 @@ def _parse_xml(text: str) -> dict:
     root = ET.fromstring(text)
     code = root.findtext(".//resultCode") or root.findtext(".//returnReasonCode")
     if code and code != "00":
-        raise FscError(f"금융위 API {code}: {RESULT_CODES.get(code, '알 수 없는 오류')}")
+        raise FscError(f"금융위 API {code}: {result_message(code)}")
     rows = [{c.tag: (c.text or "") for c in item} for item in root.iter("item")]
     return {
         "total_count": root.findtext(".//totalCount"),
@@ -301,13 +334,53 @@ def _check_json(data: dict) -> None:
         header = envelope.get("cmmMsgHeader", {})
         code = str(header.get("returnReasonCode", ""))
         raise FscError(
-            f"금융위 API {code}: {RESULT_CODES.get(code) or header.get('errMsg', '')}"
+            f"금융위 API {code}: {result_message(code, header.get('errMsg', ''))}"
         )
     header = (data.get("response") or {}).get("header") or {}
     code = str(header.get("resultCode", ""))
     if code and code != "00":
-        message = RESULT_CODES.get(code) or header.get("resultMsg", "")
-        raise FscError(f"금융위 API {code}: {message}")
+        raise FscError(
+            f"금융위 API {code}: {result_message(code, header.get('resultMsg', ''))}"
+        )
+
+
+def _known_params(fields: list[str]) -> set[str]:
+    """이 오퍼레이션이 실제로 거르는 파라미터 이름.
+
+    금융위 API는 응답 필드명을 그대로 필터로 쓰고, 여기에 부분 일치(like~)와
+    기간(begin~/end~) 변형이 붙는다.
+    """
+    ok = set(fields) | {"numOfRows", "pageNo"}
+    for f in fields:
+        cap = f[:1].upper() + f[1:]
+        ok |= {f"like{cap}", f"begin{cap}", f"end{cap}"}
+    return ok
+
+
+def _param_warning(fields: list[str], params: dict[str, Any] | None) -> str | None:
+    """모르는 파라미터 이름을 잡아낸다.
+
+    금융위 API는 모르는 파라미터를 **오류 없이 무시한다.** 그래서 필터를 걸었다고
+    믿은 채 전체 결과를 받게 되고, 그 숫자를 그대로 답하면 다른 대상의 값을
+    제시하게 된다. 상류가 침묵하므로 여기서 대신 말해 준다.
+    """
+    if not params or not fields:
+        return None
+    ok = _known_params(fields)
+    unknown = [k for k in params if k not in ok]
+    if not unknown:
+        return None
+    parts = []
+    for k in unknown:
+        near = difflib.get_close_matches(k, sorted(ok), n=2, cutoff=0.6)
+        parts.append(f"{k}" + (f" (혹시 {' 또는 '.join(near)}?)" if near else ""))
+    return (
+        "필터가 걸리지 않았을 수 있습니다 — 이 오퍼레이션에 없는 파라미터: "
+        + ", ".join(parts)
+        + ". 금융위 API는 모르는 파라미터를 오류 없이 무시하므로 아래 rows는 "
+        "의도한 필터가 적용되지 않은 결과일 수 있습니다. 결과 행의 값을 실제로 "
+        "확인하고, 파라미터 이름은 search_apis가 돌려주는 fields에서 고르세요."
+    )
 
 
 def call(
@@ -339,6 +412,8 @@ def call(
             f"'{service}'에 '{operation}' 오퍼레이션이 없습니다. "
             f"가능한 값: {', '.join(spec['operations'])}"
         )
+
+    warning = _param_warning(op_spec.get("fields") or [], params)
 
     query: dict[str, Any] = {"serviceKey": API_KEY, "numOfRows": rows, "pageNo": page}
     style = op_spec.get("param_style", "resultType")
@@ -416,6 +491,8 @@ def call(
                 result = _parse_xml(body)
             except ET.ParseError as exc:
                 raise FscError(f"XML 파싱 실패: {body[:200]}") from exc
+            if warning:
+                result["warning"] = warning
             _throttle.record_success()
             _cache.put(cache_key, result)
             return result
@@ -441,6 +518,8 @@ def call(
             "num_of_rows": payload.get("numOfRows"),
             "rows": _dig_items(payload),
         }
+        if warning:
+            result["warning"] = warning
         _throttle.record_success()
         _cache.put(cache_key, result)
         return result

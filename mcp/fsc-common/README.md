@@ -10,7 +10,6 @@ Gemini Enterprise의 Custom MCP Server 데이터 스토어로 쓴다.
 | `dart-mcp-server` | 금감원 OPEN DART | 전자공시 82종. 원문·XBRL·사업보고서 |
 | `ecos-mcp-server` | 한국은행 ECOS | 거시 시계열. 기준금리·환율·물가 |
 | `finlife-mcp-server` | 금감원 FinLife | 예적금·대출 금리 비교 |
-| `stock-mcp-server` | 금융위 주식시세 | (구) 주식·수익증권·신주인수권 — `fsc-market`이 대체 |
 | `fsc-market-mcp-server` | 금융위 | 주식·지수·ETF·ETN·채권·선물·일반상품 시세 |
 | `fsc-ficc-mcp-server` | 금융위 | 채권 발행·권리일정·콜, CP/CD 실거래, DCM |
 | `fsc-research-mcp-server` | 금융위 | 정규화 재무제표, 계열사, 공시 33종 |

@@ -53,9 +53,9 @@ DART_STATUS = {
     "010": "등록되지 않은 키입니다.",
     "011": "사용할 수 없는 키입니다. 오픈API에 등록되었으나 일시적으로 사용 중지된 키입니다.",
     "012": "접근할 수 없는 IP입니다.",
-    "013": "조회된 데이터가 없습니다. (조건에 맞는 공시가 없음 — 연도/보고서코드를 바꿔 재시도)",
+    "013": "조회된 데이터가 없습니다.",
     "014": "파일이 존재하지 않습니다.",
-    "020": "요청 제한을 초과하였습니다. (분당 1,000건 — 잠시 후 재시도)",
+    "020": "요청 제한을 초과하였습니다. (분당 1,000건)",
     "021": "조회 가능한 회사 개수가 초과하였습니다. (최대 100건)",
     "100": "필드의 부적절한 값입니다.",
     "101": "부적절한 접근입니다. (존재하지 않는 엔드포인트)",
@@ -63,6 +63,30 @@ DART_STATUS = {
     "900": "정의되지 않은 오류가 발생하였습니다.",
     "901": "사용자 계정의 개인정보 보유기간이 만료되었습니다.",
 }
+
+# 코드별 "다음에 무엇을 할 것인가". 증상만 주면 013(데이터 없음)과
+# 101(없는 엔드포인트)을 똑같이 "조회 실패"로 다루게 된다.
+DART_NEXT_STEP = {
+    "013": "실패가 아니다. 사업연도를 한 해 낮추거나 reprt_code를 바꿔 최소 한 번은"
+           " 재시도한다 — 실제로 대부분의 원인이다. 그래도 없으면 '해당 조건의 공시"
+           " 없음'으로 답한다.",
+    "010": "인증키 문제다. 재시도해도 같으므로 가져오지 못했다고 답한다.",
+    "011": "일시 중지된 키다. 재시도해도 같다.",
+    "012": "허용되지 않은 IP다. 재시도해도 같다.",
+    "020": "분당 요청 제한을 넘었다. 같은 호출을 즉시 반복하지 않는다.",
+    "021": "조회 회사 수가 한 번에 처리할 수 있는 범위를 넘었다. 나눠서 조회한다.",
+    "100": "파라미터 값이 형식에 맞지 않는다. search_dart_apis로 명세를 다시 확인한다.",
+    "101": "엔드포인트 이름을 지어냈다는 신호다. search_dart_apis로 실제 경로를 찾는다.",
+    "800": "시스템 점검 중이다. 잠시 후 재시도한다.",
+}
+
+
+def dart_message(status: str, fallback: str = "") -> str:
+    """상태 코드를 "증상 — 다음 행동"으로 만든다. 모델이 읽는 문자열이다."""
+    what = DART_STATUS.get(status) or fallback or "알 수 없는 오류"
+    step = DART_NEXT_STEP.get(status)
+    return f"{what} — {step}" if step else what
+
 
 # 재시도 정책. 한국 공공 API는 앞단에서 연결을 끊거나 일시적으로 스로틀하는
 # 구간이 실제로 관측된다. 지수 백오프 + 지터로 짧은 장애 구간을 넘긴다.
@@ -78,7 +102,14 @@ RETRYABLE_STATUS = {
     "900",  # 정의되지 않은 오류
 }
 
-mcp = FastMCP("dart-mcp")
+# 서버 단위 전제. MCP initialize 응답으로 나간다.
+INSTRUCTIONS = """금융감독원 전자공시(OPEN DART) — 공시 원문·사업보고서·재무제표·XBRL.
+
+엔드포인트 82개를 resolve_company → search_dart_apis → call_dart_api 순으로 연다.
+corp_code를 먼저 확정하지 않으면 동명 법인이 섞인다. 국내 공시 전용이며 SEC
+EDGAR 같은 해외 공시는 다루지 않는다."""
+
+mcp = FastMCP("dart-mcp", instructions=INSTRUCTIONS)
 
 
 class DartError(RuntimeError):
@@ -148,8 +179,7 @@ def _call(endpoint: str, params: dict[str, Any]) -> dict:
         # DART는 오류도 HTTP 200으로 준다. status를 반드시 봐야 한다.
         status = str(data.get("status", ""))
         if status and status != "000":
-            known = DART_STATUS.get(status)
-            message = f"DART {status}: {known or data.get('message', '')}"
+            message = f"DART {status}: {dart_message(status, data.get('message', ''))}"
             if status in RETRYABLE_STATUS:
                 last_error = message
                 continue

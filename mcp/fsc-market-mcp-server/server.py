@@ -27,12 +27,21 @@ from fsc_core import READ_ONLY, FscError
 
 CATALOG = fsc_core.load_catalog('market')
 
-mcp = FastMCP('fsc-market-mcp')
+# 서버 단위 전제. MCP initialize 응답으로 나가며, 도구 목록과 달리 매 호출
+# 컨텍스트를 차지하지 않는다. 클라이언트가 이걸 모델에 넘기지 않을 수도 있어
+# search_apis 설명에도 같은 문장을 넣어 둔다.
+INSTRUCTIONS = """시세 통합 — 주식·지수·채권·ETF/ETN/ELW·선물·일반상품(금·석유·배출권) 일별 확정시세와 KRX 상장종목 마스터
+
+장중 시세가 아니다. 기준일 다음 영업일 13시 이후에 갱신되는 확정 시세다."""
+
+mcp = FastMCP('fsc-market-mcp', instructions=INSTRUCTIONS)
 
 
 @mcp.tool(annotations=READ_ONLY)
 def search_apis(query: str = "", limit: int = 8) -> dict:
     """이 서버가 다루는 API와 오퍼레이션을 찾는다. call_api 이전 단계다.
+
+    이 서버의 전제: 장중 시세가 아니다. 기준일 다음 영업일 13시 이후에 갱신되는 확정 시세다.
 
     이름 있는 도구로 나와 있지 않은 데이터가 필요할 때 여기서 먼저 찾는다.
     반환되는 fields가 그 오퍼레이션의 응답 필드이자 **필터 파라미터 후보**다

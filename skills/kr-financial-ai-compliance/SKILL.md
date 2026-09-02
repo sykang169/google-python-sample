@@ -157,14 +157,14 @@ metadata:
 
 데이터 조회 자체는 다음 스킬이 담당하며, 각 스킬은 이 문서의 경계를 전제로 한다.
 
-- [krx-stock-quote-analysis](../krx-stock-quote-analysis/SKILL.md) — 주식·지수·ETF·채권 시세
-- [kr-bond-ficc-analysis](../kr-bond-ficc-analysis/SKILL.md) — 채권·CP/CD·DCM
-- [kr-corporate-research](../kr-corporate-research/SKILL.md) — 기업 재무·공시 (정규화)
-- [dart-disclosure-analysis](../dart-disclosure-analysis/SKILL.md) — 전자공시 원문·XBRL
+- [kr-equity-analysis](../kr-equity-analysis/SKILL.md) — 주식·지수·ETF·채권 시세
+- [kr-macro-and-rates](../kr-macro-and-rates/SKILL.md) — 채권·CP/CD·DCM
+- [kr-corporate-financials](../kr-corporate-financials/SKILL.md) — 기업 재무·공시 (정규화)
+- [kr-corporate-financials](../kr-corporate-financials/SKILL.md) — 전자공시 원문·XBRL
 - [kr-equity-operations](../kr-equity-operations/SKILL.md) — 배당·권리일정·사고주권·대차
-- [kr-securities-industry-benchmark](../kr-securities-industry-benchmark/SKILL.md) — 펀드·연금·경쟁사
-- [ecos-macro-analysis](../ecos-macro-analysis/SKILL.md) — 거시 지표
-- [finlife-product-comparison](../finlife-product-comparison/SKILL.md) — 예금·대출 금리 비교
+- [kr-product-comparison](../kr-product-comparison/SKILL.md) — 펀드·연금·경쟁사
+- [kr-macro-and-rates](../kr-macro-and-rates/SKILL.md) — 거시 지표
+- [kr-product-comparison](../kr-product-comparison/SKILL.md) — 예금·대출 금리 비교
 
 **증권사 업무를 다룰 때 특히 주의할 것** — 사고주권 조회처럼 결과가 업무 처리를
 가르는 데이터가 있다. 조회 실패를 "해당 없음"으로 답하면 실물 입고 심사가 잘못

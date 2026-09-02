@@ -90,10 +90,15 @@ for svc in "${TARGETS[@]}"; do
     continue
   fi
 
-  # 커넥터의 instance_uri는 생성 후 변경할 수 없다. PATCH가 오류 없이 무시된다.
-  # 서비스 URL이 바뀌면(리전 이전 등) 새 ID로 다시 만들어야 하므로 접미사를 둔다.
-  #   CONNECTOR_SUFFIX=-kr ./connect_ge.sh fsc-market-mcp
-  cid="${svc}${CONNECTOR_SUFFIX:-}-connector"
+  # 컬렉션 ID는 mcp-<도메인>으로 통일한다. 접두사가 같으면 콘솔 목록에서 한
+  # 덩어리로 모이고, 프로젝트에 다른 데이터 스토어가 섞여 있어도 구분된다.
+  #   ecos-mcp -> mcp-ecos,  fsc-market-mcp -> mcp-fsc-market
+  #
+  # instance_uri는 생성 후 변경할 수 없다(PATCH가 오류 없이 무시된다). 서비스
+  # URL이 바뀌면 커넥터를 새로 만들어야 하는데, 삭제한 컬렉션 ID는 한동안
+  # 재사용할 수 없다. 그때는 접미사로 다른 ID를 준다.
+  #   CONNECTOR_SUFFIX=-v2 ./connect_ge.sh fsc-market-mcp
+  cid="mcp-${svc%-mcp}${CONNECTOR_SUFFIX:-}"
   printf '%-12s %s\n' "$svc" "$url"
 
   # 페이로드의 네 가지가 전부 필요하다. 하나라도 빠지면 실패한다:

@@ -1,59 +1,120 @@
 # 금융권 Agent Skills
 
-한국 금융 도메인용 [Agent Skills](https://agentskills.io/specification) 모음입니다.
-Claude Code, Gemini CLI, Gemini Enterprise 등 스킬 표준을 지원하는 에이전트에서 쓸 수
-있습니다.
+국내 금융 업무에서 **AI가 자주 틀리는 것들을 정리한 규칙 모음**입니다.
 
-## 왜 만들었나
+스킬(Agent Skill)은 AI가 필요할 때 꺼내 읽는 참고 문서입니다. 질문에 맞는 스킬이
+자동으로 선택되어, AI가 답하기 전에 그 분야의 규칙을 먼저 확인하게 됩니다. Claude
+Code, Gemini CLI, Gemini Enterprise처럼 [Agent Skills
+표준](https://agentskills.io/specification)을 지원하는 도구에서 쓸 수 있습니다.
 
-Google 공식 스킬 카탈로그를 먼저 찾아봤는데, **금융 도메인 스킬이 없었습니다.**
+여기 담은 8종은 **데이터를 어떻게 가져오는지가 아니라, 가져온 다음 어떻게 읽어야
+하는지**를 다룹니다.
 
-| 카탈로그 | 스킬 수 | 금융 도메인 |
+## 어떤 실수를 막나
+
+아래 세 가지는 모두 **오류가 나지 않습니다.** API는 정상 응답을 주고, AI도
+자신 있게 답합니다. 검토하는 사람이 원자료를 다시 뽑아 보기 전까지는 틀린 줄
+모릅니다.
+
+**"이 종목 시장 대비 얼마나 올랐어?"**
+
+시장 대비 수익률은 종목 수익률에서 지수 수익률을 빼서 구합니다. 그런데 코스닥
+종목을 코스피 지수와 빼도 계산은 그대로 됩니다. 두 지수는 다르게 움직이기 때문에
+값이 달라지고, 때로는 플러스가 마이너스로 바뀝니다. 답변에는 "지수 대비 몇 %p"만
+남고 **어느 지수를 썼는지는 적히지 않습니다.**
+
+**"이 회사 부채비율 얼마야?"**
+
+은행은 고객이 맡긴 예금이 회계상 부채입니다. 그래서 부채비율이 제조업 기준으로는
+위험해 보이는 수준이어도 은행에서는 정상입니다. **계산도 맞고 숫자도 맞는데
+결론만 틀립니다.**
+
+**"예금 금리 제일 높은 곳 알려줘"**
+
+은행이 공시하는 금리는 두 가지입니다. 기본금리, 그리고 급여이체나 카드 실적 같은
+조건을 다 채웠을 때 받는 최고우대금리입니다. 최고우대금리만 뽑아서 "이 은행이
+가장 높다"고 안내하면, 조건을 못 채우는 고객에게는 **사실과 다른 안내**가 됩니다.
+
+이런 실수를 막는 규칙만 모았습니다.
+
+## 어떤 질문에 어떤 스킬이 쓰이나
+
+**업무 스킬 5종** — 데이터가 어디서 오는지가 아니라, **실무에서 하는 일**로
+나눴습니다. 질문 하나가 여러 데이터 소스를 넘나드는 경우가 많기 때문입니다.
+
+| 스킬 | 이런 질문에 | 필요한 데이터 |
 | --- | --- | --- |
-| [google/skills](https://github.com/google/skills) | 127 (ads / analytics / cloud / developers) | 없음 |
-| [google-gemini/gemini-skills](https://github.com/google-gemini/gemini-skills) | 4 (Gemini API 개발) | 없음 |
+| [`kr-equity-analysis`](kr-equity-analysis/) | "삼성전자 지난달 수익률", "코스피 대비 초과수익", "금 ETF 괴리" | 시세 |
+| [`kr-macro-and-rates`](kr-macro-and-rates/) | "기준금리 추이", "국고채 대비 스프레드", "CP 91일물" | 거시 시계열 + 채권 |
+| [`kr-corporate-financials`](kr-corporate-financials/) | "부채비율 3년 추이", "유상증자 공시 원문", "사외이사 몇 명" | 재무제표 + 전자공시 |
+| [`kr-product-comparison`](kr-product-comparison/) | "예금 금리 제일 높은 곳", "증권사 수수료 비교", "펀드 판매 점유율" | 상품 금리 + 업계 통계 |
+| [`kr-equity-operations`](kr-equity-operations/) | "배당 기준일", "사고주권 조회", "대차잔고" | 권리·대차 |
 
-서드파티에는 금융 스킬이 있지만([OctagonAI/skills](https://github.com/OctagonAI/skills) 등)
-대부분 미국 시장·SEC 기준이라 국내 규제와 데이터 소스에 맞지 않습니다. 그래서 이
-저장소의 MCP 서버([`../mcp`](../mcp))와 국내 규제 환경에 맞춰 직접 만들었습니다.
+**공통 스킬 3종** — 어떤 질문이든 밑에 깔리는 것들입니다. 업무 스킬들은 이 셋을
+링크로 가리키기만 하고, 같은 내용을 다시 적지 않습니다.
 
-작성 기준은 [google-gemini/gemini-skills](https://github.com/google-gemini/gemini-skills)의
-구조와 서술 방식, [Agent Skills 명세](https://agentskills.io/specification),
-[Gemini Enterprise 스킬 문서](https://docs.cloud.google.com/gemini/enterprise/docs/skills?hl=ko),
-그리고 [anthropics/skills](https://github.com/anthropics/skills)의 `skill-creator`
-지침입니다.
+| 스킬 | 다루는 것 |
+| --- | --- |
+| [`kr-market-calendar`](kr-market-calendar/) | 휴장일·영업일, 배당락·권리락, 결산월과 공시 제출기한 |
+| [`kr-entity-resolution`](kr-entity-resolution/) | 종목·회사를 코드로 확정하기 (ISIN, 법인등록번호 등) |
+| [`kr-financial-ai-compliance`](kr-financial-ai-compliance/) | 금융권 AI 규제 가드레일 (설계용 문서) |
 
-## 스킬 목록
+날짜와 종목 코드를 따로 뽑은 이유는 **틀렸을 때 아무 신호가 없기 때문**입니다.
+주말이나 공휴일 날짜로 시세를 조회하면 에러가 아니라 빈 결과가 옵니다.
+"삼성전자"로 검색하면 삼성전자우(우선주)가 함께 딸려 오는데 경고가 없습니다.
+이런 규칙을 여러 스킬에 나눠 적으면 하나만 고쳤을 때 서로 다른 말을 하게 되므로,
+한 곳에 모았습니다.
 
-| 스킬 | 다루는 것 | 짝이 되는 MCP 서버 |
+> [!NOTE]
+> `kr-financial-ai-compliance`는 **에이전트를 만들 때 참고하는 문서**입니다.
+> 투자권유 금지 같은 규제는 답변할 때마다 지켜져야 하는데, 스킬은 질문에 따라
+> 선택적으로만 읽힙니다. 그래서 실제 답변에 항상 적용되는 규칙은 스킬이 아니라
+> 시스템 프롬프트에 두었습니다
+> ([`../mcp/SYSTEM_PROMPT.md`](../mcp/SYSTEM_PROMPT.md)).
+
+## 무엇을 담고 무엇을 담지 않나
+
+각 스킬이 답하는 질문은 "이 API를 어떻게 호출하는가"가 아니라 **"어떤 답이
+그럴듯한데 틀렸는가"**입니다.
+
+**담는 것**
+
+- **코드를 기억으로 쓰지 말 것** — 통계표 번호나 공시 API 이름을 짐작해서 쓰면
+  에러가 아니라 *엉뚱한 데이터*가 돌아옵니다
+- **비교를 설계하는 법** — 만기가 다른 채권끼리, 시장이 다른 지수와, 금액 구간이
+  다른 수수료끼리 비교하면 숫자는 나오지만 답은 아닙니다
+- **이 데이터에 없는 것** — ETF는 주식시세 API에 없고, 개별 은행 금리는 한국은행
+  통계에 없습니다
+- **해석이 갈리는 지점** — 연결재무제표와 별도재무제표, 지수와 상승률, 기본금리와
+  우대금리, 대차잔고와 공매도
+- **출처와 기준일** — 금융에서 시점 없는 숫자는 틀린 숫자입니다
+
+**담지 않는 것.** 아래는 각각 더 나은 자리가 있습니다. 스킬에도 적어 두면 한쪽만
+고쳤을 때 서로 다른 말을 하게 됩니다.
+
+| 지식 | 있어야 할 곳 | 왜 |
 | --- | --- | --- |
-| [`krx-stock-quote-analysis`](krx-stock-quote-analysis/) | 주식·지수·ETF·ETN·채권 시세, 초과수익률 | `mcp/fsc-market-mcp-server` |
-| [`kr-bond-ficc-analysis`](kr-bond-ficc-analysis/) | 채권 발행·권리일정·콜, CP/CD 실거래 금리, DCM | `mcp/fsc-ficc-mcp-server` |
-| [`kr-corporate-research`](kr-corporate-research/) | 정규화 재무제표, 계열사, 공시 33종 | `mcp/fsc-research-mcp-server` |
-| [`kr-equity-operations`](kr-equity-operations/) | 배당·권리일정·사고주권·대차·REPO | `mcp/fsc-equity-ops-mcp-server` |
-| [`kr-securities-industry-benchmark`](kr-securities-industry-benchmark/) | 펀드·퇴직연금·증권사 경영지표·수수료·금투협 통계 | `mcp/fsc-industry-mcp-server` |
-| [`dart-disclosure-analysis`](dart-disclosure-analysis/) | 전자공시 원문·XBRL·사업보고서 | `mcp/dart-mcp-server` |
-| [`ecos-macro-analysis`](ecos-macro-analysis/) | 한국은행 ECOS — 기준금리·환율·물가 시계열 | `mcp/ecos-mcp-server` |
-| [`finlife-product-comparison`](finlife-product-comparison/) | 예적금·대출 금리 비교 | `mcp/finlife-mcp-server` |
-| [`kr-financial-ai-compliance`](kr-financial-ai-compliance/) | 금융권 AI 규제 가드레일 | (없음, 횡단 스킬) |
+| 조회 조건으로 쓸 수 있는 항목 이름 | MCP 서버의 `search_apis` 응답 | 실제 호출로 수집한 값이라 API가 바뀌어도 어긋나지 않습니다 |
+| 오류 코드와 대응 방법 | 서버가 오류 메시지에 함께 담아 보냅니다 | 오류가 났을 때만 필요하고, 그때 바로 도착합니다 |
+| 어떤 도구를 쓸지 | 도구 이름과 설명 | AI가 도구를 고를 때 반드시 읽는 자리입니다 |
+| 답변 형식, 규제 가드레일 | 시스템 프롬프트 | 질문과 무관하게 항상 적용돼야 합니다 |
 
-앞의 넷은 **데이터 스킬**이고 마지막 하나는 **횡단 스킬**입니다. 데이터 스킬은 각자
-마지막 절에서 규제 스킬을 참조합니다. 금융 수치를 사용자에게 내보내는 순간 규제
-경계가 걸리기 때문입니다.
+## 데이터는 어디서 오나
 
-## 설계 원칙
+스킬에는 규칙만 있고 데이터는 없습니다. 데이터는 이 저장소의
+[MCP 서버 8종](../mcp)이 가져옵니다. **다른 방법으로 같은 데이터를 조회하더라도
+스킬은 그대로 쓸 수 있습니다.**
 
-각 스킬은 "이 API를 어떻게 호출하는가"가 아니라 **"모델이 무엇을 조용히
-틀리는가"**를 중심으로 썼습니다. 도구 시그니처는 MCP 서버의 설명에 이미 있으므로
-반복하지 않고, 대신 다음을 담았습니다.
+| 스킬 | 이 저장소의 짝 |
+| --- | --- |
+| `kr-equity-analysis` | [`fsc-market-mcp-server`](../mcp/fsc-market-mcp-server) |
+| `kr-macro-and-rates` | [`ecos-mcp-server`](../mcp/ecos-mcp-server) + [`fsc-ficc-mcp-server`](../mcp/fsc-ficc-mcp-server) |
+| `kr-corporate-financials` | [`fsc-research-mcp-server`](../mcp/fsc-research-mcp-server) + [`dart-mcp-server`](../mcp/dart-mcp-server) |
+| `kr-product-comparison` | [`finlife-mcp-server`](../mcp/finlife-mcp-server) + [`fsc-industry-mcp-server`](../mcp/fsc-industry-mcp-server) |
+| `kr-equity-operations` | [`fsc-equity-ops-mcp-server`](../mcp/fsc-equity-ops-mcp-server) |
 
-- **코드를 기억에서 쓰지 말 것** — ECOS `stat_code`나 DART 엔드포인트명은 추측하면
-  오류가 아니라 *다른 데이터*가 돌아옵니다
-- **오류가 아닌 실패** — HTTP 200과 함께 오는 `status 013`, `INFO-200`,
-  `resultCode 03`은 대부분 재시도로 풀리는 조건 문제입니다
-- **수록 범위 밖** — ETF는 주식시세 API에 없고, 개별 회사 금리는 ECOS에 없습니다
-- **해석의 함정** — 연결/별도, 지수와 상승률, 기본금리와 우대금리, 액면분할, 휴장일
-- **출처와 기준시점을 반드시 함께** — 금융 답변에서 시점 없는 숫자는 틀린 숫자입니다
+실제 질문이 이 스킬들을 어떻게 넘나드는지는
+[`../mcp/SCENARIOS.md`](../mcp/SCENARIOS.md)에 데스크별 시나리오 13개로 있습니다.
 
 ## 사용 방법
 
@@ -67,13 +128,16 @@ ln -s "$(pwd)" ~/.claude/skills/kr-finance
 
 ### Gemini CLI 등 스킬 표준을 지원하는 에이전트
 
-스킬 디렉터리를 그대로 두거나 심볼릭 링크로 연결하면 `SKILL.md`의 frontmatter가
-자동으로 인덱싱됩니다.
+스킬 폴더를 그대로 두거나 심볼릭 링크로 연결하면 됩니다. 각 `SKILL.md` 맨 위의
+설명(frontmatter)을 읽어 목록에 자동으로 올립니다.
 
 ### Gemini Enterprise
 
-경로가 두 가지입니다. 어느 쪽이든 `references/`는 GE에 단계적 공개가 없어 무시되므로,
-패키징 스크립트가 `SKILL.md` 끝에 부록으로 이어붙입니다.
+올리는 방법이 두 가지입니다.
+
+어느 쪽이든 먼저 패키징 스크립트를 돌려야 합니다. Gemini Enterprise는 `references/`
+폴더를 읽지 않기 때문입니다(필요할 때만 꺼내 읽는 기능이 없습니다). 스크립트가
+참조 문서를 `SKILL.md` 끝에 부록으로 붙여서 내용이 빠지지 않게 합니다.
 
 **(A) 웹앱 업로드** — 한 번 올려 보고 끝내실 때
 
@@ -137,19 +201,39 @@ base64(`zippedFilesystem`)로 실어 보냅니다. 생성·수정·삭제가 장
 python3 scripts/validate_skills.py
 ```
 
-명세가 기계적으로 확인할 수 있는 것만 봅니다 — `name` 형식(소문자·숫자·하이픈,
-64자, 디렉터리명과 일치), `description` 1,024자, `compatibility` 500자, 본문 500줄
-권고, 상대 링크의 존재 여부입니다. 내용의 품질은 사람이 봐야 합니다.
+형식만 검사합니다. 이름 규칙(소문자·숫자·하이픈, 64자 이내, 폴더명과 일치),
+`description` 1,024자, `compatibility` 500자, 본문 500줄 권고, 그리고 문서 안의
+링크가 실제로 존재하는지입니다.
+
+**내용이 맞는지는 검사하지 못합니다.** 그건 사람이 읽어야 합니다.
 
 ## 스킬을 추가하실 때
 
 1. `<skill-name>/SKILL.md`를 만듭니다. 디렉터리명과 `name`이 같아야 합니다
-2. `description`에 **무엇을 하는지와 언제 쓰는지**를 모두 넣습니다. 모델은 스킬을
-   과소 트리거하는 경향이 있으므로, 사용자가 실제로 쓸 표현("주담대 금리 비교",
-   "기준금리 추이")을 키워드로 넣어 두세요
+2. `description`에 **무엇을 하는지**와 **언제 읽어야 하는지**를 모두 씁니다.
+   AI는 스킬을 필요한 상황에서도 안 읽고 지나가는 경우가 많습니다. 그래서 사용자가
+   실제로 입력할 법한 말("주담대 금리 비교", "기준금리 추이")을 그대로 넣어 둡니다
 3. 본문은 500줄 이하로 씁니다. 넘치면 `references/`로 분리하고 SKILL.md에서
    **언제 읽어야 하는지**와 함께 링크합니다
 4. `python3 scripts/validate_skills.py`로 검사합니다
+
+## 왜 만들었나
+
+Google 공식 스킬 카탈로그를 먼저 찾아봤는데, **금융 도메인 스킬이 없었습니다.**
+
+| 카탈로그 | 스킬 수 | 금융 도메인 |
+| --- | --- | --- |
+| [google/skills](https://github.com/google/skills) | 127 (ads / analytics / cloud / developers) | 없음 |
+| [google-gemini/gemini-skills](https://github.com/google-gemini/gemini-skills) | 4 (Gemini API 개발) | 없음 |
+
+서드파티에는 금융 스킬이 있지만([OctagonAI/skills](https://github.com/OctagonAI/skills) 등)
+대부분 미국 시장·SEC 기준이라 국내 규제와 데이터 소스에 맞지 않습니다.
+
+작성 기준은 [google-gemini/gemini-skills](https://github.com/google-gemini/gemini-skills)의
+구조와 서술 방식, [Agent Skills 명세](https://agentskills.io/specification),
+[Gemini Enterprise 스킬 문서](https://docs.cloud.google.com/gemini/enterprise/docs/skills?hl=ko),
+그리고 [anthropics/skills](https://github.com/anthropics/skills)의 `skill-creator`
+지침입니다.
 
 ## 한계
 

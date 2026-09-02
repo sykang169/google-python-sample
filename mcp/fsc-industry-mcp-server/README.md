@@ -5,7 +5,7 @@
 금융위원회가 공공데이터포털에 개방한 API 중 **상품·업계** 계열
 15종(오퍼레이션 52개)을 MCP 도구로 노출한다.
 
-- 짝이 되는 스킬: [`kr-securities-industry-benchmark`](../../skills/kr-securities-industry-benchmark/SKILL.md)
+- 짝이 되는 스킬: [`kr-product-comparison`](../../skills/kr-product-comparison/SKILL.md)
 - Cloud Run 서비스명: `fsc-industry-mcp`
 
 ## 이런 질문에 답한다
