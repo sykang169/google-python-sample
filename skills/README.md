@@ -27,11 +27,15 @@ Google 공식 스킬 카탈로그를 먼저 찾아봤는데, **금융 도메인 
 
 | 스킬 | 다루는 것 | 짝이 되는 MCP 서버 |
 | --- | --- | --- |
-| [`dart-disclosure-analysis`](dart-disclosure-analysis/) | 전자공시(OPEN DART) — 공시·재무제표·지배구조·지분 | [`mcp/dart-mcp-server`](../mcp/dart-mcp-server) |
-| [`ecos-macro-analysis`](ecos-macro-analysis/) | 한국은행 ECOS — 기준금리·환율·물가·GDP 시계열 | [`mcp/ecos-mcp-server`](../mcp/ecos-mcp-server) |
-| [`finlife-product-comparison`](finlife-product-comparison/) | 금감원 금융상품통합비교공시 — 예적금·대출 금리 비교 | [`mcp/finlife-mcp-server`](../mcp/finlife-mcp-server) |
-| [`krx-stock-quote-analysis`](krx-stock-quote-analysis/) | 금융위 주식시세정보 — 일별 시세·거래량·시가총액 | [`mcp/stock-mcp-server`](../mcp/stock-mcp-server) |
-| [`kr-financial-ai-compliance`](kr-financial-ai-compliance/) | 금융권 AI 규제 가드레일 — 투자권유 경계, PII, 감사 로그, 망분리 | (없음, 횡단 스킬) |
+| [`krx-stock-quote-analysis`](krx-stock-quote-analysis/) | 주식·지수·ETF·ETN·채권 시세, 초과수익률 | `mcp/fsc-market-mcp-server` |
+| [`kr-bond-ficc-analysis`](kr-bond-ficc-analysis/) | 채권 발행·권리일정·콜, CP/CD 실거래 금리, DCM | `mcp/fsc-ficc-mcp-server` |
+| [`kr-corporate-research`](kr-corporate-research/) | 정규화 재무제표, 계열사, 공시 33종 | `mcp/fsc-research-mcp-server` |
+| [`kr-equity-operations`](kr-equity-operations/) | 배당·권리일정·사고주권·대차·REPO | `mcp/fsc-equity-ops-mcp-server` |
+| [`kr-securities-industry-benchmark`](kr-securities-industry-benchmark/) | 펀드·퇴직연금·증권사 경영지표·수수료·금투협 통계 | `mcp/fsc-industry-mcp-server` |
+| [`dart-disclosure-analysis`](dart-disclosure-analysis/) | 전자공시 원문·XBRL·사업보고서 | `mcp/dart-mcp-server` |
+| [`ecos-macro-analysis`](ecos-macro-analysis/) | 한국은행 ECOS — 기준금리·환율·물가 시계열 | `mcp/ecos-mcp-server` |
+| [`finlife-product-comparison`](finlife-product-comparison/) | 예적금·대출 금리 비교 | `mcp/finlife-mcp-server` |
+| [`kr-financial-ai-compliance`](kr-financial-ai-compliance/) | 금융권 AI 규제 가드레일 | (없음, 횡단 스킬) |
 
 앞의 넷은 **데이터 스킬**이고 마지막 하나는 **횡단 스킬**입니다. 데이터 스킬은 각자
 마지막 절에서 규제 스킬을 참조합니다. 금융 수치를 사용자에게 내보내는 순간 규제

@@ -113,7 +113,7 @@ terraform apply        # 새 리비전 배포
 ## 확인
 
 ```bash
-URL=https://dart-mcp-<PROJECT_NUMBER>.us-central1.run.app/mcp
+URL=https://dart-mcp-<PROJECT_NUMBER>.asia-northeast3.run.app/mcp
 
 curl -sN --max-time 30 -X POST "$URL" \
   -H "Authorization: Bearer $(gcloud auth print-identity-token)" \

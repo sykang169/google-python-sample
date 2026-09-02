@@ -40,7 +40,9 @@ Gemini Enterprise에서 확인 프롬프트 없이 호출됩니다.
 **ETF는 이 서비스에 없습니다.** KODEX·TIGER 같은 ETF는 `get_stock_price`에도
 `get_fund_price`에도 수록되어 있지 않습니다. `get_fund_price`의 수익증권은
 자산운용사 공모펀드(예: "한투한미핵심성장포커스1(A)")로, 일자당 100건 미만입니다.
-ETF 시세는 이 서비스키로 접근할 수 없는 별도 서비스에 있습니다.
+
+ETF·ETN 시세는 **`fsc-market-mcp`의 `get_etf_price` / `get_etn_price`**에 있습니다
+(같은 공공데이터포털 인증키로 접근합니다. 서비스별 활용신청만 따로 하면 됩니다).
 
 **잘못된 `market` 값은 조용히 무시됩니다.** `KOSPI`/`KOSDAQ`/`KONEX` 외의 값을 주면
 오류 없이 **필터가 적용되지 않은** 결과가 돌아옵니다. 반환된 `mrktCtg`를 확인해
@@ -62,7 +64,7 @@ terraform apply        # 새 리비전 배포
 ## 확인
 
 ```bash
-URL=https://stock-mcp-<PROJECT_NUMBER>.us-central1.run.app/mcp
+URL=https://stock-mcp-<PROJECT_NUMBER>.asia-northeast3.run.app/mcp
 
 curl -sN --max-time 30 -X POST "$URL" \
   -H "Authorization: Bearer $(gcloud auth print-identity-token)" \

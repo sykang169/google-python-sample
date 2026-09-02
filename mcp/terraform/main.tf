@@ -13,6 +13,7 @@ resource "google_project_service" "required" {
     "cloudbuild.googleapis.com",
     "discoveryengine.googleapis.com", # Gemini Enterprise 데이터 스토어
     "aiplatform.googleapis.com",      # dart-mcp의 ask_dart
+    "compute.googleapis.com",         # Cloud NAT 전용 이그레스 IP
   ]) : toset([])
 
   project = var.project_id
@@ -23,10 +24,18 @@ resource "google_project_service" "required" {
 }
 
 locals {
-  repo = "${var.region}-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.mcp.repository_id}"
+  # 서비스가 배포되는 리전 전체. Artifact Registry는 리전마다 하나씩 둔다
+  # (Cloud Run이 다른 리전의 저장소에서도 당길 수는 있지만, 콜드 스타트마다
+  # 대륙을 건너는 이미지 풀이 일어난다).
+  regions = toset([for k, v in local.services : v.region])
 
-  # MCP 서버 3종. 구조가 같아 for_each로 묶는다.
-  services = {
+  repos = {
+    for r in local.regions :
+    r => "${r}-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.mcp[r].repository_id}"
+  }
+
+  # 기관별 MCP 서버 4종. 구조가 같아 for_each로 묶는다.
+  base_services = {
     ecos-mcp = {
       secret_id       = "ECOS_API_KEY"
       secret_env      = "ECOS_API_KEY"
@@ -60,6 +69,29 @@ locals {
     }
   }
 
+  # 금융위 공공데이터 서버 5종. 데스크별로 나뉘어 있을 뿐 구조가 같고,
+  # 공공데이터포털 인증키는 계정당 하나이므로 STOCK_API_KEY를 공유한다
+  # (승인은 API마다 따로 받지만 키 문자열은 같다).
+  fsc_servers = ["market", "ficc", "research", "equity-ops", "industry"]
+
+  fsc_services = {
+    for name in local.fsc_servers : "fsc-${name}-mcp" => {
+      secret_id       = "STOCK_API_KEY"
+      secret_env      = "STOCK_API_KEY"
+      memory          = "512Mi"
+      needs_vertex_ai = false
+      extra_env       = {}
+    }
+  }
+
+  # 배포 대상 전체. 기관별 4종 + 금융위 데스크별 5종.
+  # 리전은 여기서 붙인다. 서비스가 region을 직접 들고 있으면 그것이 우선한다.
+  # 서비스가 region을 직접 들고 있으면 그것을 쓰고, 없으면 기본값을 붙인다.
+  services = merge(
+    { for k, v in local.base_services : k => merge({ region = var.region }, v) },
+    { for k, v in local.fsc_services : k => merge({ region = var.region }, v) },
+  )
+
   vertex_ai_services = toset([for k, v in local.services : k if v.needs_vertex_ai])
 }
 
@@ -68,8 +100,10 @@ locals {
 # Terraform이 소유하는 저장소를 쓴다.
 
 resource "google_artifact_registry_repository" "mcp" {
+  for_each = local.regions
+
   project       = var.project_id
-  location      = var.region
+  location      = each.value
   repository_id = "mcp-servers"
   description   = "MCP 서버 컨테이너 이미지 (Terraform 관리)"
   format        = "DOCKER"
@@ -121,7 +155,7 @@ resource "google_cloud_run_v2_service" "mcp" {
 
   project             = var.project_id
   name                = each.key
-  location            = var.region
+  location            = each.value.region
   deletion_protection = false
 
   # Gemini Enterprise가 도달해야 하므로 인그레스를 열어 둔다.
@@ -140,8 +174,21 @@ resource "google_cloud_run_v2_service" "mcp" {
       max_instance_count = 10
     }
 
+    # 이 리전에 Cloud NAT가 있으면 모든 아웃바운드를 그쪽으로 보낸다.
+    # 공유 이그레스 풀에서 빠져나오는 것이 목적이다(network.tf 주석 참고).
+    dynamic "vpc_access" {
+      for_each = contains(var.nat_regions, each.value.region) ? [1] : []
+      content {
+        egress = "ALL_TRAFFIC"
+        network_interfaces {
+          network    = google_compute_network.mcp[0].id
+          subnetwork = google_compute_subnetwork.mcp[each.value.region].id
+        }
+      }
+    }
+
     containers {
-      image = "${local.repo}/${each.key}:${lookup(var.image_tags, each.key, var.image_tag)}"
+      image = "${local.repos[each.value.region]}/${each.key}:${lookup(var.image_tags, each.key, var.image_tag)}"
 
       ports {
         container_port = 8080
@@ -241,7 +288,7 @@ resource "google_cloud_run_v2_service_iam_member" "gemini_enterprise" {
   for_each = var.grant_gemini_enterprise_access ? local.services : {}
 
   project  = var.project_id
-  location = var.region
+  location = each.value.region
   name     = google_cloud_run_v2_service.mcp[each.key].name
   role     = "roles/run.invoker"
   member   = "serviceAccount:service-${data.google_project.this.number}@gcp-sa-discoveryengine.iam.gserviceaccount.com"
@@ -263,7 +310,7 @@ resource "google_cloud_run_v2_service_iam_member" "public" {
   for_each = var.public_access ? local.services : {}
 
   project  = var.project_id
-  location = var.region
+  location = each.value.region
   name     = google_cloud_run_v2_service.mcp[each.key].name
   role     = "roles/run.invoker"
   member   = "allUsers"

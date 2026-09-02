@@ -10,9 +10,14 @@ output "mcp_urls" {
   }
 }
 
-output "image_repository" {
-  description = "build.sh가 이미지를 밀어 넣는 Artifact Registry 경로."
-  value       = local.repo
+output "image_repositories" {
+  description = "리전별 Artifact Registry 경로. build.sh가 서비스 리전에 맞춰 고른다."
+  value       = local.repos
+}
+
+output "service_regions" {
+  description = "서비스별 배포 리전. build.sh와 connect_ge.sh가 읽는다."
+  value       = { for k, v in local.services : k => v.region }
 }
 
 output "runtime_service_accounts" {
@@ -26,4 +31,12 @@ output "public_access_enabled" {
     (조직 정책 constraints/iam.allowedPolicyMemberDomains 확인 필요).
   EOT
   value       = var.public_access
+}
+
+output "egress_ips" {
+  description = <<-EOT
+    리전별 고정 이그레스 IP. 공공 API가 IP 등록을 요구할 때(resultCode 32)
+    제출할 주소이며, 차단 여부를 문의할 때도 이 값을 쓴다.
+  EOT
+  value       = { for r, a in google_compute_address.nat : r => a.address }
 }

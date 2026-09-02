@@ -12,6 +12,7 @@ StreamableHTTP 전송을 쓴다. (Gemini Enterprise는 레거시 SSE를 지원�
 
 from __future__ import annotations
 
+import logging
 import os
 import random
 import time
@@ -28,6 +29,11 @@ TIMEOUT = httpx.Timeout(30.0, connect=10.0)
 # data.go.kr 키는 '+', '/', '=' 를 포함하는 디코딩 형태다. httpx가 알아서
 # 퍼센트 인코딩하므로 미리 인코딩해서 넣으면 이중 인코딩이 되어 실패한다.
 API_KEY = os.environ.get("STOCK_API_KEY", "")
+
+# httpx의 INFO 로그는 쿼리스트링을 포함한 전체 URL을 남긴다. 거기에 serviceKey가
+# 들어 있어 Cloud Logging에 인증키가 적재된다. WARNING으로 올려 막는다.
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpcore").setLevel(logging.WARNING)
 
 READ_ONLY = {"readOnlyHint": True, "destructiveHint": False, "idempotentHint": True}
 

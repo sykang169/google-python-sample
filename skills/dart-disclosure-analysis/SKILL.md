@@ -126,5 +126,11 @@ DART는 **HTTP 200과 함께** `status`로 오류를 준다. 상태 코드만 �
 - 조회한 수치에 근거하지 않은 주가 전망이나 매수/매도 의견을 덧붙이지 않는다.
   공시 분석과 투자권유는 다르다 — 규제 경계는 [kr-financial-ai-compliance](../kr-financial-ai-compliance/SKILL.md)를 참고한다.
 - 조회에 실패했는데 그럴듯한 수치를 채워 넣지 않는다. 실패는 실패라고 말한다.
-- 공시에 없는 항목(예: 실시간 주가)을 DART에서 찾지 않는다. 시세는
+- 공시에 없는 항목(예: 주가)을 DART에서 찾지 않는다. 시세는
   [krx-stock-quote-analysis](../krx-stock-quote-analysis/SKILL.md)다.
+
+**금융위 공공데이터에도 같은 기업 정보가 있다.** 계정 값으로 계산하거나 여러
+기업을 한 번에 훑을 때는 정규화된
+[kr-corporate-research](../kr-corporate-research/SKILL.md)가 빠르고, 공시 원문·
+사업보고서 본문·XBRL 주석이 필요하면 DART가 맞다. 두 소스의 수치를 한 답변에
+섞지 않는다 — 작성 기준과 정정 반영 시점이 다르다.

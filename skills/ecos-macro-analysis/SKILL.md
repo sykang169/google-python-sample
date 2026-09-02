@@ -143,6 +143,9 @@ ECOS도 **HTTP 200과 함께** `RESULT` 블록으로 오류를 준다.
 
 ## 하지 말아야 할 것
 
+- 개별 채권의 스프레드를 물으면 ECOS만으로 답할 수 없다. 국고채 금리는 여기,
+  개별 종목 수익률은 [kr-bond-ficc-analysis](../kr-bond-ficc-analysis/SKILL.md)에
+  있으므로 두 소스를 합치고 **만기를 맞췄는지, 기준일이 같은지** 밝힌다.
 - 거시지표로 **금리·환율 전망을 단정하지 않는다.** 과거 시계열의 설명과
   미래 예측은 다르며, 후자는 투자권유로 읽힐 수 있다
   ([kr-financial-ai-compliance](../kr-financial-ai-compliance/SKILL.md) 참고).

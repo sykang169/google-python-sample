@@ -1,0 +1,685 @@
+{
+ "GetStocLendBorrInfoService_V2": {
+  "name": "주식대차정보",
+  "server": "equity-ops",
+  "desk": "증권금융·대차/REPO",
+  "tier": "core",
+  "purpose": "주식 대차잔고·종목순위. 공매도 압력 지표",
+  "base_url": "https://apis.data.go.kr/1160100",
+  "public_data_pk": "15059612",
+  "operations": {
+   "getMontLendAndBorrStatu_V2": {
+    "fields": [
+     "basDt",
+     "lnbBal",
+     "lnbCclAmt",
+     "lnbCclStckCnt",
+     "lnbExprItmsCnt",
+     "lnbRdptAmt",
+     "lnbRdptStckCnt",
+     "lnbRmanStckCnt"
+    ],
+    "param_style": "resultType",
+    "total_count": 224
+   },
+   "getNatiAndForeLendAndBorrBalaCo_V2": {
+    "fields": [
+     "basDt",
+     "brwBalForgRto",
+     "forgBrwBal",
+     "forgLndnBal",
+     "lndnBalForgRto",
+     "ntivBrwBal",
+     "ntivLndnBal"
+    ],
+    "param_style": "resultType",
+    "total_count": 224
+   },
+   "getNatiAndForeLendAndBorrTrad_V2": {
+    "fields": [
+     "basDt",
+     "forgLnbCclAmt",
+     "forgLnbCclStckCnt",
+     "ntivLnbCclAmt",
+     "ntivLnbCclStckCnt",
+     "sumLnbCclAmt",
+     "sumLnbCclStckCnt"
+    ],
+    "param_style": "resultType",
+    "total_count": 4605
+   },
+   "getStBusiTypePartStatu_V2": {
+    "fields": [
+     "basDt",
+     "isinCd",
+     "isinCdNm",
+     "sicCd",
+     "sicNm",
+     "stckBrwBal",
+     "stckBrwRto",
+     "stckLndnBal",
+     "stckLndnRto"
+    ],
+    "param_style": "resultType",
+    "total_count": 13032
+   },
+   "getStItemLendAndBorrStatu_V2": {
+    "fields": [
+     "basDt",
+     "isinCd",
+     "isinCdNm",
+     "lnbCclStckCnt",
+     "lnbRdptStckCnt",
+     "lnbRmanStckCnt"
+    ],
+    "param_style": "resultType",
+    "total_count": 8133028
+   },
+   "getStLendAndBorrItemRank_V2": {
+    "fields": [
+     "basDt",
+     "isinCd",
+     "isinCdNm",
+     "lnbBal",
+     "lnbCclStckCnt",
+     "lnbRmanStckCnt",
+     "lnbScrtDcd",
+     "lnbScrtDcdNm",
+     "rcalRdptStckCnt",
+     "rdptStckCnt"
+    ],
+    "param_style": "resultType",
+    "total_count": 8125514
+   }
+  }
+ },
+ "GetBondLendBorrInfoService_V2": {
+  "name": "채권대차정보",
+  "server": "equity-ops",
+  "desk": "증권금융·대차/REPO",
+  "tier": "core",
+  "purpose": "채권 대차",
+  "base_url": "https://apis.data.go.kr/1160100",
+  "public_data_pk": "15043462",
+  "operations": {
+   "getBondBusiTypePartStat_V2": {
+    "fields": [
+     "basDt",
+     "bondBrwBal",
+     "bondBrwRto",
+     "bondLndnBal",
+     "bondLndnRto",
+     "isinCd",
+     "isinCdNm",
+     "sicCd",
+     "sicNm"
+    ],
+    "param_style": "resultType",
+    "total_count": 1806034
+   },
+   "getBondItemLendAndBorrTradStat_V2": {
+    "fields": [
+     "basDt",
+     "bondLnbBal",
+     "bondLnbCclAmt",
+     "bondLnbRdptAmt",
+     "isinCd",
+     "isinCdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": 372699
+   },
+   "getBondLendAndBorrRank_V2": {
+    "fields": [
+     "basDt",
+     "isinCd",
+     "isinCdNm",
+     "lnbBal",
+     "lnbCclAmt",
+     "lnbRdptAmt",
+     "lnbScrtDcd",
+     "lnbScrtDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": 372702
+   }
+  }
+ },
+ "GetRepoItemInfoService_V2": {
+  "name": "REPO종목정보",
+  "server": "equity-ops",
+  "desk": "증권금융·대차/REPO",
+  "tier": "core",
+  "purpose": "REPO 금리. 조달비용 기준",
+  "base_url": "https://apis.data.go.kr/1160100",
+  "public_data_pk": "15059610",
+  "operations": {
+   "getInteRateInfo_V2": {
+    "fields": [
+     "basDt",
+     "purcBzcTcd",
+     "purcBzcTcdNm",
+     "rdptTermCcd",
+     "rdptTermCcdNm",
+     "rpBuyAplCurCd",
+     "rpBuyAplCurCdNm",
+     "rpBuyScrtKcd",
+     "rpBuyScrtKcdNm",
+     "rpInrt",
+     "rpRmngExprDcd",
+     "rpRmngExprDcdNm",
+     "rpSqno",
+     "slrBzcTcd",
+     "slrBzcTcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": 11149982
+   }
+  }
+ },
+ "GetRepoTradInfoService_V2": {
+  "name": "REPO거래정보",
+  "server": "equity-ops",
+  "desk": "증권금융·대차/REPO",
+  "tier": "useful",
+  "purpose": "REPO 거래·잔고",
+  "base_url": "https://apis.data.go.kr/1160100",
+  "public_data_pk": "15059598",
+  "operations": {
+   "getBuyiSecuBala_V2": {
+    "fields": [
+     "basDt",
+     "etcBondMogAmt",
+     "etfMogAmt",
+     "lcbndMogAmt",
+     "mogTsumAmt",
+     "rpCrbnMogAmt",
+     "rpFnbndMogAmt",
+     "rpGoboMogAmt",
+     "rpMsbMogAmt",
+     "rpSpcbndMogAmt",
+     "rpTcd",
+     "rpTcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": 10423
+   },
+   "getCaseForTrad_V2": {
+    "fields": [
+     "basDt",
+     "buyScrtBuyAmt",
+     "buyScrtCnt",
+     "buyScrtEvlAmt",
+     "buynShtrFinBzcDcd",
+     "buynShtrFinBzcDcdNm",
+     "isinCd",
+     "isinCdNm",
+     "rdptTermCcd",
+     "rdptTermCcdNm",
+     "rpBuyAmt",
+     "rpBuyAplCurCd",
+     "rpBuyAplCurCdNm",
+     "rpInrt",
+     "rpMrgamRto",
+     "rpOpngDt",
+     "rpRmngExprDcd",
+     "rpRmngExprDcdNm",
+     "rpSqno",
+     "scrsItmsKcd",
+     "scrsItmsKcdNm",
+     "slngShtrFinBzcDcd",
+     "slngShtrFinBzcDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": 27425772
+   },
+   "getCurrBala_V2": {
+    "fields": [
+     "rpBuyAplCurCd",
+     "rpBuyAplCurCdNm",
+     "rpCurBal",
+     "rpTrDt",
+     "trTcd",
+     "trTcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": 9171
+   }
+  }
+ },
+ "GetStocDiviInfoService_V2": {
+  "name": "주식배당정보",
+  "server": "equity-ops",
+  "desk": "권리·예탁결제",
+  "tier": "core",
+  "purpose": "배당 기준일·금액. 배당락 처리와 고객 안내",
+  "base_url": "https://apis.data.go.kr/1160100",
+  "public_data_pk": "15043284",
+  "operations": {
+   "getDiviInfo_V2": {
+    "fields": [
+     "basDt",
+     "cashDvdnPayDt",
+     "cashGrdnDvdnRt",
+     "crno",
+     "dvdnBasDt",
+     "isinCd",
+     "isinCdNm",
+     "scrsItmsKcd",
+     "scrsItmsKcdNm",
+     "stckDvdnRcd",
+     "stckDvdnRcdNm",
+     "stckGenrCashDvdnRt",
+     "stckGenrDvdnAmt",
+     "stckGenrDvdnRt",
+     "stckGrdnDvdnAmt",
+     "stckGrdnDvdnRt",
+     "stckHndvDt",
+     "stckIssuCmpyNm",
+     "stckParPrc",
+     "stckStacMd",
+     "trsnmDptyDcd",
+     "trsnmDptyDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": 71674
+   }
+  }
+ },
+ "GetStocRighScheService_V2": {
+  "name": "주식권리일정정보",
+  "server": "equity-ops",
+  "desk": "권리·예탁결제",
+  "tier": "core",
+  "purpose": "권리행사 일정. 청약·행사 업무의 달력",
+  "base_url": "https://apis.data.go.kr/1160100",
+  "public_data_pk": "15059609",
+  "operations": {
+   "getRighExerReasSche_V2": {
+    "fields": [
+     "basDt",
+     "crno",
+     "issuCmpyKsdCustNo",
+     "nmlsLckEdDt",
+     "nmlsLckSttgDt",
+     "rgtExertEdDt",
+     "rgtExertRcd",
+     "rgtExertRcdNm",
+     "rgtExertSttgDt",
+     "scrsIssuMnbdCd",
+     "scrsIssuMnbdCdNm",
+     "stckIssuCmpyNm",
+     "stckIssuRcd",
+     "stckIssuRcdNm",
+     "stckParPrc",
+     "stckStacMd",
+     "trsnmDptyDcd",
+     "trsnmDptyDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": 1246786
+   }
+  }
+ },
+ "GetStocTradInfoService_V2": {
+  "name": "주식분포및사고주권정보",
+  "server": "equity-ops",
+  "desk": "권리·예탁결제",
+  "tier": "core",
+  "purpose": "주식분포 및 **사고주권 여부**. 입고 심사 필수",
+  "base_url": "https://apis.data.go.kr/1160100",
+  "public_data_pk": "15043364",
+  "operations": {
+   "getIrreRigforSecu_V2": {
+    "fields": [
+     "acdnRgscKindCnt",
+     "acdnScrtNo",
+     "acdnScrtNoClsfNm",
+     "basDt",
+     "crno",
+     "isinCd",
+     "isinCdNm",
+     "scrsDcd",
+     "scrsDcdNm",
+     "stckAcdnDcd",
+     "stckAcdnDcdNm",
+     "stckIssuCmpyNm",
+     "stckIssuSqno"
+    ],
+    "param_style": "resultType",
+    "total_count": 217684
+   },
+   "getStocDistInfo_V2": {
+    "fields": [
+     "crno",
+     "issuCmpyKsdCustNo",
+     "issuStckCnt",
+     "issuStckRto",
+     "rgtExertQualBasDt",
+     "stckDbtnDcd",
+     "stckDbtnDcdNm",
+     "stckIssuCmpyNm",
+     "sthdNopeCnt",
+     "sthdNopeRto"
+    ],
+    "param_style": "resultType",
+    "total_count": 935195
+   }
+  }
+ },
+ "GetPreeRighSecuIssuInfoService_V2": {
+  "name": "신주인수권증권발행정보",
+  "server": "equity-ops",
+  "desk": "권리·예탁결제",
+  "tier": "useful",
+  "purpose": "신주인수권증권 발행",
+  "base_url": "https://apis.data.go.kr/1160100",
+  "public_data_pk": "15043461",
+  "operations": {
+   "getPreeRighSecuBasiInfo_V2": {
+    "fields": [
+     "basDt",
+     "crno",
+     "isinCd",
+     "isinCdNm",
+     "itmsShrtnCd",
+     "lstgDcd",
+     "lstgDcdNm",
+     "prmrExertPrc",
+     "prmrExertPsblEdDt",
+     "prmrExertPsblSttgDt",
+     "prmrIssuDt",
+     "prmrIsurNm"
+    ],
+    "param_style": "resultType",
+    "total_count": 89141
+   },
+   "getPreeRighSecuRelaBondInfo_V2": {
+    "fields": [
+     "basDt",
+     "bondIntTcd",
+     "bondIntTcdNm",
+     "bondRegsDcd",
+     "bondRegsDcdNm",
+     "bondRnknDcd",
+     "bondRnknDcdNm",
+     "crno",
+     "grnDcd",
+     "grnDcdNm",
+     "isinCd",
+     "isinCdNm",
+     "itmsShrtnCd",
+     "optnTcd",
+     "optnTcdNm",
+     "prmrIsurNm",
+     "prmrOffrMcd",
+     "prmrOffrMcdNm",
+     "rltnBondBal",
+     "rltnBondExprDt",
+     "rltnBondIsinCd",
+     "rltnBondIsinCdNm",
+     "rltnBondIssuAmt",
+     "rltnBondIssuDt",
+     "rltnBondLstgDt",
+     "rltnBondMngDcnt",
+     "rltnBondSrfcIrt",
+     "txtnDcd",
+     "txtnDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": 93506
+   },
+   "getPreeRighSecuStriPricInfo_V2": {
+    "fields": [
+     "crno",
+     "isinCd",
+     "isinCdNm",
+     "itmsShrtnCd",
+     "pricChngRcd",
+     "pricChngRcdNm",
+     "prmrExertPrc",
+     "prmrExertPricAplDt",
+     "prmrExertRto",
+     "prmrIsurNm"
+    ],
+    "param_style": "resultType",
+    "total_count": 1659
+   },
+   "getPreeRighSecuUndeAsseInfo_V2": {
+    "fields": [
+     "basDt",
+     "crno",
+     "isinCd",
+     "isinCdNm",
+     "itmsShrtnCd",
+     "lstgDcd",
+     "lstgDcdNm",
+     "prmrIsurNm",
+     "udasIsinCd",
+     "udasIsinCdNm",
+     "udasItmsShrtnCd",
+     "udasParPrc"
+    ],
+    "param_style": "resultType",
+    "total_count": 93506
+   }
+  }
+ },
+ "GetDrForeSecuSettInfoService_V2": {
+  "name": "국제거래외화증권예탁결제정보",
+  "server": "equity-ops",
+  "desk": "권리·예탁결제",
+  "tier": "useful",
+  "purpose": "외화증권 예탁결제. 해외주식 백오피스",
+  "base_url": "https://apis.data.go.kr/1160100",
+  "public_data_pk": "15043445",
+  "operations": {
+   "getForeSecuSettInfo_V2": {
+    "fields": [
+     "buynCcnt",
+     "dpsgScrtSlngCcnt",
+     "frcrScrtDpsgStlDt",
+     "scrsDcd",
+     "scrsDcdNm",
+     "scrsMrktNtnlDcd",
+     "scrsMrktNtnlDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": 248930
+   },
+   "getMarkForeSecuSettStat_V2": {
+    "fields": [
+     "buynAmt",
+     "buynCcnt",
+     "dpsgScrtSlngAmt",
+     "dpsgScrtSlngCcnt",
+     "frcrScrtDpsgStlDt",
+     "scrsDcd",
+     "scrsDcdNm",
+     "scrsMrktCnntNm",
+     "scrsMrktNtnlDcd",
+     "scrsMrktNtnlDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": 102058
+   }
+  }
+ },
+ "GetStocIssuInfoService_V3": {
+  "name": "주식발행정보",
+  "server": "equity-ops",
+  "desk": "권리·예탁결제",
+  "tier": "useful",
+  "purpose": "종목기본·주식발행내역",
+  "base_url": "https://apis.data.go.kr/1160100",
+  "public_data_pk": "15043423",
+  "operations": {
+   "getItemBasiInfo_V3": {
+    "fields": [
+     "basDt",
+     "crno",
+     "dpsgCanDt",
+     "dpsgRegDt",
+     "isinCd",
+     "isinCdNm",
+     "issuFrmtClsfNm",
+     "issuStckCnt",
+     "itmsShrtnCd",
+     "lstgAbolDt",
+     "lstgDt",
+     "scrsItmsKcd",
+     "scrsItmsKcdNm",
+     "stckIssuCmpyNm",
+     "stckParPrc"
+    ],
+    "param_style": "resultType",
+    "total_count": 17600
+   },
+   "getLockUpRetuInfo_V3": {
+    "fields": [
+     "afrsRsqtCnt",
+     "basDt",
+     "crno",
+     "isinCd",
+     "isinCdNm",
+     "itmsShrtnCd",
+     "lblProtTsumIssuStckCnt",
+     "lkupRegDt",
+     "lkupRegStckCnt",
+     "lstgDcd",
+     "lstgDcdNm",
+     "rsrnDt",
+     "rsrnStckCnt",
+     "scrsItmsKcd",
+     "scrsItmsKcdNm",
+     "stckIssuCmpyNm",
+     "stckLblHoldRcd",
+     "stckLblHoldRcdNm"
+    ],
+    "param_style": "xml",
+    "total_count": "20654"
+   },
+   "getStocIssuInfo_V3": {
+    "fields": [
+     "basDt",
+     "crno",
+     "isinCd",
+     "isinCdNm",
+     "issuStckCnt",
+     "lstgDt",
+     "scrsDcd",
+     "scrsItmsKcd",
+     "scrsItmsKcdNm",
+     "stckIssuCmpyNm",
+     "stckIssuDcnt",
+     "stckIssuDt",
+     "stckIssuRcd",
+     "stckIssuRcdNm",
+     "stckIssuSqno"
+    ],
+    "param_style": "xml",
+    "total_count": "153123"
+   }
+  }
+ },
+ "GetDrTradItemInfoService_V2": {
+  "name": "국제거래종목정보",
+  "server": "equity-ops",
+  "desk": "권리·예탁결제",
+  "tier": "useful",
+  "purpose": "DR 종목·사유별 일정. 해외주식 권리업무",
+  "base_url": "https://apis.data.go.kr/1160100",
+  "public_data_pk": "15059582",
+  "operations": {
+   "getDepoReceItem_V2": {
+    "fields": [
+     "basDt",
+     "crno",
+     "drCnvrOrshCnt",
+     "drCnvrPsblLmtTsumCnt",
+     "drCnvrPsblStckCnt",
+     "drDcd",
+     "drDcdNm",
+     "drDpsgInstNm",
+     "drIssuCmpyNm",
+     "drXchgDcd",
+     "drXchgDcdNm",
+     "isinCd",
+     "isinCdNm",
+     "itmsShrtnCd",
+     "itmsShrtnCdNm",
+     "orshDrRto",
+     "orshIsinCd",
+     "orshIsinCdNm",
+     "stckKcd",
+     "stckKcdNm"
+    ],
+    "param_style": "xml",
+    "total_count": "328006"
+   },
+   "getReasScheInfo_V2": {
+    "fields": [
+     "basDt",
+     "crno",
+     "drIsinCd",
+     "drIsinCdNm",
+     "drItmsShrtnCd",
+     "innnTrIssuCmpyNm",
+     "issrNo",
+     "newLstgClsfNm",
+     "orshIsinCdNm",
+     "rgtExertRcd",
+     "rgtExertRcdNm"
+    ],
+    "param_style": "xml",
+    "total_count": "2699659"
+   }
+  }
+ },
+ "GetCMBondLnbInfoService": {
+  "name": "채권대차거래정보",
+  "server": "equity-ops",
+  "desk": "증권금융·대차/REPO",
+  "tier": "useful",
+  "purpose": "금투협 채권대차 거래내역·추이",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "public_data_pk": "15124889",
+  "operations": {
+   "getBondLnbDetail": {
+    "fields": [
+     "basDt",
+     "bondItmsCd",
+     "bondItmsNm",
+     "cclAmt",
+     "cclBondBalnAmt",
+     "rpmtAmt"
+    ],
+    "param_style": "xml",
+    "total_count": "365221"
+   },
+   "getBondLnbInvpnDetail": {
+    "fields": [
+     "basDt",
+     "borCclBondAmt",
+     "borCclBondAmtRto",
+     "invpnClsfDtlNm",
+     "invpnClsfNm",
+     "lndeCclBondAmt",
+     "lndeCclBondAmtRto"
+    ],
+    "param_style": "xml",
+    "total_count": "11571"
+   },
+   "getBondLnbProgress": {
+    "fields": [
+     "balnAmt",
+     "basDt",
+     "cclAmt",
+     "rpmtAmt"
+    ],
+    "param_style": "xml",
+    "total_count": "1262"
+   }
+  }
+ }
+}
