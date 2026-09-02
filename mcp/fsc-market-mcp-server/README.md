@@ -5,7 +5,7 @@
 금융위원회가 공공데이터포털에 개방한 API 중 **시세 통합** 계열
 7종(오퍼레이션 16개)을 MCP 도구로 노출한다.
 
-- 짝이 되는 스킬: [`krx-stock-quote-analysis`](../../skills/krx-stock-quote-analysis/SKILL.md)
+- 짝이 되는 스킬: [`kr-equity-analysis`](../../skills/kr-equity-analysis/SKILL.md)
 - Cloud Run 서비스명: `fsc-market-mcp`
 
 ## 이런 질문에 답한다

@@ -22,11 +22,11 @@ CATALOG = json.loads((HERE / "catalog.json").read_text(encoding="utf-8"))
 
 # 서버 <-> 스킬 대응. README에서 서로를 가리키게 한다.
 SKILL_OF = {
-    "market": "krx-stock-quote-analysis",
-    "ficc": "kr-bond-ficc-analysis",
-    "research": "kr-corporate-research",
+    "market": "kr-equity-analysis",
+    "ficc": "kr-macro-and-rates",
+    "research": "kr-corporate-financials",
     "equity-ops": "kr-equity-operations",
-    "industry": "kr-securities-industry-benchmark",
+    "industry": "kr-product-comparison",
 }
 
 REQUIREMENTS = "mcp==1.27.0\nhttpx==0.28.1\nuvicorn==0.35.0\n"

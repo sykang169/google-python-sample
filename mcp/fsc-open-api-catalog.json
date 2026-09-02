@@ -1870,7 +1870,7 @@
       "public_data_pk": "15094808",
       "portal_url": "https://www.data.go.kr/data/15094808/openapi.do",
       "adoption_priority": null,
-      "adoption_note": "stock-mcp-server가 4개 오퍼레이션 전부 사용 중",
+      "adoption_note": "fsc-market-mcp-server가 4개 오퍼레이션 전부 사용 중",
       "in_use": true,
       "base_url": "https://apis.data.go.kr/1160100/service",
       "operations": [
