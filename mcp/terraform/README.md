@@ -169,6 +169,12 @@ FORCE_REGION=asia-northeast3 ./build.sh fsc-market-mcp
 `build.sh`는 빌드한 서비스의 태그만 `image.auto.tfvars`에 기록하므로, 일부만 다시
 빌드해도 나머지가 깨지지 않습니다.
 
+`image.auto.tfvars`는 **생성물이라 커밋하지 않습니다**(`.gitignore`). 태그는
+프로젝트마다 다르므로, 커밋해 두면 새 프로젝트에 clone 했을 때 남의 프로젝트
+태그를 물려받아 Cloud Run이 `Image not found`로 죽습니다. 빌드 없이 `apply`하면
+`terraform plan` 단계에서 precondition이 막고 `./build.sh`를 먼저 실행하라고
+알려줍니다.
+
 ### 키 교체
 
 ```bash
