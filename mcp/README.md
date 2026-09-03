@@ -95,6 +95,27 @@ gcloud services enable serviceusage.googleapis.com cloudresourcemanager.googleap
 
 전체 과정은 20~30분 정도 걸립니다. DART 자산 생성(4분)과 이미지 빌드가 대부분입니다.
 
+### 빠른 길 — `deploy.sh`
+
+단계 사이에 순서 의존이 있는데 그게 오류 메시지에 드러나지 않습니다. `deploy.sh`가
+순서를 지키며 진행하고, 빠진 것이 있으면 무엇이 왜 필요한지 알려줍니다.
+
+```bash
+git clone https://github.com/sykang169/google-python-sample.git
+cd google-python-sample/mcp/terraform
+cp terraform.tfvars.example terraform.tfvars && vi terraform.tfvars   # project_id
+cp .env.example .env && vi .env                                       # API 키 4개
+
+./deploy.sh            # 점검만 — 무엇이 준비됐고 무엇이 빠졌는지
+./deploy.sh --apply    # 채우며 끝까지
+```
+
+`terraform init`(백엔드 버킷은 계정마다 다릅니다)과 Gemini Enterprise 연결(조직
+정책 확인이 필요합니다)은 자동으로 하지 않고 안내만 합니다. 각 단계는 멱등이라
+중간에 실패하면 원인을 고치고 다시 돌리시면 됩니다.
+
+아래는 같은 일을 손으로 하는 순서입니다.
+
 ### 1. 저장소를 내려받고 terraform 디렉터리로 이동합니다
 
 ```bash
@@ -386,6 +407,7 @@ mcp/
 ├── fsc-industry-mcp-server/     상품·업계
 ├── fsc-research-mcp-server/     기업분석·공시
 └── terraform/              인프라 정의와 배포 스크립트
+    ├── deploy.sh           첫 배포를 순서대로 (점검 → 채우기)
     ├── setup_keys.sh       API 키를 Secret Manager에 저장
     ├── build.sh            컨테이너 이미지 빌드
     └── connect_ge.sh       Gemini Enterprise 데이터 커넥터 생성
