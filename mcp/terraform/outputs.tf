@@ -40,3 +40,8 @@ output "egress_ips" {
   EOT
   value       = { for r, a in google_compute_address.nat : r => a.address }
 }
+
+output "build_service_account" {
+  description = "build.sh가 Cloud Build를 돌릴 때 쓰는 계정"
+  value       = google_service_account.build.email
+}

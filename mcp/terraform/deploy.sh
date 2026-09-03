@@ -152,21 +152,38 @@ else
 terraform init 만 실행하셔도 됩니다."
 fi
 
-# ── 4. Artifact Registry ────────────────────────────────────────────────────
+# ── 4. 빌드에 필요한 것 ─────────────────────────────────────────────────────
 #
-# 이미지를 밀어 넣을 곳이 먼저 있어야 build.sh가 돈다.
+# 이미지를 밀어 넣을 저장소와, 빌드를 돌릴 계정이 먼저 있어야 build.sh가 돈다.
+# 2024년 이후 만든 프로젝트는 기본 컴퓨트 SA로 빌드가 되지 않는다.
 
-step "4. Artifact Registry"
+step "4. Artifact Registry · 빌드 계정"
 
 REGION="$(from_tfvars region)"; [[ -z "$REGION" ]] && REGION="us-central1"
+BUILD_SA="mcp-build@${PROJECT_ID}.iam.gserviceaccount.com"
+need_bootstrap=0
+
 if gcloud artifacts repositories describe mcp-servers \
      --location="$REGION" --project="$PROJECT_ID" >/dev/null 2>&1; then
   ok "mcp-servers ($REGION)"
-elif [[ $APPLY -eq 0 ]]; then
-  pending "mcp-servers 저장소가 $REGION 에 없습니다"
 else
-  terraform apply -target=google_artifact_registry_repository.mcp \
-    || halt "Artifact Registry 생성 실패"
+  need_bootstrap=1
+  [[ $APPLY -eq 0 ]] && pending "mcp-servers 저장소가 $REGION 에 없습니다"
+fi
+
+if gcloud iam service-accounts describe "$BUILD_SA" --project="$PROJECT_ID" >/dev/null 2>&1; then
+  ok "$BUILD_SA"
+else
+  need_bootstrap=1
+  [[ $APPLY -eq 0 ]] && pending "빌드 계정 mcp-build 가 없습니다"
+fi
+
+if [[ $need_bootstrap -eq 1 && $APPLY -eq 1 ]]; then
+  terraform apply \
+    -target=google_artifact_registry_repository.mcp \
+    -target=google_service_account.build \
+    -target=google_project_iam_member.build \
+    || halt "Artifact Registry / 빌드 계정 생성 실패"
 fi
 
 # ── 5. DART 자산 ────────────────────────────────────────────────────────────

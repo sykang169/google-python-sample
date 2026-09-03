@@ -284,6 +284,7 @@ Gemini Enterprise → 데이터 스토어 → 해당 항목 선택 → Actions �
 | 데이터 스토어 생성이 거부됩니다 | 조직 정책([7단계](#7-조직-정책-확인))이 아직 적용되지 않았을 수 있습니다. 해제 후 2분 정도 기다려 주세요 |
 | `Reload custom actions`에 도구가 안 나옵니다 | MCP 서버에 도달하지 못하는 경우입니다. 아래 검증 명령으로 서버부터 확인해 보세요 |
 | 모델이 "도구를 호출하겠습니다"만 반복합니다 | 서버가 최신 코드로 배포되었는지 확인해 주세요. `./build.sh && terraform apply` |
+| `build.sh`가 `could not resolve source ... storage.objects.get` 403으로 죽습니다 | 2024년 이후 만든 프로젝트는 Cloud Build 기본 계정에 빌더 역할이 붙지 않습니다. Terraform이 만드는 전용 계정(`mcp-build`)을 쓰면 해결됩니다 — `terraform apply -target=google_service_account.build -target=google_project_iam_member.build` 후 다시 빌드하세요 |
 | `terraform apply`는 성공했는데 변경이 반영되지 않습니다 | Cloud Run 트래픽이 이전 리비전에 고정되었을 수 있습니다. `gcloud run services update-traffic SVC --to-latest` |
 
 서버가 정상인지 직접 확인하시려면:
