@@ -55,6 +55,30 @@ svc_repo() { echo "$(svc_region "$1")-docker.pkg.dev/${PROJECT_ID}/mcp-servers";
 
 TAG="$(date -u +%Y%m%d-%H%M%S)"
 
+# 빌드 계정. Terraform이 만든 전용 SA(mcp-build)가 있으면 그것으로 빌드한다.
+# 2024년 이후 만든 프로젝트는 기본 컴퓨트 SA에 빌더 역할이 붙지 않아 소스
+# tarball을 읽지 못한다(main.tf의 google_service_account.build 주석 참고).
+#
+# --service-account 를 쓰면 로그 대상을 함께 정해야 한다. 기본 로그 버킷은
+# Cloud Build 소유라 지정 SA가 쓸 수 없어서, 프로젝트 소유의 리전 버킷으로 돌린다.
+BUILD_FLAGS=()
+BUILD_SA="$(terraform output -raw build_service_account 2>/dev/null || true)"
+if [[ -z "$BUILD_SA" ]]; then
+  _cand="mcp-build@${PROJECT_ID}.iam.gserviceaccount.com"
+  gcloud iam service-accounts describe "$_cand" --project="$PROJECT_ID" >/dev/null 2>&1 \
+    && BUILD_SA="$_cand"
+fi
+if [[ -n "$BUILD_SA" ]]; then
+  BUILD_FLAGS=(
+    --service-account="projects/${PROJECT_ID}/serviceAccounts/${BUILD_SA}"
+    --default-buckets-behavior=regional-user-owned-bucket
+  )
+  echo "build account: $BUILD_SA"
+else
+  # 예전에 만든 프로젝트는 기본 SA로도 돈다. 새 프로젝트라면 여기서 403이 난다.
+  echo "build account: (Cloud Build 기본) — terraform apply로 mcp-build SA를 만들면 그쪽을 씁니다"
+fi
+
 ALL=(ecos-mcp dart-mcp finlife-mcp
      fsc-market-mcp fsc-ficc-mcp fsc-research-mcp fsc-equity-ops-mcp fsc-industry-mcp)
 TARGETS=("${@:-}")
@@ -86,6 +110,7 @@ for svc in "${TARGETS[@]}"; do
   gcloud builds submit "$src" \
     --tag="$(svc_repo "$svc")/${svc}:${TAG}" \
     --project="$PROJECT_ID" \
+    "${BUILD_FLAGS[@]+"${BUILD_FLAGS[@]}"}" \
     --quiet
 done
 

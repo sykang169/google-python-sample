@@ -109,6 +109,35 @@ resource "google_artifact_registry_repository" "mcp" {
   }
 }
 
+# ── 빌드 서비스 계정 ────────────────────────────────────────────────────────
+#
+# Cloud Build는 예전에 프로젝트 기본 컴퓨트 SA로 돌았다. 2024년 이후 만든
+# 프로젝트는 cloudbuild API를 켜도 그 SA에 빌더 역할이 붙지 않아, 소스
+# tarball을 업로드해 놓고도 읽지 못해 빌드가 죽는다.
+#
+#   ERROR: could not resolve source: ... does not have storage.objects.get
+#          access to ... _cloudbuild/objects/source/....tgz
+#
+# 기본 SA에 역할을 얹어 되살릴 수도 있지만, 그 SA는 프로젝트 전반에서 쓰이므로
+# 빌드 권한을 얹는 것은 범위가 넓다. 빌드 전용 SA를 두고 build.sh가
+# --service-account 로 지정한다.
+resource "google_service_account" "build" {
+  project      = var.project_id
+  account_id   = "mcp-build"
+  display_name = "MCP 이미지 빌드"
+  description  = "build.sh가 Cloud Build를 돌릴 때 쓰는 계정 (Terraform 관리)"
+
+  depends_on = [google_project_service.required]
+}
+
+# 소스 tarball 읽기 · 이미지 push · 빌드 로그 쓰기가 모두 필요하다.
+# roles/cloudbuild.builds.builder 가 이 셋을 묶은 역할이다.
+resource "google_project_iam_member" "build" {
+  project = var.project_id
+  role    = "roles/cloudbuild.builds.builder"
+  member  = "serviceAccount:${google_service_account.build.email}"
+}
+
 # ── 서비스 계정 ─────────────────────────────────────────────────────────────
 # 서비스마다 전용 SA를 둔다. 프로젝트 기본 컴퓨트 SA는 roles/owner를 갖고 있어
 # MCP 서버 런타임으로 쓰기에 과도하다.
