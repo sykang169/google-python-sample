@@ -241,6 +241,14 @@ resource "google_cloud_run_v2_service" "mcp" {
   depends_on = [google_secret_manager_secret_iam_member.runtime]
 
   lifecycle {
+    # 이미지 태그는 build.sh가 image.auto.tfvars에 기록한다. 그 파일은 생성물이라
+    # 커밋하지 않으므로, 새로 clone한 뒤 빌드 없이 apply하면 여기서 멈춘다.
+    # 막지 않으면 Cloud Run이 몇 분 뒤 "Image not found"로 죽어 원인이 멀어진다.
+    precondition {
+      condition     = contains(keys(var.image_tags), each.key) || var.image_tag != "latest"
+      error_message = "${each.key}의 이미지 태그가 없습니다. 먼저 ./build.sh 를 실행하세요 (build.sh가 image.auto.tfvars에 태그를 기록합니다). 이미 올려둔 이미지를 쓰시려면 -var image_tag=<태그> 로 지정하세요."
+    }
+
     # Cloud Run v2에는 scaling 블록이 두 군데 있다:
     #   template.scaling  리비전 단위 (max_instance_count 등) — 우리가 관리한다
     #   scaling           서비스 단위 (min_instance_count, manual_instance_count)

@@ -481,3 +481,9 @@ pdm.lock
 !pyproject.toml
 !Dockerfile
 !docker-compose.yml
+
+# ===== Terraform =====
+# build.sh가 생성하는 이미지 태그. 프로젝트마다 값이 다르므로 커밋하지 않는다.
+# 커밋해 두면 새 프로젝트에 clone 했을 때 남의 프로젝트 태그를 물려받아
+# Cloud Run이 "Image not found"로 죽는다.
+mcp/terraform/image.auto.tfvars
