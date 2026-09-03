@@ -54,12 +54,19 @@ TARGETS=("${@:-}")
 
 TOKEN="$(gcloud auth print-access-token)"
 
+# 사용자 자격증명(ADC)으로 부르면 할당량 프로젝트가 비어 있어 API가 거절한다.
+#   ERROR: ... requires a quota project, which is not set by default
+# 헤더로 명시한다. gcloud auth application-default set-quota-project는 gcloud
+# 클라이언트에만 적용되고 이런 raw curl 호출에는 영향이 없다.
+# (호출자에게 프로젝트의 serviceusage.services.use 권한이 있어야 한다.)
+AUTH=(-H "Authorization: Bearer ${TOKEN}" -H "X-Goog-User-Project: ${PROJECT_ID}")
+
 # 상태 조회 모드 — 이름을 추측하지 않고 custom_mcp 커넥터를 전부 나열한다.
 # 콘솔에서 만든 것은 ID에 타임스탬프가 붙으므로 목록 조회가 안전하다.
 if [[ "${1:-}" == "--status" ]]; then
   echo "project=$PROJECT_ID location=$LOCATION"
   curl -s "${BASE}/projects/${PROJECT_ID}/locations/${LOCATION}/collections?pageSize=100" \
-    -H "Authorization: Bearer ${TOKEN}" \
+    "${AUTH[@]}" \
   | python3 -c "
 import sys, json
 d = json.load(sys.stdin)
@@ -108,7 +115,7 @@ for svc in "${TARGETS[@]}"; do
   #   actionParams.auth_type          params가 아니라 actionParams에 들어간다
   #   entities                        백킹 데이터 스토어가 만들어진다
   resp="$(curl -s -X POST "${BASE}/projects/${PROJECT_ID}/locations/${LOCATION}:setUpDataConnector" \
-    -H "Authorization: Bearer ${TOKEN}" -H "Content-Type: application/json" \
+    "${AUTH[@]}" -H "Content-Type: application/json" \
     -d "{
       \"collectionId\": \"${cid}\",
       \"collectionDisplayName\": \"${DISPLAY_NAME[$svc]:-$svc}\",
