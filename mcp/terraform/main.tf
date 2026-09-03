@@ -6,7 +6,7 @@ data "google_project" "this" {
 # 신규 프로젝트에서 바로 apply할 수 있도록 필요한 API를 켠다.
 
 resource "google_project_service" "required" {
-  for_each = var.enable_apis ? toset([
+  for_each = var.enable_apis ? toset(concat([
     "run.googleapis.com",
     "secretmanager.googleapis.com",
     "artifactregistry.googleapis.com",
@@ -14,13 +14,42 @@ resource "google_project_service" "required" {
     "discoveryengine.googleapis.com", # Gemini Enterprise 데이터 스토어
     "aiplatform.googleapis.com",      # dart-mcp의 ask_dart
     "compute.googleapis.com",         # Cloud NAT 전용 이그레스 IP
-  ]) : toset([])
+    ],
+    # 조직 정책을 Terraform이 직접 해제할 때만 필요하다.
+    var.disable_custom_mcp_org_policy_override ? ["orgpolicy.googleapis.com"] : []
+  )) : toset([])
 
   project = var.project_id
   service = each.value
 
   # 이 구성을 destroy해도 API는 끄지 않는다. 다른 리소스가 쓰고 있을 수 있다.
   disable_on_destroy = false
+}
+
+# ── 조직 정책 ───────────────────────────────────────────────────────────────
+# Custom MCP 데이터 스토어 생성은 이 제약으로 기본 차단된다. 켜져 있으면
+# 배포는 전부 성공한 뒤 connect_ge.sh가 커넥터를 만들다 막힌다.
+#
+#   ERROR: Operation denied by org policy on resource
+#   'projects/<번호>/locations/global/collections/mcp-ecos/dataConnector':
+#   ["constraints/discoveryengine.managed.disableCustomMcpServerConnector": ...]
+#
+# 프로젝트 단위로 해제한다. 상위(조직·폴더) 정책은 건드리지 않는다.
+# roles/orgpolicy.policyAdmin이 필요하고 전파에 2분쯤 걸린다. 권한이 없으면
+# 변수를 false로 두고 조직 관리자에게 요청한다.
+resource "google_org_policy_policy" "custom_mcp_connector" {
+  count = var.disable_custom_mcp_org_policy_override ? 1 : 0
+
+  name   = "projects/${var.project_id}/policies/discoveryengine.managed.disableCustomMcpServerConnector"
+  parent = "projects/${var.project_id}"
+
+  spec {
+    rules {
+      enforce = "FALSE"
+    }
+  }
+
+  depends_on = [google_project_service.required]
 }
 
 locals {
