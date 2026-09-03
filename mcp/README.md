@@ -60,6 +60,28 @@ Gemini Enterprise
 | 주식시세 | [data.go.kr](https://www.data.go.kr/) | 서비스마다 개별 신청이 필요합니다. **디코딩된 형태**의 키를 사용하세요 |
 | FINLIFE | [finlife.fss.or.kr](https://finlife.fss.or.kr/) | 금융감독원 |
 
+### 새로 만든 프로젝트라면 — Service Usage API 먼저
+
+Terraform이 필요한 API 7종을 켜 주지만(`main.tf`의 `google_project_service`),
+**그 리소스 자체가 Service Usage API를 호출합니다.** 새 프로젝트는 이게 꺼져
+있어서 `terraform apply`가 7개 리소스 전부 `SERVICE_DISABLED`로 죽습니다.
+Terraform이 스스로 켤 수 없는 부분이라 한 번만 손으로 켜 주셔야 합니다.
+
+```bash
+gcloud services enable serviceusage.googleapis.com cloudresourcemanager.googleapis.com \
+  --project=YOUR_PROJECT
+```
+
+이 명령까지 403이 나면 gcloud로는 부트스트랩이 안 되는 상태입니다. 오류 메시지에
+있는 콘솔 링크(`console.developers.google.com/apis/api/serviceusage.googleapis.com/overview?project=...`)로
+켜신 뒤 **1~2분 전파를 기다렸다가** 진행하세요.
+
+`setup_keys.sh --apply`가 이 두 가지(`serviceusage`, `secretmanager`)는 직접
+켜려고 시도하므로, 2단계를 먼저 돌리시면 대개 여기서 걸리지 않습니다.
+
+> 결제 계정이 연결되지 않은 프로젝트도 같은 지점에서 막힙니다. `run`,
+> `aiplatform`, `compute`는 결제 없이는 활성화가 거부됩니다.
+
 ### 필요한 권한
 
 - 프로젝트에 대한 `roles/editor` 수준의 권한
@@ -97,6 +119,13 @@ set -a && . ./.env && set +a
   STOCK_API_KEY 생성 ... OK
   FINLIFE_API_KEY 생성 ... OK
 ```
+
+> **새로 만든 프로젝트라면** 이 시점에 API가 아직 꺼져 있습니다. Terraform이
+> 켜 주지만 그건 6단계라서요. `setup_keys.sh --apply`가 `serviceusage`와
+> `secretmanager` 두 개는 직접 켜고 진행합니다
+> ([앞 절](#새로-만든-프로젝트라면--service-usage-api-먼저) 참고). 실패하면
+> gcloud가 준 이유를 그대로 출력하니 계정·권한·결제·조직 정책 중 무엇인지
+> 보고 판단하시면 됩니다.
 
 > 키는 Terraform이 관리하지 않습니다. Terraform이 시크릿 값을 다루면 상태
 > 파일(tfstate)에 평문으로 남기 때문입니다. `setup_keys.sh`가 Secret Manager에
