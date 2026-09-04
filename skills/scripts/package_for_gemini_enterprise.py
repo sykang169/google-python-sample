@@ -72,6 +72,24 @@ def build_skill_md(skill_dir: pathlib.Path) -> str:
     return "\n".join(parts)
 
 
+# ZIP 항목의 타임스탬프는 기본적으로 "지금"(writestr) 또는 파일 mtime(write)에서
+# 온다. 둘 다 재현되지 않는다. 내용이 그대로여도 다시 빌드하면 바이트가 달라져
+# 8개가 전부 커밋 대상으로 잡히고, git은 mtime을 보존하지 않으므로 새로 clone한
+# 머신에서는 또 다른 값이 나온다. 권한 비트도 umask를 타서 머신마다 다르다.
+#
+# 모든 항목에 고정 시각과 고정 권한을 준다. 그러면 **내용이 바뀐 ZIP만** diff에
+# 남는다. 배포본을 저장소에 두는 구조라 이게 중요하다.
+ZIP_EPOCH = (1980, 1, 1, 0, 0, 0)  # ZIP 포맷이 표현할 수 있는 가장 이른 시각
+
+
+def zip_entry(name: str, executable: bool = False) -> zipfile.ZipInfo:
+    info = zipfile.ZipInfo(name, date_time=ZIP_EPOCH)
+    info.compress_type = zipfile.ZIP_DEFLATED
+    # 디스크의 권한을 읽지 않는다. scripts/ 아래 .py/.sh만 실행 가능으로 둔다.
+    info.external_attr = (0o755 if executable else 0o644) << 16
+    return info
+
+
 def package(
     skill_dir: pathlib.Path, out_dir: pathlib.Path, lowercase: bool = False
 ) -> pathlib.Path:
@@ -86,7 +104,7 @@ def package(
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
         skill_md = build_skill_md(skill_dir)
         total += len(skill_md.encode("utf-8"))
-        zf.writestr("skill.md" if lowercase else "SKILL.md", skill_md)
+        zf.writestr(zip_entry("skill.md" if lowercase else "SKILL.md"), skill_md)
 
         for sub in ("scripts", "assets"):
             src = skill_dir / sub
@@ -99,7 +117,12 @@ def package(
                     skipped.append(str(file.relative_to(skill_dir)))
                     continue
                 total += file.stat().st_size
-                zf.write(file, str(file.relative_to(skill_dir)))
+                arcname = str(file.relative_to(skill_dir))
+                zf.writestr(
+                    zip_entry(arcname,
+                              executable=sub == "scripts" and file.suffix in (".py", ".sh")),
+                    file.read_bytes(),
+                )
 
     if total > MAX_TOTAL_BYTES:
         raise SystemExit(
