@@ -67,7 +67,7 @@ ISIN, 법인등록번호, 펀드 표준코드를 먼저 고정하고 조회합�
 | `fsc-equity-ops` | 금융위 | 7 | 배당 기준일, 권리행사 일정, 사고주권, 대차 현황, REPO 금리 |
 | `fsc-industry` | 금융위 | 7 | 펀드 표준코드·판매현황, 증권사 경영지표·수수료 공시, 금투협 통계 |
 | `fsc-research` | 금융위 | 6 | 정규화 재무제표, 기업 개요·계열사, 공시 33종 |
-| `dart-mcp` | 금감원 | 4 | 전자공시 원문·사업보고서·XBRL (엔드포인트 82개를 검색+실행 2단계로 압축) |
+| `dart-mcp` | 금감원 | 6 | 전자공시 정형 데이터·XBRL (엔드포인트 82개를 검색+실행 2단계로 압축) + 공시 원문 본문 (목차→항목 2단계) |
 | `finlife-mcp` | 금감원 | 6 | 예금·적금·주담대·전세·신용대출의 회사별 실제 판매 금리 |
 | `ecos-mcp` | 한국은행 | 6 | 기준금리·환율·물가·GDP·국고채 금리 등 거시 시계열 (통계표 약 840종) |
 
@@ -120,7 +120,8 @@ ecos       search_statistic_tables  →  get_statistic_series   국고채 3년
 ```
 fsc-research get_corp_outline           crno(법인등록번호) 확정
 fsc-research get_financial_statement    bizYear 3개 연도
-dart         resolve_company         →  search_dart_apis("유상증자")  →  call_dart_api
+dart         resolve_company         →  call_dart_api("list")        접수번호(rcept_no)
+dart         get_disclosure_outline  →  get_disclosure_section       원문 본문
 ```
 
 **정확도의 조건**
@@ -129,9 +130,14 @@ dart         resolve_company         →  search_dart_apis("유상증자")  → 
 - 계산은 금융위 정규화 재무제표로, 원문 인용은 DART로 역할을 나눕니다. 두 소스는
   계정 정의가 달라 한 표에 섞지 않습니다.
 - 부채비율처럼 계산한 값은 산식과 함께 제시합니다.
+- **원문 본문은 목차를 먼저 봅니다.** 사업보고서 본문은 텍스트만 80만 자여서
+  통째로 읽을 수 없습니다. `get_disclosure_outline`이 주는 목차에서 필요한 항목을
+  고르고, 그 `chars`(실제 받을 분량)를 보고 읽을지 정합니다.
+- **처음 읽는 문서는 40초 이상 걸립니다.** DART 서버가 느린 탓이며, 응답이
+  없다고 같은 호출을 반복하지 않습니다.
 
 **답에 담기는 것** — 3개 연도 부채비율과 산식, 증자 공시의 발행 규모·목적·희석률,
-공시 원문 링크.
+인용한 원문 항목과 접수번호.
 
 ### 그룹 지배구조 맵 · 서버 2
 
@@ -392,7 +398,8 @@ fsc-industry get_kofia_stat        금투협 종합통계
 ```
 1턴  fsc-market      find_listed_item → get_stock_price → get_market_index
 2턴  fsc-research    get_corp_outline → get_financial_statement
-     dart            resolve_company → search_dart_apis → call_dart_api
+     dart            resolve_company → call_dart_api("list") → get_disclosure_outline
+                     → get_disclosure_section (필요한 항목만)
 3턴  fsc-ficc        get_bond_basic → get_bond_call_redemption
      fsc-market      get_bond_price
      ecos            search_statistic_tables → get_statistic_series
