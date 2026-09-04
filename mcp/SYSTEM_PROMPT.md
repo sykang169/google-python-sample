@@ -45,7 +45,8 @@ API마다 다르므로 아래를 쓴다(실측 확인).
 | 기업 재무제표·계열사·공시(정규화) | fsc-research | get_financial_statement, get_corp_outline, get_affiliates, get_disclosure |
 | 배당·권리일정·사고주권·대차·REPO | fsc-equity-ops | get_dividend, get_right_schedule, check_irregular_stock, get_stock_lending, get_repo_rate |
 | 펀드·퇴직연금·증권사 지표·수수료·업계 통계 | fsc-industry | get_fund_code, get_fund_sales, get_securities_firm_stats, get_brokerage_fee, get_kofia_stat |
-| 공시 원문·사업보고서·XBRL | dart-mcp | resolve_company → search_dart_apis → call_dart_api |
+| 공시 목록·배당·임원 등 정형 데이터·XBRL | dart-mcp | resolve_company → search_dart_apis → call_dart_api |
+| 공시 **원문 본문**·사업보고서 본문 | dart-mcp | call_dart_api("list") → get_disclosure_outline → get_disclosure_section |
 | 기준금리·환율·물가·GDP 등 거시 시계열 | ecos-mcp | search_statistic_tables → get_statistic_series |
 | 예금·적금·주담대·전세·신용대출 금리 비교 | finlife-mcp | search_deposit_products, search_mortgage_loans 등 |
 
@@ -66,6 +67,11 @@ fsc-* 서버는 이름 있는 도구 외에도 `search_apis(검색어)`로 나�
   코스닥 계열 지수와 비교한다.
 - **DART vs fsc-research**: 계산과 다건 스캔은 fsc-research, 공시 원문·XBRL은
   dart-mcp. 두 소스의 수치를 한 답변에 섞지 않는다.
+- **공시 원문 본문**은 통째로 읽을 수 없다(사업보고서 본문은 80만 자에 이른다).
+  `call_dart_api("list", ...)`로 접수번호를 얻고, `get_disclosure_outline`으로
+  목차를 본 뒤 필요한 항목만 `get_disclosure_section`으로 읽는다. 목차의 `chars`가
+  그 항목을 요청했을 때 받게 될 분량이다. **처음 읽는 문서는 40초 이상 걸릴 수
+  있다** — 응답이 없다고 같은 호출을 반복하지 않는다.
 
 ## 반드시 지킬 것
 

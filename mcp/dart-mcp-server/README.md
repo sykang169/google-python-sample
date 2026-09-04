@@ -3,16 +3,23 @@
 금융감독원 전자공시(OPEN DART)를 MCP 도구로 노출하는 서버입니다. 기업의 재무제표,
 배당, 임원·주주 현황, 합병·증자 같은 공시 정보를 조회합니다.
 
-DART는 JSON 엔드포인트가 82개인데, 이 서버는 **도구 4개**로 제공합니다.
+DART는 JSON 엔드포인트가 82개인데, 이 서버는 **도구 6개**로 제공합니다.
 
-## 도구 4개
+## 도구 6개
 
 ```
 resolve_company(name)              회사명 → corp_code   (내장 인덱스, 외부 호출 없음)
 search_dart_apis(query, group)     82개 카탈로그 검색 → 엔드포인트 + 파라미터 명세
 call_dart_api(endpoint, params)    찾은 엔드포인트 실행
 ask_dart(question, corp_name)      자연어 질문 하나로 조회 (선택)
+
+get_disclosure_outline(rcept_no)          공시 원문의 목차 (본문 미포함)
+get_disclosure_section(rcept_no, ...)     고른 항목의 본문만
 ```
+
+앞의 넷은 DART가 JSON으로 주는 **정형 데이터**를 다룹니다. 뒤의 둘은 **공시
+원문 본문**을 읽습니다 — `document.xml`은 JSON이 아니라 ZIP으로 오기 때문에
+82개 카탈로그에 들어가지 못하고, `call_dart_api`로는 부를 수 없습니다.
 
 ### 기본 흐름
 
@@ -27,6 +34,29 @@ call_dart_api("alotMatter", {...}) → 데이터
 
 DART의 모든 API는 회사명이 아니라 8자리 `corp_code`를 요구하므로, 회사가 등장하면
 `resolve_company`부터 부르셔야 합니다.
+
+### 공시 원문 본문 읽기
+
+사업보고서 본문은 **텍스트만 80만 자**입니다(삼성전자 2024년, 압축 676KB →
+XML 7.6MB). 통째로 반환하는 방법은 없습니다. 목차를 먼저 보고 필요한 항목만
+읽습니다.
+
+```
+call_dart_api("list", {"corp_code": "00126380", ...})   → rcept_no
+get_disclosure_outline("20250311001085")                → 목차 155개 항목
+get_disclosure_section("20250311001085", section_no=20) → 그 항목만
+```
+
+목차의 `chars`가 **그 항목을 요청했을 때 받게 될 분량**입니다(XML 길이가 아니라
+평문 길이). `focus="financial" | "governance" | "business"`로 목차를 좁힐 수
+있습니다.
+
+상위 제목("III. 재무에 관한 사항")은 하위 항목을 포함하지 않습니다. 포함시키면
+항목 하나가 수십만 자가 되어 나누는 의미가 사라지기 때문입니다.
+
+> **첫 조회는 40초 이상 걸립니다.** DART가 676KB를 보내는 데 실측 43초가 걸리며
+> (약 15KB/s) 압축 해제 0.1초, 파싱 0.2초입니다. 병목은 전적으로 DART 서버입니다.
+> `DART_DOC_CACHE_BUCKET`을 설정하면 두 번째부터는 수백 ms입니다.
 
 ### `ask_dart`는 언제 쓰나
 
@@ -130,6 +160,7 @@ curl -sN --max-time 30 -X POST "$URL" \
 | `DART_ENABLE_ASK` | `1` | `0`이면 `ask_dart`를 비활성화합니다 |
 | `DART_ROUTER_MODEL` | `gemini-2.5-flash` | `ask_dart`가 사용하는 모델 |
 | `GOOGLE_CLOUD_PROJECT` / `GOOGLE_CLOUD_LOCATION` | — | `ask_dart`의 Vertex AI 호출용 |
+| `DART_DOC_CACHE_BUCKET` | — | 공시 원문 파싱 결과를 담을 GCS 버킷. 없으면 캐시를 건너뜁니다 |
 
 ## 참고
 
