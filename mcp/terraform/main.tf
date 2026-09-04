@@ -80,6 +80,8 @@ locals {
       extra_env = {
         GOOGLE_CLOUD_PROJECT  = var.project_id
         GOOGLE_CLOUD_LOCATION = "global"
+        # 공시 원문 캐시 버킷. 없으면 서버가 조용히 캐시를 건너뛴다.
+        DART_DOC_CACHE_BUCKET = google_storage_bucket.dart_doc_cache.name
       }
     }
     finlife-mcp = {
@@ -197,6 +199,39 @@ resource "google_project_iam_member" "runtime_telemetry" {
   project = var.project_id
   role    = each.value.role
   member  = "serviceAccount:${google_service_account.mcp[each.value.service].email}"
+}
+
+# ── 공시 원문 캐시 ──────────────────────────────────────────────────────────
+# DART의 document.xml은 676KB를 받는 데 실측 43초가 걸린다(약 15KB/s). 파싱은
+# 0.2초이므로 병목은 전적으로 DART 서버다.
+#
+# 공시 원문은 접수번호가 확정되면 **바뀌지 않는다.** 무효화를 고민할 필요가
+# 없는, 캐시하기 가장 좋은 데이터다. Cloud Run은 인스턴스가 여러 개라 서버의
+# 인메모리 캐시만으로는 다음 호출이 다른 인스턴스로 갈 때 또 43초를 기다린다.
+#
+# 문서 하나가 압축 후 수백 KB다. 90일이면 워크샵과 실사용 재조회를 덮고,
+# 그 뒤 다시 받아도 캐시가 다시 채워진다.
+resource "google_storage_bucket" "dart_doc_cache" {
+  project  = var.project_id
+  name     = "${var.project_id}-dart-doc-cache"
+  location = var.region
+
+  uniform_bucket_level_access = true
+  public_access_prevention    = "enforced"
+
+  lifecycle_rule {
+    condition { age = 90 }
+    action { type = "Delete" }
+  }
+
+  depends_on = [google_project_service.required]
+}
+
+# dart-mcp 런타임만 읽고 쓴다. 다른 서비스 계정에는 주지 않는다.
+resource "google_storage_bucket_iam_member" "dart_doc_cache" {
+  bucket = google_storage_bucket.dart_doc_cache.name
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:${google_service_account.mcp["dart-mcp"].email}"
 }
 
 # ── Cloud Run ───────────────────────────────────────────────────────────────

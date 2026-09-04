@@ -11,6 +11,13 @@ DART는 JSON 엔드포인트가 82개다. 이를 그대로 MCP 도구로 펼치�
   call_dart_api    찾은 엔드포인트를 결정론적으로 실행한다
   ask_dart         (선택) 서버 내부 Gemini가 엔드포인트를 골라 실행한다
 
+공시 원문(document.xml)은 JSON이 아니라 ZIP을 주므로 카탈로그 82개에 들어가지
+못한다. 같은 이유로 통째로 반환할 수도 없다 — 사업보고서 본문은 500만 자를
+넘는다. 목차와 본문을 나눈 전용 도구 두 개로 연다.
+
+  get_disclosure_outline   목차만 (제목 목록과 각 항목의 분량)
+  get_disclosure_section   고른 항목의 본문만 (기본 상한 2만 자)
+
 앞의 3개는 LLM을 쓰지 않는다. 판단은 호출하는 에이전트가 하고 이 서버는
 카탈로그와 실행만 담당하므로 결정론적이고 디버깅이 쉽다. ask_dart는 도메인
 지식이 필요한 질문("배당"이 alotMatter인지 stockTotqySttus인지 같은)을 위한
@@ -24,11 +31,17 @@ Gemini Enterprise 데이터 스토어가 소비할 수 있도록 StreamableHTTP�
 from __future__ import annotations
 
 import gzip
+import html
+import io
 import json
+import logging
 import os
 import pathlib
 import random
+import re
 import time
+import zipfile
+from collections import OrderedDict
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
@@ -39,6 +52,13 @@ from mcp.server.transport_security import TransportSecuritySettings
 DART_BASE = "https://opendart.fss.or.kr/api"
 TIMEOUT = httpx.Timeout(30.0, connect=10.0)
 ASSETS = pathlib.Path(__file__).parent / "assets"
+
+logger = logging.getLogger("dart-mcp")
+
+# httpx는 INFO에서 요청 URL을 통째로 남긴다. DART는 인증키를 쿼리 파라미터로만
+# 받으므로(헤더 방식이 없다) 그대로 두면 **Cloud Logging에 키 원문이 쌓인다.**
+# 로그 레벨을 올려 URL이 남지 않게 한다.
+logging.getLogger("httpx").setLevel(logging.WARNING)
 
 API_KEY = os.environ.get("DART_API_KEY", "")
 ENABLE_ASK = os.environ.get("DART_ENABLE_ASK", "1") != "0"
@@ -107,7 +127,11 @@ INSTRUCTIONS = """금융감독원 전자공시(OPEN DART) — 공시 원문·사
 
 엔드포인트 82개를 resolve_company → search_dart_apis → call_dart_api 순으로 연다.
 corp_code를 먼저 확정하지 않으면 동명 법인이 섞인다. 국내 공시 전용이며 SEC
-EDGAR 같은 해외 공시는 다루지 않는다."""
+EDGAR 같은 해외 공시는 다루지 않는다.
+
+공시 원문 본문이 필요하면 call_dart_api("list", ...)로 rcept_no를 얻은 뒤
+get_disclosure_outline으로 목차를 보고 get_disclosure_section으로 해당 항목만
+읽는다. 본문은 500만 자를 넘을 수 있어 통째로 반환하지 않는다."""
 
 mcp = FastMCP("dart-mcp", instructions=INSTRUCTIONS)
 
@@ -478,6 +502,385 @@ def ask_dart(question: str, corp_name: str = "", bsns_year: str = "") -> dict:
         "summary": data.get("summary"),
         "data": data,
     }
+
+
+# ── 공시 원문 ────────────────────────────────────────────────────────────────
+# document.xml은 다른 82개와 성격이 다르다. JSON이 아니라 ZIP 바이너리를 주고
+# 그 안에 DART 고유 태그로 짜인 XML이 들어 있다. 그래서 카탈로그에서 빠져 있고
+# call_dart_api로는 부를 수 없다. 전용 도구로 연다.
+#
+# 분량이 진짜 문제다. 삼성전자 2024 사업보고서(20250311001085)를 실측하면
+# 압축 676KB, 풀면 XML 3개 7.6MB, 본문 텍스트만 580만 자다. 통째로 돌려주면
+# 어떤 모델의 컨텍스트도 넘는다. 그래서 두 단계로 나눈다.
+#
+#   get_disclosure_outline   목차만 준다 (제목 135개, 수 KB)
+#   get_disclosure_section   고른 항목의 본문만 준다 (기본 상한 2만 자)
+#
+# 목차의 chars가 곧 그 항목을 요청했을 때 받게 될 분량이다. 상위 제목은 하위
+# 항목을 포함하지 않는다 — 포함시키면 "II. 사업의 내용" 하나가 14만 자가 되어
+# 나누는 의미가 사라진다.
+
+DOC_BASE = "https://opendart.fss.or.kr/api/document.xml"
+DOC_CACHE_TTL = 600.0          # 목차를 보고 섹션을 고르는 왕복을 한 번의 다운로드로
+DOC_CACHE_MAX = 2              # 문서 하나가 수십 MB라 넉넉히 두지 않는다
+SECTION_CHARS_DEFAULT = 20_000
+SECTION_CHARS_CAP = 60_000     # 모델이 max_chars를 크게 불러도 여기서 막는다
+TABLE_ROWS_DEFAULT = 200       # 표 하나에서 가져올 최대 행 수
+
+# 문서 안의 항목 이름을 모를 때 좁히는 힌트. adk-finance-agent의
+# dart_analytics에서 쓰던 분류를 그대로 가져왔다.
+FOCUS_KEYWORDS = {
+    "financial": ["재무", "손익", "현금흐름", "자본변동", "매출", "자산", "부채", "주석"],
+    "governance": ["임원", "주주", "감사", "지배구조", "이사회", "계열회사"],
+    "business": ["사업", "영업", "시장", "경쟁", "생산", "수주", "연구개발"],
+}
+
+_doc_cache: "OrderedDict[str, tuple[float, dict]]" = OrderedDict()
+
+# GCS 캐시. DART의 document.xml은 676KB를 받는 데 실측 43초가 걸린다(약 15KB/s).
+# 병목은 우리 파싱(0.2초)이 아니라 DART 서버다. 대신 **공시 원문은 불변이다** —
+# 접수번호가 확정되면 내용이 바뀌지 않으므로 무효화를 고민할 필요가 없다.
+#
+# 인메모리 캐시는 같은 인스턴스로 연속 호출될 때만 듣는다. Cloud Run은
+# stateless_http에 인스턴스가 여러 개라 다음 호출이 다른 인스턴스로 가면 다시
+# 43초를 기다린다. 파싱 결과를 버킷에 두면 그 경우에도 수백 ms로 끝난다.
+#
+# 버킷이 없으면(로컬 개발) 조용히 건너뛴다. GCS 오류도 요청을 실패시키지
+# 않는다 — 캐시는 최적화이지 정합성의 근거가 아니다.
+DOC_BUCKET = os.environ.get("DART_DOC_CACHE_BUCKET", "")
+_gcs_client: Any = None
+
+
+def _bucket() -> Any:
+    """GCS 버킷 핸들. 버킷 미설정이거나 라이브러리가 없으면 None."""
+    global _gcs_client
+    if not DOC_BUCKET:
+        return None
+    if _gcs_client is None:
+        try:
+            from google.cloud import storage  # 버킷을 쓸 때만 import한다
+            _gcs_client = storage.Client()
+        except Exception as exc:  # 자격증명 없음, 라이브러리 없음 등
+            logger.warning("GCS 캐시를 쓸 수 없습니다: %s", exc)
+            _gcs_client = False
+    return _gcs_client.bucket(DOC_BUCKET) if _gcs_client else None
+
+
+def _cache_read(rcept_no: str) -> dict | None:
+    bucket = _bucket()
+    if bucket is None:
+        return None
+    try:
+        blob = bucket.blob(f"document/{rcept_no}.json.gz")
+        if not blob.exists():
+            return None
+        return json.loads(gzip.decompress(blob.download_as_bytes()))
+    except Exception as exc:
+        logger.warning("GCS 캐시 읽기 실패(%s): %s", rcept_no, exc)
+        return None
+
+
+def _cache_write(rcept_no: str, parsed: dict) -> None:
+    bucket = _bucket()
+    if bucket is None:
+        return
+    try:
+        body = gzip.compress(json.dumps(parsed, ensure_ascii=False).encode())
+        bucket.blob(f"document/{rcept_no}.json.gz").upload_from_string(
+            body, content_type="application/gzip")
+    except Exception as exc:
+        logger.warning("GCS 캐시 쓰기 실패(%s): %s", rcept_no, exc)
+
+
+def _fetch_document_zip(rcept_no: str) -> bytes:
+    """document.xml을 내려받는다. 성공하면 ZIP 바이트다.
+
+    _call은 `.json`을 붙이고 JSON을 기대하므로 쓸 수 없다. 오류일 때 DART는
+    ZIP이 아니라 XML 본문을 200으로 주므로 매직 넘버로 갈라낸다.
+    """
+    if not API_KEY:
+        raise DartError(
+            "DART_API_KEY가 설정되지 않았습니다. Cloud Run에서는 "
+            "--set-secrets=DART_API_KEY=DART_API_KEY:latest 로 주입하세요."
+        )
+    if not (rcept_no.isdigit() and len(rcept_no) == 14):
+        raise DartError(
+            f"rcept_no는 14자리 숫자입니다(받은 값: {rcept_no!r}). "
+            "call_dart_api('list', ...)로 공시 목록을 조회하면 rcept_no가 나옵니다."
+        )
+
+    last_error: str | None = None
+    for attempt in range(MAX_ATTEMPTS):
+        if attempt:
+            _backoff(attempt - 1)
+        try:
+            with httpx.Client(timeout=httpx.Timeout(120.0, connect=10.0)) as client:
+                resp = client.get(DOC_BASE, params={"crtfc_key": API_KEY,
+                                                    "rcept_no": rcept_no})
+        except httpx.TransportError as exc:
+            last_error = f"{type(exc).__name__}: {exc}"
+            continue
+
+        if resp.status_code == 429 or resp.status_code >= 500:
+            last_error = f"HTTP {resp.status_code}"
+            continue
+        resp.raise_for_status()
+
+        if resp.content[:2] == b"PK":
+            return resp.content
+
+        # ZIP이 아니면 오류 XML이다. status를 뽑아 평소와 같은 메시지로 만든다.
+        text = resp.content.decode("utf-8", "replace")
+        status = (re.search(r"<status>(\d+)</status>", text) or [None, ""])[1]
+        message = f"DART {status}: {dart_message(status)}" if status else \
+            f"DART가 ZIP이 아닌 응답을 반환했습니다: {text[:200]}"
+        if status in RETRYABLE_STATUS:
+            last_error = message
+            continue
+        raise DartError(message)
+
+    raise DartError(
+        f"공시 원문 조회가 {MAX_ATTEMPTS}회 모두 실패했습니다. 마지막 오류 — {last_error}"
+    )
+
+
+def _render_table(block: str, max_rows: int) -> str:
+    """<TABLE> 한 덩어리를 행 단위 평문으로 만든다.
+
+    셀은 ` | `로, 행은 줄바꿈으로 잇는다. 원본 구현은 20행에서 잘랐는데
+    연결재무상태표가 그보다 길어 조용히 잘린 표를 받게 되므로 호출자가 정한다.
+    """
+    rows: list[str] = []
+    for tr in re.findall(r"<TR\b[^>]*>(.*?)</TR>", block, re.S | re.I):
+        # 셀 태그가 넷이다. TD/TH는 일반 표, **TE/TU는 재무제표 표**에 쓰인다.
+        # TD/TH만 보면 연결 재무상태표가 머리글 한 줄만 남고 통째로 사라진다
+        # (2024 사업보고서 실측: TE 225개, TH 4개, TD 0개).
+        cells = [_strip_tags(c) for c in
+                 re.findall(r"<T[DHEU]\b[^>]*>(.*?)</T[DHEU]>", tr, re.S | re.I)]
+        if any(cells):
+            rows.append(" | ".join(cells))
+    if len(rows) > max_rows:
+        rows = rows[:max_rows] + [f"... (표 {len(rows)}행 중 {max_rows}행만 표시)"]
+    return "\n".join(rows)
+
+
+def _strip_tags(fragment: str) -> str:
+    text = re.sub(r"<[^>]+>", " ", fragment)
+    return re.sub(r"\s+", " ", html.unescape(text)).strip()
+
+
+def _to_plain(fragment: str, table_max_rows: int) -> str:
+    """DART XML 조각을 사람이 읽는 평문으로 만든다. 표는 형태를 살린다."""
+    out, pos = [], 0
+    # `<TABLE-GROUP>`도 `<TABLE\b`에 걸린다. 공백이나 `>`가 바로 뒤에 오는 것만 표다.
+    for m in re.finditer(r"<TABLE(?=[\s>])[^>]*>.*?</TABLE>", fragment, re.S | re.I):
+        out.append(_strip_tags(fragment[pos:m.start()]))
+        out.append("\n" + _render_table(m.group(0), table_max_rows) + "\n")
+        pos = m.end()
+    out.append(_strip_tags(fragment[pos:]))
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(p for p in out if p.strip())).strip()
+
+
+def _parse_document(rcept_no: str) -> dict:
+    """ZIP을 메모리에서 열어 파일 목록과 목차를 만든다. 본문은 캐시에만 둔다.
+
+    Cloud Run은 인스턴스가 여러 개이고 stateless_http라 다음 호출이 다른
+    인스턴스로 갈 수 있다. 캐시는 **적중하면 좋은 최적화**일 뿐이며, 어긋나면
+    다시 내려받으므로 정합성은 캐시에 기대지 않는다.
+    """
+    now = time.time()
+    hit = _doc_cache.get(rcept_no)
+    if hit and now - hit[0] < DOC_CACHE_TTL:
+        _doc_cache.move_to_end(rcept_no)
+        return hit[1]
+
+    cached = _cache_read(rcept_no)
+    if cached is not None:
+        _remember(rcept_no, now, cached)
+        return cached
+
+    blob = _fetch_document_zip(rcept_no)
+    files, sections = [], []
+    doc_name = company = ""
+
+    with zipfile.ZipFile(io.BytesIO(blob)) as zf:
+        for info in sorted(zf.infolist(), key=lambda i: -i.file_size):
+            entry = {"filename": info.filename, "bytes": info.file_size}
+            if not info.filename.lower().endswith((".xml", ".html", ".htm", ".txt")):
+                # PDF·HWP 첨부는 이 도구로 읽지 않는다. 있다는 사실만 알린다.
+                entry["readable"] = False
+                files.append(entry)
+                continue
+
+            text = zf.read(info.filename).decode("utf-8", "replace")
+            entry["readable"] = True
+            entry["chars"] = len(text)
+            doc_name = doc_name or _strip_tags(
+                (re.search(r"<DOCUMENT-NAME\b[^>]*>(.*?)</DOCUMENT-NAME>", text, re.S) or ["", ""])[1])
+            company = company or _strip_tags(
+                (re.search(r"<COMPANY-NAME\b[^>]*>(.*?)</COMPANY-NAME>", text, re.S) or ["", ""])[1])
+            files.append(entry)
+
+            # 제목 위치와 그때의 SECTION 중첩 깊이를 함께 수집한다.
+            depth, marks = 0, []
+            for m in re.finditer(
+                    r"<(/?)SECTION-(\d)\b[^>]*>|<TITLE\b[^>]*>(.*?)</TITLE>", text, re.S):
+                if m.group(3) is not None:
+                    marks.append((m.start(), m.end(), _strip_tags(m.group(3)), max(depth, 1)))
+                else:
+                    depth += -1 if m.group(1) else 1
+            # 평문 변환을 여기서 끝낸다. XML 길이는 실제 분량과 1.3~22.5배까지
+            # 벌어져(표가 많을수록 심하다) 크기를 보고 읽을지 정하는 판단을
+            # 정반대로 만든다. 155개 전부 변환해도 0.7초이고, 변환 결과만 들고
+            # 있으면 원본 XML(6.9M자)을 버릴 수 있어 메모리도 줄어든다.
+            for i, (_start, end, title, level) in enumerate(marks):
+                nxt = marks[i + 1][0] if i + 1 < len(marks) else len(text)
+                body = _to_plain(text[end:nxt], TABLE_ROWS_DEFAULT)
+                sections.append({
+                    "no": len(sections) + 1,
+                    "file": info.filename,
+                    "level": level,
+                    "title": title,
+                    "chars": len(body),
+                    "xml_chars": nxt - end,
+                    "_text": body,
+                })
+
+    parsed = {
+        "rcept_no": rcept_no,
+        "document_name": doc_name,
+        "company_name": company,
+        "files": files,
+        "sections": sections,
+        "text_chars": sum(x["chars"] for x in sections),
+    }
+    _cache_write(rcept_no, parsed)
+    _remember(rcept_no, now, parsed)
+    return parsed
+
+
+def _remember(rcept_no: str, now: float, parsed: dict) -> None:
+    _doc_cache[rcept_no] = (now, parsed)
+    while len(_doc_cache) > DOC_CACHE_MAX:
+        _doc_cache.popitem(last=False)
+
+
+@mcp.tool(annotations=READ_ONLY)
+def get_disclosure_outline(rcept_no: str, focus: str = "", limit: int = 200) -> dict:
+    """공시 원문의 목차를 읽는다. 본문을 읽기 전에 **반드시 먼저 호출한다.**
+
+    사업보고서 본문은 500만 자를 넘는다. 통째로는 읽을 수 없으므로 이 도구로
+    목차를 받아 필요한 항목의 `no`를 고르고, get_disclosure_section으로 그
+    항목만 읽는다.
+
+    각 항목의 `chars`가 곧 그 항목을 요청했을 때 받게 될 분량이다. 상위 제목은
+    하위 항목을 포함하지 않는다.
+
+    Args:
+        rcept_no: 접수번호 14자리. call_dart_api("list", {"corp_code": ...})로 얻는다.
+        focus: 항목을 좁히는 힌트. "financial"(재무·주석), "governance"(임원·주주·
+            지배구조), "business"(사업·영업·생산) 중 하나. 비우면 전부.
+        limit: 반환할 항목 수 상한.
+
+    Returns:
+        document_name, company_name, files(파일별 크기·읽기 가능 여부),
+        sections(no·level·title·chars), section_count.
+    """
+    doc = _parse_document(rcept_no)
+    rows = doc["sections"]
+    if focus:
+        keys = FOCUS_KEYWORDS.get(focus.strip().lower())
+        if keys is None:
+            raise DartError(
+                f"focus는 {', '.join(FOCUS_KEYWORDS)} 중 하나입니다(받은 값: {focus!r}).")
+        rows = [s for s in rows if any(k in s["title"] for k in keys)]
+
+    return {
+        "rcept_no": rcept_no,
+        "document_name": doc["document_name"],
+        "company_name": doc["company_name"],
+        "files": doc["files"],
+        "text_chars": doc["text_chars"],
+        "section_count": len(rows),
+        "sections": [{k: s[k] for k in ("no", "level", "title", "chars", "file")}
+                     for s in rows[:limit]],
+        "next_step": "필요한 항목의 no를 골라 "
+                     "get_disclosure_section(rcept_no, section_no=<no>)로 읽는다.",
+    }
+
+
+@mcp.tool(annotations=READ_ONLY)
+def get_disclosure_section(
+    rcept_no: str,
+    section_no: int = 0,
+    title: str = "",
+    max_chars: int = SECTION_CHARS_DEFAULT,
+) -> dict:
+    """공시 원문에서 **한 항목만** 평문으로 읽는다.
+
+    get_disclosure_outline으로 목차를 먼저 본 뒤 호출한다. 문서 전체를 반환하는
+    방법은 없다 — 500만 자짜리 문서가 있기 때문이다.
+
+    Args:
+        rcept_no: 접수번호 14자리.
+        section_no: 목차의 `no`. 이 값을 쓰는 것이 가장 정확하다.
+        title: no를 모를 때 제목의 일부로 찾는다(부분 일치). 여러 개가 걸리면
+            후보를 돌려주고 읽지 않는다.
+        max_chars: 반환 상한. 넘으면 잘라서 주고 truncated로 알린다.
+
+    Returns:
+        title, chars(원본 분량), returned_chars, truncated, text.
+        truncated가 True면 이어 읽을 방법을 next_step으로 함께 준다.
+    """
+    doc = _parse_document(rcept_no)
+    rows = doc["sections"]
+    if not rows:
+        raise DartError(
+            f"{rcept_no}에서 읽을 수 있는 항목을 찾지 못했습니다. "
+            "get_disclosure_outline으로 파일 목록을 먼저 확인하세요.")
+
+    if section_no:
+        picked = [s for s in rows if s["no"] == section_no]
+        if not picked:
+            raise DartError(
+                f"section_no={section_no}는 이 문서에 없습니다(1~{len(rows)}). "
+                "get_disclosure_outline으로 목차를 다시 확인하세요.")
+    elif title:
+        picked = [s for s in rows if title.strip() in s["title"]]
+        if not picked:
+            raise DartError(
+                f"제목에 {title!r}를 포함하는 항목이 없습니다. "
+                "get_disclosure_outline으로 실제 제목을 확인하세요.")
+        if len(picked) > 1:
+            return {
+                "rcept_no": rcept_no,
+                "matched": [{k: s[k] for k in ("no", "level", "title", "chars")}
+                            for s in picked[:20]],
+                "next_step": f"{len(picked)}개가 일치합니다. section_no로 하나를 지정하세요.",
+            }
+    else:
+        raise DartError("section_no 또는 title 중 하나는 지정해야 합니다.")
+
+    sec = picked[0]
+    plain = sec["_text"]
+
+    cap = min(max(max_chars, 500), SECTION_CHARS_CAP)
+    truncated = len(plain) > cap
+    out = {
+        "rcept_no": rcept_no,
+        "no": sec["no"],
+        "title": sec["title"],
+        "chars": len(plain),
+        "returned_chars": min(len(plain), cap),
+        "truncated": truncated,
+        "text": plain[:cap],
+    }
+    if truncated:
+        out["next_step"] = (
+            f"{len(plain):,}자 중 {cap:,}자만 반환했습니다. 하위 항목이 있으면 "
+            "목차에서 더 좁은 no를 고르고, 없으면 max_chars를 올려 다시 부릅니다"
+            f"(상한 {SECTION_CHARS_CAP:,}자).")
+    return out
 
 
 # ── 기동 ────────────────────────────────────────────────────────────────────
