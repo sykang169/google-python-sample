@@ -28,8 +28,12 @@ Gemini Enterprise의 Custom MCP Server 데이터 스토어로 쓴다.
 fsc-common/           ← 원본. 여기만 고친다
   fsc_core.py           공용 클라이언트 (호출·재시도·응답 정규화)
   catalog.json          50 서비스 × 175 오퍼레이션 + 실측 응답 필드
+  candidates.json       아직 안 붙인 60 서비스 × 119 오퍼레이션
   servers.py            5개 서버의 도구 정의
   sync.py               서버 디렉터리 생성/갱신
+  check_access.py       배포된 API의 승인 여부 확인
+  collect_operations.py 포털에서 후보 API 명세 수집
+  check_candidates.py   후보 API의 승인 여부 확인
 fsc-<name>-mcp-server/  ← 생성물. 직접 고치지 말 것
 ```
 
@@ -48,10 +52,39 @@ python3 sync.py market     # 하나만
 | 키 | 왜 필요한가 |
 | --- | --- |
 | `base_url` | 호출 경로가 `/1160100/service/<서비스>`와 `/1160100/<서비스>` 두 갈래다. 틀리면 권한과 무관하게 `resultCode 12`가 난다 |
-| `operations[].fields` | 금융위 API는 **응답 필드명이 곧 필터 파라미터**다. 포털 HTML에 파라미터 명세가 없어 실제 응답에서 수집했다 |
+| `operations[].fields` | 금융위 API는 **응답 필드명이 곧 필터 파라미터**다. 실제 응답에서 수집했다 |
 | `operations[].param_style` | 포맷 지정이 `resultType` / `_type` / XML전용으로 갈린다 |
 
 전체 110종의 목록과 도입 우선순위는 `mcp/fsc-open-api-catalog.json`에 있다.
+
+> 포털 상세 페이지에도 요청변수·출력결과 표가 있다. 처음에는 없는 줄 알았는데,
+> 페이지 HTML에는 첫 오퍼레이션만 실리고 나머지는 AJAX로 따로 오기 때문이었다.
+> `collect_operations.py`가 그 경로를 쓴다.
+
+## 아직 채택하지 않은 60종
+
+`candidates.json`이 나머지 60종의 명세를 `catalog.json`과 같은 모양으로 들고
+있다. 서버에 붙이기로 하면 해당 항목을 `catalog.json`으로 옮기고 `servers.py`에
+도구를 정의하면 된다.
+
+```bash
+# 포털에서 오퍼레이션·요청변수·출력결과를 수집한다 (이어받기 지원)
+python3 mcp/fsc-common/collect_operations.py /tmp/collected.json
+
+# 실제로 호출해 활용신청 승인 여부를 본다
+STOCK_API_KEY=... python3 mcp/fsc-common/check_candidates.py \
+    /tmp/collected.json /tmp/access.json
+```
+
+포털이 명세를 두 가지 방식으로 준다. 옛 데이터셋은 select + AJAX, 새 데이터셋
+(`PRDE02`)은 Swagger 2.0 JSON을 페이지에 그대로 심는다. 수집기가 둘 다 읽는다.
+
+> **포털이 선언한 호스트를 그대로 믿으면 안 된다.** 새 데이터셋 20종은 명세에
+> `openapi.fsc.go.kr`로 적혀 있다. 그런데 그 호스트는 DNS는 뜨는데 TCP 연결이
+> 안 되고(2026-09-06, 이 개발 환경 기준 — Cloud Run에서는 따로 확인해야 한다),
+> 실제로는 `apis.data.go.kr/1160100/service`로 다 통했다. 그래서
+> `check_candidates.py`는 경로 후보를 여러 개 시도하고 통한 경로를 기록한다.
+> 카탈로그의 `portal_declared_base_url`이 어긋난 선언을 남겨 둔 자리다.
 
 ## 인증키
 

@@ -1,0 +1,5486 @@
+{
+ "GetBorrInveInfoService": {
+  "name": "차입투자정보",
+  "topic": "기업정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15059585",
+  "operations": {
+   "getNPLReviInfo": {
+    "ko_name": "부실채권회생정보조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "법인등록번호",
+      "name": "crno",
+      "required": false,
+      "sample": "1201110040022",
+      "desc": "법인등록번호"
+     },
+     {
+      "ko": "사건발생년도",
+      "name": "icdtOccrYr",
+      "required": false,
+      "sample": "",
+      "desc": "사건이 발생한 년도"
+     }
+    ],
+    "fields": [
+     "basDt",
+     "crno",
+     "th1CrdrAsmbDt",
+     "th2CrdrAsmbDt",
+     "th3CrdrAsmbDt",
+     "corvCnfmOpngDt",
+     "corvCnfmOpngPropDt",
+     "corvCnfmDt",
+     "corvCnfmDcd",
+     "corvCnfmDcdNm",
+     "corvPcScd",
+     "corvPcScdNm",
+     "revlInfoEcalDcd",
+     "revlInfoEcalDcdNm",
+     "curtNo",
+     "icdtOccrYr",
+     "icdtOccrNo"
+    ]
+   },
+   "getNPLBankrInfo": {
+    "ko_name": "부실채권파산정보조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "법인등록번호",
+      "name": "crno",
+      "required": false,
+      "sample": "1801110205020",
+      "desc": "법인등록번호"
+     }
+    ],
+    "fields": [
+     "basDt",
+     "crno",
+     "bondRlprSqno",
+     "icdtRcptSqno",
+     "dbtRlprDcd",
+     "dbtRlprDcdNm",
+     "bkrpExmpPrgCtt",
+     "bondAmtBasDt",
+     "bkrpExmpPrgLastChgDt"
+    ]
+   },
+   "getPoliFundUtilInfo": {
+    "ko_name": "정책자금활용정보조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준일자",
+      "name": "basDt",
+      "required": false,
+      "sample": "",
+      "desc": "작업 또는 거래의 기준이 되는 일자(년월일)"
+     },
+     {
+      "ko": "법인등록번호",
+      "name": "crno",
+      "required": false,
+      "sample": "1801110007062",
+      "desc": "법인등록번호"
+     }
+    ],
+    "fields": [
+     "basDt",
+     "crno",
+     "plcyCptClsfNm",
+     "plcyCptSuprFncoNm",
+     "plcyCptExecGvrnMtofNm",
+     "plcyCptSuprFrmtCtt",
+     "plcyCptSuprAmt",
+     "plcyCptBal",
+     "plcyCptSuprExecDt",
+     "plcyCptExprDt"
+    ]
+   },
+   "getPublFundUtilInfo": {
+    "ko_name": "공적자금활용정보조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준일자",
+      "name": "basDt",
+      "required": false,
+      "sample": "",
+      "desc": "작업 또는 거래의 기준이 되는 일자(년월일)"
+     },
+     {
+      "ko": "법인등록번호",
+      "name": "crno",
+      "required": false,
+      "sample": "1244110101741",
+      "desc": "법인등록번호"
+     }
+    ],
+    "fields": [
+     "basDt",
+     "crno",
+     "pblfndClsfNm",
+     "pblfndExcuBnkNm",
+     "pblfndExcuMtofNm",
+     "pblfndExcuFrmtNm",
+     "pblfndExcuAmt",
+     "pblfndAcbkBal",
+     "plcyCptSuprExecDt",
+     "pblfndExcuDcnt",
+     "pblfndExprDt"
+    ]
+   }
+  }
+ },
+ "GetFnCoBasiInfoService": {
+  "name": "금융회사기본정보",
+  "topic": "금융회사정보",
+  "adoption_priority": 2,
+  "adoption_note": "FinLife kor_co_nm을 법인 식별자로 해석",
+  "access": "callable",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15043232",
+  "operations": {
+   "getFnCoOutl": {
+    "ko_name": "금융회사기업개요조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "서비스키",
+      "name": "ServiceKey",
+      "required": false,
+      "sample": "-",
+      "desc": "공공데이터포털에서 받은 인증키"
+     },
+     {
+      "ko": "기준일자",
+      "name": "basDt",
+      "required": false,
+      "sample": "20200408",
+      "desc": "작업 또는 거래의 기준이 되는 일자(년월일)"
+     },
+     {
+      "ko": "법인등록번호",
+      "name": "crno",
+      "required": false,
+      "sample": "1101113892240",
+      "desc": "법인등록번호"
+     },
+     {
+      "ko": "금융회사명",
+      "name": "fncoNm",
+      "required": false,
+      "sample": "메리츠자산운용",
+      "desc": "금융회사의 이름"
+     }
+    ],
+    "fields": [
+     "basDt",
+     "crno",
+     "fncoNm",
+     "fncoEnsnNm",
+     "isinCd",
+     "isinCdNm",
+     "fncoRprNm",
+     "corpRegMrktDcd",
+     "corpRegMrktDcdNm",
+     "bzno",
+     "fncoAdr",
+     "fncoZpcd",
+     "fncoHmpgUrl",
+     "fncoTlno",
+     "fncoFxno",
+     "sicCd",
+     "sicNm",
+     "fncoEstbDt",
+     "fncoStacMm",
+     "fncoXchgLstgDt",
+     "fncoXchgLstgAbolDt",
+     "fncoKosdaqLstgDt",
+     "fncoKosdaqLstgAbolDt",
+     "fncoKrxLstgDt",
+     "fncoKrxLstgAbolDt",
+     "fncoSmenpYn",
+     "mntrFcnFncoCd",
+     "mntrFcnFncoCdNm",
+     "fncoEmpeCnt",
+     "empeAvgCnwkTermCtt",
+     "fncoEmpeAvgSlryAmt",
+     "actnAudpnNm",
+     "audtRptOpnnCtt",
+     "fncoMainBizNm",
+     "fssCorpUnqNo",
+     "fssCorpChgDtm"
+    ]
+   }
+  }
+ },
+ "GetFnCoGoveInfoService": {
+  "name": "금융회사지배구조정보",
+  "topic": "금융회사정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15059593",
+  "operations": {
+   "getFnCoStocHoldInfo": {
+    "ko_name": "금융회사주주정보조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준일자",
+      "name": "basDt",
+      "required": false,
+      "sample": "20191231",
+      "desc": "작업 또는 거래의 기준이 되는 일자(년월일)"
+     },
+     {
+      "ko": "법인등록번호",
+      "name": "crno",
+      "required": false,
+      "sample": "1101110042484",
+      "desc": "법인등록번호"
+     }
+    ],
+    "fields": [
+     "basDt",
+     "crno",
+     "sthdSqno",
+     "sthdFnm",
+     "maxSthdRltNm",
+     "stckCsfNm",
+     "fncoEoteStckCnt",
+     "fncoEoteShrRatCtt"
+    ]
+   },
+   "getFnCoReprDireInfo": {
+    "ko_name": "금융회사대표이사정보조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준일자",
+      "name": "basDt",
+      "required": false,
+      "sample": "20191231",
+      "desc": "작업 또는 거래의 기준이 되는 일자(년월일)"
+     },
+     {
+      "ko": "법인등록번호",
+      "name": "crno",
+      "required": false,
+      "sample": "1101110003692",
+      "desc": "법인등록번호"
+     }
+    ],
+    "fields": [
+     "basDt",
+     "crno",
+     "fncoNm",
+     "ceoFnm",
+     "ceoJbttNm",
+     "rgstExutYn",
+     "ceoFltmsvYn",
+     "ceoChrgBzwrCtt",
+     "ceoMainCrrCtt",
+     "ownOnskCnt",
+     "ownPfstCnt",
+     "maxSthdRltNm",
+     "ceoHdfTermCtt",
+     "ceoTrmXpryDt"
+    ]
+   },
+   "getFnCoExecRemuStat": {
+    "ko_name": "금융회사임원보수현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준일자",
+      "name": "basDt",
+      "required": false,
+      "sample": "20190401",
+      "desc": "작업 또는 거래의 기준이 되는 일자(년월일)"
+     },
+     {
+      "ko": "법인등록번호",
+      "name": "crno",
+      "required": false,
+      "sample": "1801110078443",
+      "desc": "법인등록번호"
+     }
+    ],
+    "fields": [
+     "basDt",
+     "crno",
+     "rgstDrtrCnt",
+     "rgstDrtrTrmrAmt",
+     "rgstDrtrAvgRmrAmt",
+     "rgstDrtrRmkCtt",
+     "otdrCnt",
+     "otdrTrmrAmt",
+     "otdrAvgRmrAmt",
+     "otdrRmkCtt",
+     "audpnCnt",
+     "audpnTrmrAmt",
+     "audpnAvgRmrAmt",
+     "audtRmkCtt"
+    ]
+   },
+   "getFnCoExecInfo": {
+    "ko_name": "금융회사임원정보조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준일자",
+      "name": "basDt",
+      "required": false,
+      "sample": "20191231",
+      "desc": "작업 또는 거래의 기준이 되는 일자(년월일)"
+     },
+     {
+      "ko": "법인등록번호",
+      "name": "crno",
+      "required": false,
+      "sample": "1101113634428",
+      "desc": "법인등록번호"
+     }
+    ],
+    "fields": [
+     "basDt",
+     "crno",
+     "dataSqno",
+     "exutFnm",
+     "exutBornYm",
+     "exutJbttNm",
+     "rgstExutYn",
+     "rgstExutCtt",
+     "fltmsvYn",
+     "fltmsvCtt",
+     "chrgBzwrCtt",
+     "mainCrrCtt",
+     "onskOwnStckCnt",
+     "pfstOwnStckCnt",
+     "exutHdfTermCtt",
+     "exutTrmXpryDt",
+     "sexCd",
+     "sexCdNm",
+     "exutOwnOnskCnt",
+     "exutOwnPfstCnt"
+    ]
+   }
+  }
+ },
+ "GetFnCoFinaStatCredInfoService_V2": {
+  "name": "금융회사재무신용정보",
+  "topic": "금융회사정보",
+  "adoption_priority": 2,
+  "adoption_note": "금융회사 재무제표 3종",
+  "access": "callable",
+  "approval": "개발단계",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "spec_source": "swagger",
+  "public_data_pk": "15059594",
+  "operations": {
+   "getFnCoIs_V2": {
+    "ko_name": "금융회사손익계산서조회",
+    "desc": "기준일자, 법인등록번호, 사업연도를 통하여 재무제표구분코드, 계정과목명, 당기계정과목금액, 전기계정과목금액등을 조회하는 금융회사손익계산서조회 기능",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "작업 또는 거래의 기준이 되는 일자(년월일)",
+      "name": "basDt",
+      "required": false,
+      "sample": "20181231",
+      "desc": "작업 또는 거래의 기준이 되는 일자(년월일)"
+     },
+     {
+      "ko": "법인등록번호",
+      "name": "crno",
+      "required": false,
+      "sample": "1201110234469",
+      "desc": "법인등록번호"
+     },
+     {
+      "ko": "법인에 대해 법령이 규정한 1회계기간으로서 법인세의 과세기간",
+      "name": "bizYear",
+      "required": false,
+      "sample": "2018",
+      "desc": "법인에 대해 법령이 규정한 1회계기간으로서 법인세의 과세기간"
+     }
+    ],
+    "fields": [
+     "FnCoIs_header",
+     "FnCoIs_body"
+    ]
+   }
+  }
+ },
+ "GetFnCoDepoInsuInfoService": {
+  "name": "금융회사부보정보",
+  "topic": "금융회사정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15059606",
+  "operations": {
+   "getDepoInsuSubjFnCo": {
+    "ko_name": "부보대상금융회사조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준일자",
+      "name": "basDt",
+      "required": false,
+      "sample": "",
+      "desc": "작업 또는 거래의 기준이 되는일자(년월일)"
+     },
+     {
+      "ko": "법인등록번호",
+      "name": "crno",
+      "required": false,
+      "sample": "1101112033150",
+      "desc": "법인등록번호"
+     }
+    ],
+    "fields": [
+     "basDt",
+     "crno",
+     "binsTrgtYn",
+     "binsFncoAraCd",
+     "binsFncoAraCdNm",
+     "binsFncoRevsDt"
+    ]
+   },
+   "getDepoInsuSubjFinaInst": {
+    "ko_name": "부보대상금융상품조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준일자",
+      "name": "basDt",
+      "required": false,
+      "sample": "20170112",
+      "desc": "작업 또는 거래의 기준이 되는 일자(년월일)"
+     },
+     {
+      "ko": "법인등록번호",
+      "name": "crno",
+      "required": false,
+      "sample": "1101110339956",
+      "desc": "법인등록번호"
+     }
+    ],
+    "fields": [
+     "basDt",
+     "crno",
+     "binsFncoCd",
+     "binsFncoAraCd",
+     "binsFncoAraCdNm",
+     "binsFncoNm",
+     "binsFncoPrdNm"
+    ]
+   },
+   "getDepoInsuSubjDepoStat": {
+    "ko_name": "부보대상예금현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201712",
+      "desc": "작업 또는 거래의 기준이 되는 년월"
+     },
+     {
+      "ko": "법인등록번호",
+      "name": "crno",
+      "required": false,
+      "sample": "1101112705379",
+      "desc": "법인등록번호"
+     }
+    ],
+    "fields": [
+     "basYm",
+     "crno",
+     "binsFncoNm",
+     "binsFncoCd",
+     "binsTrgtAcitId",
+     "binsTrgtAcitNm",
+     "binsTrgtAmt",
+     "binsXclTrgtAmt"
+    ]
+   }
+  }
+ },
+ "GetBkrFnCoInfoService": {
+  "name": "파산금융회사 기본정보",
+  "topic": "금융회사정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15043285",
+  "operations": {
+   "getBkrFnCoBasiInfo": {
+    "ko_name": "파산금융회사기본정보조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "서비스키",
+      "name": "ServiceKey",
+      "required": false,
+      "sample": "-",
+      "desc": "공공데이터포털에서 받은 인증키"
+     },
+     {
+      "ko": "기준일자",
+      "name": "basDt",
+      "required": false,
+      "sample": "20200407",
+      "desc": "작업 또는 거래의 기준이 되는 일자(년월일)"
+     },
+     {
+      "ko": "파산금융회사명",
+      "name": "bkrpFncoNm",
+      "required": false,
+      "sample": "골든브릿지저축은행",
+      "desc": "파산금융회사의 명칭"
+     }
+    ],
+    "fields": [
+     "basDt",
+     "bkrpFncoNm",
+     "bkrpFncoSqno",
+     "bkrpFncoAraCd",
+     "bkrpFncoAraNm",
+     "pdacTrspnNm",
+     "bkrpRegDt",
+     "bkrpFncoAdr",
+     "bkrpFncoTlno",
+     "bkrpFncoFxno",
+     "etcCtt"
+    ]
+   }
+  }
+ },
+ "GetBkrFnCoBsInfoService": {
+  "name": "파산금융회사재무상태표정보",
+  "topic": "금융회사정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15059601",
+  "operations": {
+   "getBkrFnCoBs": {
+    "ko_name": "파산금융회사재무상태표조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준일자",
+      "name": "basDt",
+      "required": false,
+      "sample": "20090301",
+      "desc": "작업 또는 거래의 기준이 되는 일자(년월일)"
+     },
+     {
+      "ko": "법인등록번호",
+      "name": "crno",
+      "required": false,
+      "sample": "2201110001312",
+      "desc": "법인등록번호"
+     },
+     {
+      "ko": "사업연도",
+      "name": "bizYear",
+      "required": false,
+      "sample": "2009",
+      "desc": "법인에 대해 법령이 규정한 1회계기간으로서 법인세의 과세기간"
+     }
+    ],
+    "fields": [
+     "basDt",
+     "crno",
+     "bizYear",
+     "rptCd",
+     "rptCdNm",
+     "fnclDcd",
+     "fnclDcdNm",
+     "acitId",
+     "acitNm",
+     "thqrAcitAmt",
+     "crtmAcitAmt",
+     "lsqtAcitAmt",
+     "pvtrAcitAmt",
+     "bpvtrAcitAmt"
+    ]
+   }
+  }
+ },
+ "GetBkrFnCoIsInfoService": {
+  "name": "파산금융회사손익계산서정보",
+  "topic": "금융회사정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15059602",
+  "operations": {
+   "getBkrFnCoIs": {
+    "ko_name": "파산금융회사손익계산서조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준일자",
+      "name": "basDt",
+      "required": false,
+      "sample": "20090601",
+      "desc": "작업 또는 거래의 기준이 되는 일자(년월일)"
+     },
+     {
+      "ko": "법인등록번호",
+      "name": "crno",
+      "required": false,
+      "sample": "2201110001312",
+      "desc": "법인등록번호"
+     },
+     {
+      "ko": "사업연도",
+      "name": "bizYear",
+      "required": false,
+      "sample": "2009",
+      "desc": "법인에 대해 법령이 규정한 1회계기간으로서 법인세의 과세기간"
+     }
+    ],
+    "fields": [
+     "basDt",
+     "crno",
+     "bizYear",
+     "rptCd",
+     "rptCdNm",
+     "fnclDcd",
+     "fnclDcdNm",
+     "acitId",
+     "acitNm",
+     "thqrAcitAmt",
+     "crtmAcitAmt",
+     "lsqtAcitAmt",
+     "pvtrAcitAmt",
+     "bpvtrAcitAmt"
+    ]
+   }
+  }
+ },
+ "GetPublFuScInfoService": {
+  "name": "금융회사 자금지원및회수정보",
+  "topic": "금융회사정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15059608",
+  "operations": {
+   "getPublFundSuppCollInfo": {
+    "ko_name": "자금지원및회수정보조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준일자",
+      "name": "basDt",
+      "required": false,
+      "sample": "20000831",
+      "desc": "작업 또는 거래의 기준이 되는 일자(년월일)"
+     },
+     {
+      "ko": "금융회사명",
+      "name": "fncoNm",
+      "required": false,
+      "sample": "신협",
+      "desc": "금융회사의 이름"
+     }
+    ],
+    "fields": [
+     "basDt",
+     "fncoNm",
+     "bzdsCsfNm",
+     "bsupFncoNm",
+     "bkrpFncoClupMthoNm",
+     "rdptFndSuprInvtAmt",
+     "rdptFndSuprCtbtAmt",
+     "rdptFndSuprDepSbpayAmt",
+     "rdptFndSuprLoanAmt",
+     "rdptFndSuprAstBuyAmt",
+     "rdptFndSuprStotAmt",
+     "rdptFndRtrvInvtAmt",
+     "rdptFndRtrvLoanAmt",
+     "rdptFndRtrvBkrpDvdnAmt",
+     "rdptFndRtrvAstDsslAmt",
+     "rdptFndRtrvStotAmt",
+     "spraccSuprIsuAm",
+     "spraccSuprEstrPayAm",
+     "spraccSuprInvtAmt",
+     "spraccSuprCtbtAmt",
+     "spraccSuprKrncLoanAmt",
+     "spraccSuprSumAmt",
+     "spraccInvtRtrvAmt",
+     "spraccBkrpDvdnRtrvAmt",
+     "spraccLoanRtrvAmt",
+     "spraccRtrvEtcAmt",
+     "spraccRtrvSumAmt",
+     "pblfndRmkCtt"
+    ]
+   }
+  }
+ },
+ "GetStocDepoInfoService_V2": {
+  "name": "주식등록예탁가능정보",
+  "topic": "자본시장정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계",
+  "base_url": "https://apis.data.go.kr/1160100",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100",
+  "spec_source": "swagger-paths",
+  "public_data_pk": "15059607",
+  "operations": {
+   "getDepoAvaiWhet_V2": {
+    "ko_name": "",
+    "desc": "주식등록예탁가능정보는 특정 주식이 한국예탁결제원에 등록 및 예탁이 가능한지 여부를 확인할 수 있는 데이터입니다.\\n\\n기준일자, 종목번호, 발행회사명 등을 기준으로, 등록예탁 가능여부, 예탁가능일자, 등록구분, 상장구분, 발행주식수, 액면가, 발행시장 등의 정보를 제공합니다.\\n\\n<데이터 조회 시 유의사항>\\n파라미터 없이 조회 시 데이터 조회 시간이 오",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "basDt",
+     "crno",
+     "stckIssuCmpyNm",
+     "isinCd",
+     "isinCdNm",
+     "scrsItmsKcd",
+     "scrsItmsKcdNm",
+     "stckIssuFrmtNm",
+     "itmsShrtnCd",
+     "dpsgRegDt",
+     "dpsgRegCanDt",
+     "lstgDcd",
+     "lstgDcdNm",
+     "lstgDt",
+     "rbfLstgDcd",
+     "rbfLstgDcdNm",
+     "stckNcirRcd",
+     "stckNcirRcdNm",
+     "lstgAbolDt",
+     "afrpItmsNm"
+    ]
+   }
+  }
+ },
+ "GetFundInfoService_V2": {
+  "name": "크라우드펀딩정보",
+  "topic": "자본시장정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계",
+  "base_url": "https://apis.data.go.kr/1160100",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100",
+  "spec_source": "swagger-paths",
+  "public_data_pk": "15059613",
+  "operations": {
+   "getFundIssuCompInfo_V2": {
+    "ko_name": "",
+    "desc": "크라우드펀딩정보는 온라인소액투자중개업자를 통해 자금을 조달한 크라우드펀딩 발행사의 정보를 제공하는 데이터입니다. 발행사명, 대표자명, 발행금액, 발행일자, 증권종류, 증권수량, 발행사 업종, 소재지 등의 정보가 포함됩니다.\\n\\n이 데이터는 1개 오퍼레이션으로 구성되어 있습니다.\\n오퍼레이션은 다음과 같습니다.\\n\\n① 크라우드펀딩 발행사정보 조회 : 발행",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "basDt",
+     "fundIssuCmpyNm",
+     "fundTofrAmt",
+     "fundOffrSttgDt",
+     "fundOffrEdDt",
+     "fundSbscAmt",
+     "fundSbscRt",
+     "fundInvsCnt",
+     "fundIssuCmpyRprsBzcNm"
+    ]
+   }
+  }
+ },
+ "GetFundBrokInfoService_V2": {
+  "name": "크라우드펀딩중개업자정보",
+  "topic": "자본시장정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계",
+  "base_url": "https://apis.data.go.kr/1160100",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100",
+  "spec_source": "swagger-paths",
+  "public_data_pk": "15043360",
+  "operations": {
+   "getFundBrokInfo_V2": {
+    "ko_name": "",
+    "desc": "크라우드펀딩중개업자정보는 기준일자와 업체명을 기준으로 크라우드펀딩 중개업자의 기본 현황과 발행 실적을 제공하는 데이터입니다. \\n\\n주요 제공 항목에는 중개업자명, 일련번호, 기준일자, 유가증권구분코드 및 명칭, 크라우드펀딩 발행금액 등이 포함되며, 중개업자별로 시점별 발행 현황을 확인할 수 있습니다. \\n\\n이 데이터는 기업의 비상장 자금조달 및 초기 투",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "basDt",
+     "fundBrkrSqno",
+     "fundBrkrNm",
+     "scrsDcd",
+     "scrsDcdNm",
+     "fundIssuAmt"
+    ]
+   }
+  }
+ },
+ "GetMortLoanIssuDetaInfoService": {
+  "name": "모기지론발행상세정보",
+  "topic": "자본시장정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15059599",
+  "operations": {
+   "getIssuOutl": {
+    "ko_name": "발행개요조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "유가증권발행년도",
+      "name": "scrsIssuYr",
+      "required": false,
+      "sample": "2005",
+      "desc": "유가증권을 발행할 당시의 연도"
+     }
+    ],
+    "fields": [
+     "rqdzPlanCd",
+     "isinCd",
+     "bondCcd",
+     "mbsDtlCsfNm",
+     "scrsIssuYr",
+     "scrsIssuRndNo",
+     "scrsIssuDt",
+     "frreRnknDcd",
+     "frreRnknDcdNm",
+     "trncCdNm",
+     "scrsIssuAmt",
+     "scrsExprClsfNm",
+     "scrsIssuIrt",
+     "intPayMthNm",
+     "issuScrtCrdtGdcd",
+     "pamtPayMcd",
+     "pamtPayMcdNm",
+     "cloptCondCtt",
+     "fstDvdnBnfPayDt",
+     "prirPayAmtNm",
+     "babuPayAmtNm",
+     "wghnAvgIssuIrt",
+     "crdtRifmCtt",
+     "issuInvpnCtt"
+    ]
+   },
+   "getItemExpeMatu": {
+    "ko_name": "종목별예상만기조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "MBS상세분류명",
+      "name": "mbsDtlCsfNm",
+      "required": false,
+      "sample": "일반 MBS",
+      "desc": "주택저당증권(MBS)의 상세 분류 이름"
+     }
+    ],
+    "fields": [
+     "rqdzPlanCd",
+     "isinCd",
+     "bondCcd",
+     "mbsDtlCsfNm",
+     "scrsIssuYr",
+     "scrsIssuRndNo",
+     "trncCdNm",
+     "scrsExprYrs",
+     "bsicInrtCtt",
+     "clrdRatRsngRt",
+     "clrdRatFallRt"
+    ]
+   },
+   "getUndeAsseInfo": {
+    "ko_name": "대상기초자산정보조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "MBS상세분류명",
+      "name": "mbsDtlCsfNm",
+      "required": false,
+      "sample": "일반 MBS",
+      "desc": "주택저당증권(MBS)의 상세 분류 이름"
+     }
+    ],
+    "fields": [
+     "rqdzPlanCd",
+     "isinCd",
+     "bondCcd",
+     "mbsDtlCsfNm",
+     "scrsIssuYr",
+     "scrsIssuRndNo",
+     "trncCdNm",
+     "udasPrdKindNm",
+     "udasSleFncoNm",
+     "udasSleCcnt",
+     "udasSleAmt",
+     "fncoSleRto"
+    ]
+   }
+  }
+ },
+ "GetMortLoanItemBasiInfoService": {
+  "name": "모기지론종목기본정보",
+  "topic": "자본시장정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15059600",
+  "operations": {
+   "getMortLoanItemBasiInfo": {
+    "ko_name": "모기지론종목기본정보조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "유가증권발행년도",
+      "name": "scrsIssuYr",
+      "required": false,
+      "sample": "2009",
+      "desc": "유가증권을 발행할 당시의 연도"
+     }
+    ],
+    "fields": [
+     "rqdzPlanCd",
+     "isinCd",
+     "bondCcd",
+     "mbsDtlCsfNm",
+     "scrsIssuYr",
+     "scrsIssuRndNo",
+     "trncCdNm",
+     "anulIntPayFcnt",
+     "scrsIssuDt",
+     "scrsExprDt",
+     "basIrtKcd",
+     "basIrtKcdNm",
+     "srfcInrt",
+     "intPayMcd",
+     "intPayMcdNm",
+     "intClcMcd",
+     "intClcMcdNm",
+     "scrsIssuAmt",
+     "mglnBal",
+     "frreRnknDcd",
+     "frreRnknDcdNm",
+     "pamtPayMcd",
+     "pamtPayMcdNm",
+     "cloptExertCtt",
+     "cloptExertPsblMmntCtt",
+     "cloptExertUnitCd",
+     "cloptExertUnitCdNm",
+     "scrtLstgDt",
+     "scrtIssuMcd",
+     "scrtIssuMcdNm",
+     "sptdCmpyNm",
+     "crbuNm",
+     "elcBidInstNm"
+    ]
+   },
+   "getDiviIntePaymInfo": {
+    "ko_name": "배당이자지급관련정보조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "유가증권발행년도",
+      "name": "scrsIssuYr",
+      "required": false,
+      "sample": "2014",
+      "desc": "유가증권을 발행할 당시의 연도"
+     }
+    ],
+    "fields": [
+     "rqdzPlanCd",
+     "isinCd",
+     "bondCcd",
+     "mbsDtlCsfNm",
+     "scrsIssuYr",
+     "scrsIssuRndNo",
+     "trncCdNm",
+     "dvdnIntPayMthNm",
+     "srfcInrt",
+     "intPayCyclNm",
+     "nxtmIntPayDt",
+     "rbfIntPayDt",
+     "intAplpClsfNm",
+     "bnkHldyPayMthNm",
+     "sttrHldyPayMthNm",
+     "nowSwapExrt"
+    ]
+   },
+   "getCredGradInfo": {
+    "ko_name": "신용등급관련정보조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "유가증권발행년도",
+      "name": "scrsIssuYr",
+      "required": false,
+      "sample": "2006",
+      "desc": "유가증권을 발행할 당시의 연도"
+     }
+    ],
+    "fields": [
+     "rqdzPlanCd",
+     "isinCd",
+     "bondCcd",
+     "mbsDtlCsfNm",
+     "scrsIssuYr",
+     "scrsIssuRndNo",
+     "trncCdNm",
+     "crbuCd",
+     "crbuCdNm",
+     "scrsCrdtEvlDt",
+     "scrsCrdtEvlClsfNm",
+     "rbfCrdtEvlGdcd",
+     "rbfCrdtEvlGdcdNm",
+     "nowCrdtEvlGdcd",
+     "nowCrdtEvlGdcdNm",
+     "scrsGrChngYn"
+    ]
+   }
+  }
+ },
+ "GetMortLoanCallOptiInfoService": {
+  "name": "모기지론콜옵션행사내역정보",
+  "topic": "자본시장정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15059590",
+  "operations": {
+   "getCallOptiInfo": {
+    "ko_name": "콜옵션행사내역조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "유가증권발행년도",
+      "name": "scrsIssuYr",
+      "required": false,
+      "sample": "2010",
+      "desc": "유가증권을 발행할 당시의 연도"
+     }
+    ],
+    "fields": [
+     "rqdzPlanCd",
+     "isinCd",
+     "bondCcd",
+     "mbsDtlCsfNm",
+     "scrsIssuYr",
+     "scrsIssuRndNo",
+     "trncCdNm",
+     "scrsIssuDt",
+     "pbanWrtDt",
+     "pbanClsfNm",
+     "pbanTitNm",
+     "clrdDt",
+     "realIntPayDt",
+     "scrsDvdnBnfRt",
+     "cloptExertRto",
+     "cloptExertAmt",
+     "cloptIntPayAmt",
+     "cloptIntCalcFmulCtt",
+     "cloptAfexrBondBal",
+     "rdptPlanRevsYn",
+     "rdptPlanRmkCtt"
+    ]
+   }
+  }
+ },
+ "GetMortLoanPrinInteInfoService": {
+  "name": "모기지론원본및이자지급정보",
+  "topic": "자본시장정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15059589",
+  "operations": {
+   "getPrinAndInteInfo": {
+    "ko_name": "원본및이자지급내역조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "유가증권발행년도",
+      "name": "scrsIssuYr",
+      "required": false,
+      "sample": "2012",
+      "desc": "유가증권을 발행할 당시의 연도"
+     }
+    ],
+    "fields": [
+     "rqdzPlanCd",
+     "isinCd",
+     "bondCcd",
+     "mbsDtlCsfNm",
+     "scrsIssuYr",
+     "scrsIssuRndNo",
+     "trncCdNm",
+     "pbanWrtDt",
+     "pbanClsfNm",
+     "pbanTitNm",
+     "scrsIssuBal",
+     "scrsDvdnBnfRt",
+     "scrsExprDt",
+     "scrsIntPayDt",
+     "scrsOrcpPayAmt",
+     "scrsIntPayAmt",
+     "scrsPaySumAmt",
+     "cloptExertClsfNm",
+     "rdptPlanRevsYn",
+     "rdptPlanRmkCtt"
+    ]
+   }
+  }
+ },
+ "GetMortLoanMarkTradInfoService": {
+  "name": "모기지론시장거래현황정보",
+  "topic": "자본시장정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15059603",
+  "operations": {
+   "getOverTheCounTradStat": {
+    "ko_name": "장외거래현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "유동화계획코드",
+      "name": "rqdzPlanCd",
+      "required": false,
+      "sample": "KHFCMB2017S-02",
+      "desc": "유동화 계획별 관리 코드"
+     }
+    ],
+    "fields": [
+     "rqdzPlanCd",
+     "isinCd",
+     "bondCcd",
+     "mbsDtlCsfNm",
+     "scrsIssuYr",
+     "scrsIssuRndNo",
+     "trncCdNm",
+     "scrsOtcTrDt",
+     "scrsExprDt",
+     "scrsAvgBnfRt",
+     "scrsAvgUpr",
+     "scrsHgstBnfRt",
+     "scrsMnmBnfRt",
+     "scrsOtcTrAmt",
+     "scrsOtcRltrAmt",
+     "scrsOtcTrCcnt"
+    ]
+   }
+  }
+ },
+ "GetMortLoanUndeAsseInfoService": {
+  "name": "모기지론기초자산정보",
+  "topic": "자본시장정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15059604",
+  "operations": {
+   "getUndeAsseRedeInfo": {
+    "ko_name": "기초자산상환내역조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준연월",
+      "name": "basMm",
+      "required": false,
+      "sample": "201504",
+      "desc": "작업 또는 거래의 기준이 되는 연월"
+     },
+     {
+      "ko": "유가증권발행년도",
+      "name": "scrsIssuYr",
+      "required": false,
+      "sample": "2013",
+      "desc": "유가증권을 발행할 당시의 연도"
+     }
+    ],
+    "fields": [
+     "basMm",
+     "rqdzPlanCd",
+     "bondCcd",
+     "mbsDtlCsfNm",
+     "scrsIssuYr",
+     "scrsIssuRndNo",
+     "scrsIssuDt",
+     "intlLoanCcnt",
+     "intlLoanBal",
+     "pvmnLoanBal",
+     "clrdAmt",
+     "thmmTrdpAmt",
+     "clrdRto",
+     "basMmLoanBal",
+     "basMmLoanBalRto",
+     "intRdptAmt"
+    ]
+   },
+   "getUndeAsseOverRate": {
+    "ko_name": "기초자산연체율조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201808",
+      "desc": "작업 또는 거래의 기준이 되는 년월(년월)"
+     },
+     {
+      "ko": "유가증권발행년도",
+      "name": "scrsIssuYr",
+      "required": false,
+      "sample": "2009",
+      "desc": "유가증권발행년도"
+     }
+    ],
+    "fields": [
+     "basYm",
+     "rqdzPlanCd",
+     "bondCcd",
+     "mbsDtlCsfNm",
+     "scrsIssuYr",
+     "scrsIssuRndNo",
+     "scrsIssuDt",
+     "ovPamtAt",
+     "ovInt",
+     "piamOvSumAmt",
+     "piamOvRat",
+     "ovLoanBal",
+     "basMmLoanBal"
+    ]
+   },
+   "getUndeAsseDetaInfo": {
+    "ko_name": "기초자산세부정보조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "202004",
+      "desc": "작업 또는 거래의 기준이 되는 일자(년월일)"
+     },
+     {
+      "ko": "유가증권발행년도",
+      "name": "scrsIssuYr",
+      "required": false,
+      "sample": "2013",
+      "desc": "유가증권발행년도"
+     }
+    ],
+    "fields": [
+     "basYm",
+     "rqdzPlanCd",
+     "bondCcd",
+     "mbsDtlCsfNm",
+     "scrsIssuYr",
+     "scrsIssuRndNo",
+     "scrsIssuDt",
+     "intlLoanBal",
+     "thmmLoanBal",
+     "thmmPamtRdptRto",
+     "thmmPamtRdptAmt",
+     "thmmClrdRto",
+     "thmmClrdAmt",
+     "tmendLoanBalRto",
+     "ltstMn1AnulClrdRto"
+    ]
+   },
+   "getUndeAsseSeRedeInfo": {
+    "ko_name": "기초자산증권상환정보조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "202001",
+      "desc": "기준년월"
+     },
+     {
+      "ko": "유가증권발행년도",
+      "name": "scrsIssuYr",
+      "required": false,
+      "sample": "2019",
+      "desc": "유가증권발행년도"
+     }
+    ],
+    "fields": [
+     "basYm",
+     "rqdzPlanCd",
+     "isinCd",
+     "bondCcd",
+     "mbsDtlCsfNm",
+     "scrsIssuYr",
+     "scrsIssuRndNo",
+     "trncCdNm",
+     "scrsIssuDt",
+     "clrdAmt",
+     "nrmRdptAmt",
+     "tmendLoanBal",
+     "wghnAvgInrt",
+     "mothClrdRto",
+     "m3AnulClrdRto",
+     "scrsIntPayDt",
+     "dvdnInrt",
+     "dvdnInt",
+     "exprRdptAmt",
+     "cloptExertAmt",
+     "cloptExertRto",
+     "scrtBal",
+     "scrtBalRto"
+    ]
+   },
+   "getUndeAsseLtvDti": {
+    "ko_name": "기초자산LTV및DTI조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201810",
+      "desc": "작업 또는 거래의 기준이 되는 년월"
+     },
+     {
+      "ko": "유동화계획코드",
+      "name": "rqdzPlanCd",
+      "required": false,
+      "sample": "KHFCMB2012S-02",
+      "desc": "유동화계획코드"
+     }
+    ],
+    "fields": [
+     "basYm",
+     "rqdzPlanCd",
+     "bondCcd",
+     "mbsDtlCsfNm",
+     "scrsIssuYr",
+     "scrsIssuRndNo",
+     "scrsIssuDt",
+     "intlLoanBal",
+     "thmmLoanBal",
+     "avgLtvRat",
+     "avgDtiRat",
+     "clrdRto",
+     "ovRat"
+    ]
+   }
+  }
+ },
+ "GetMortLoanSecuBalaInfoService": {
+  "name": "모기지론증권잔액현황정보",
+  "topic": "자본시장정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15059605",
+  "operations": {
+   "getAllSeBalaStat": {
+    "ko_name": "전체증권잔액현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "202003",
+      "desc": "채권을 발행한 년도"
+     }
+    ],
+    "fields": [
+     "basYm",
+     "scrsIssuYr",
+     "mbsIssuAmt",
+     "mbbIssuAmt",
+     "slbsIssuAmt",
+     "komocoIssuAmt",
+     "mogScrtCnt"
+    ]
+   },
+   "getMbsIssuYearSecuBala": {
+    "ko_name": "MBS발행연도별증권잔액조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "202003",
+      "desc": "작업 또는 거래의 기준이 되는 년월"
+     }
+    ],
+    "fields": [
+     "basYm",
+     "scrsIssuYr",
+     "mbsIssuAmt",
+     "mbsRdptAmt",
+     "mbsIssuBal",
+     "mbsScrtCnt"
+    ]
+   },
+   "getMbsMatuSecuBala": {
+    "ko_name": "MBS만기별증권잔액조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "202003",
+      "desc": "작업 또는 거래의 기준이 되는 연도"
+     }
+    ],
+    "fields": [
+     "basYm",
+     "scrsExprClsfNm",
+     "mbsIssuAmt",
+     "mbsRdptAmt",
+     "mbsIssuBal"
+    ]
+   },
+   "getMbsUndeAsseTypeSecuBala": {
+    "ko_name": "MBS기초자산유형별증권잔액조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "202003",
+      "desc": "작업 또는 거래의 기준이 되는 연도"
+     }
+    ],
+    "fields": [
+     "basYm",
+     "udasPtrnNm",
+     "mbsIssuAmt",
+     "mbsRdptAmt",
+     "mbsIssuBal"
+    ]
+   }
+  }
+ },
+ "GetMoLoPrinInteRedeInfoService": {
+  "name": "모기지론증권원본및이자상환추이정보",
+  "topic": "자본시장정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15059588",
+  "operations": {
+   "getAllSecuPrinInteRedeInfo": {
+    "ko_name": "전체증권원본및이자상환추이정보조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "202003",
+      "desc": "작업 또는 거래의 기준이 되는 연도"
+     }
+    ],
+    "fields": [
+     "basYm",
+     "scrsIssuYr",
+     "bondCcd",
+     "mbsOrcpAmt",
+     "mbsDvdnAmt",
+     "komocoOrcpAmt",
+     "komocoDvdnAmt",
+     "slbsOrcpAmt",
+     "slbsDvdnAmt"
+    ]
+   },
+   "getCallOptiStat": {
+    "ko_name": "콜옵션행사현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "202003",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "basYm",
+     "scrsIssuYr",
+     "bondCcd",
+     "mbsCloptExertAmt",
+     "komocoCloptExertAmt",
+     "slbsCloptExertAmt"
+    ]
+   }
+  }
+ },
+ "GetMortLoanIssuStatInfoService": {
+  "name": "모기지론발행통계정보",
+  "topic": "자본시장정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 심의승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15059587",
+  "operations": {
+   "getIssuAmouStatStat": {
+    "ko_name": "발행금액현황통계조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "202003",
+      "desc": "기준년월"
+     },
+     {
+      "ko": "유동화계획코드",
+      "name": "rqdzPlanCd",
+      "required": false,
+      "sample": "Z",
+      "desc": "유동화계획코드"
+     }
+    ],
+    "fields": [
+     "basYm",
+     "rqdzPlanCd",
+     "scrsIssuYr",
+     "scrsIssuRndNo",
+     "scrsIssuDt",
+     "tsumIssuAmt",
+     "mbsIssuAmt",
+     "mbbIssuAmt",
+     "slbsIssuAmt",
+     "prirIssuAmt",
+     "yr1ExprIssuAmt",
+     "yr1ExprIssuAmtRto",
+     "yr2ExprIssuAmt",
+     "yr2ExprIssuAmtRto",
+     "yr3ExprIssuAmt",
+     "yr3ExprIssuAmtRto",
+     "yr5ExprIssuAmt",
+     "yr5ExprIssuAmtRto",
+     "yr7ExprIssuAmt",
+     "yr7ExprIssuAmtRto",
+     "yr10ExprIssuAmt",
+     "yr10ExprIssuAmtRto",
+     "yr15ExprIssuAmt",
+     "yr15ExprIssuAmtRto",
+     "yr20ExprIssuAmt",
+     "yr20ExprIssuAmtRto",
+     "yr21ExprIssuAmt",
+     "yr21ExprIssuAmtRto",
+     "yr21ExprXcsIssuAmt",
+     "yr21ExprXcsIssuAmtRto"
+    ]
+   },
+   "getIssuInteStatStat": {
+    "ko_name": "발행금리현황통계조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "202003",
+      "desc": "유동화 증권을 발행한 일자"
+     },
+     {
+      "ko": "유가증권발행년도",
+      "name": "scrsIssuYr",
+      "required": false,
+      "sample": "2010",
+      "desc": "유가증권발행년도"
+     }
+    ],
+    "fields": [
+     "basYm",
+     "rqdzPlanCd",
+     "scrsIssuYr",
+     "scrsIssuRndNo",
+     "scrsIssuDt",
+     "wghnAvgIssuIrt",
+     "mbsGvbdIssuIrt",
+     "mbbIssuIrt",
+     "slbsIssuIrt",
+     "yr1ExprIssuIrt",
+     "yr2ExprIssuIrt",
+     "yr3ExprIssuIrt",
+     "yr5ExprIssuIrt",
+     "yr10ExprIssuIrt",
+     "yr20ExprIssuIrt"
+    ]
+   }
+  }
+ },
+ "GetMortLoanRedeStatInfoService": {
+  "name": "모기지론상환내역통계정보",
+  "topic": "자본시장정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15059586",
+  "operations": {
+   "getItemRedeInfo": {
+    "ko_name": "종목별상환내역조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "202003",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "basYm",
+     "rqdzPlanCd",
+     "bondCcd",
+     "scrsIssuYr",
+     "scrsIssuRndNo",
+     "scrsIssuDt",
+     "scrsTisuAmt",
+     "scrsTrdpAmt",
+     "scrsTisuBal",
+     "scrsTrdpRto",
+     "prirScrtIssuAmt",
+     "prirScrtCloptRdptAmt",
+     "prirScrtNrmRdptAmt",
+     "prirScrtIssuBal",
+     "babuScrtIssuAmt",
+     "babuScrtRdptAmt",
+     "babuScrtIssuBal"
+    ]
+   },
+   "getMatuRedeInfo": {
+    "ko_name": "만기별상환내역조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "202003",
+      "desc": "작업 또는 거래의 기준이 되는 일자(년월일)"
+     }
+    ],
+    "fields": [
+     "basYm",
+     "bondCsfNm",
+     "rdptExprClsfNm",
+     "mbsSumIssuAmt",
+     "mbsSumRdptAmt",
+     "mbsSumIssuBal",
+     "scrsIssuAmt",
+     "scrsRdptAmt",
+     "scrsIssuBal"
+    ]
+   }
+  }
+ },
+ "GetCMStckLnbInfoService": {
+  "name": "주식대차거래정보",
+  "topic": "자본시장정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "callable",
+  "approval": "개발단계",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "spec_source": "swagger",
+  "public_data_pk": "15124865",
+  "operations": {
+   "getStckLnbInvpnDetail": {
+    "ko_name": "﻿참여자별주식대차거래내역",
+    "desc": "참여자별 주식대차거래내역의 ﻿기준일자, 참여자구분, 참여자구분상세, 대여자체결규모, 대여자비중, 차입자체결규모, 차입자비중 정보 제공",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준일자",
+      "name": "basDt",
+      "required": false,
+      "sample": "20231005",
+      "desc": "기준일자"
+     },
+     {
+      "ko": "기준일자보다크거나같은데이터",
+      "name": "beginBasDt",
+      "required": false,
+      "sample": "20231005",
+      "desc": "기준일자보다크거나같은데이터"
+     },
+     {
+      "ko": "기준일자보다작은데이터",
+      "name": "endBasDt",
+      "required": false,
+      "sample": "20231006",
+      "desc": "기준일자보다작은데이터"
+     },
+     {
+      "ko": "기준일자값이검색값을포함하는데이터",
+      "name": "likeBasDt",
+      "required": true,
+      "sample": "20231005",
+      "desc": "기준일자값이검색값을포함하는데이터"
+     },
+     {
+      "ko": "참여자구분명",
+      "name": "invpnClsfNm",
+      "required": false,
+      "sample": "내국인",
+      "desc": "참여자구분명"
+     },
+     {
+      "ko": "참여자구분상세명",
+      "name": "invpnClsfDtlNm",
+      "required": false,
+      "sample": "자산운용",
+      "desc": "참여자구분상세명"
+     }
+    ],
+    "fields": [
+     "header",
+     "body"
+    ]
+   }
+  }
+ },
+ "GetHsgPenInfoService": {
+  "name": "주택연금 가입정보",
+  "topic": "자본시장정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계",
+  "base_url": "http://openapi.fsc.go.kr/service",
+  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "spec_source": "swagger",
+  "public_data_pk": "15151172",
+  "operations": {
+   "getRmtgJoinInfo": {
+    "ko_name": "주택연금공급 통계조회",
+    "desc": "기준연월, 주택연금가입지역분류코드, 지역명, 당월공급총건수, 당월공급총액 조회기능",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준연월",
+      "name": "basYm",
+      "required": false,
+      "sample": "",
+      "desc": "기준연월"
+     },
+     {
+      "ko": "기준연월보다크거나같은데이터",
+      "name": "beginBasYm",
+      "required": false,
+      "sample": "",
+      "desc": "기준연월보다크거나같은데이터"
+     },
+     {
+      "ko": "기준연월보다작은데이터",
+      "name": "endBasYm",
+      "required": false,
+      "sample": "",
+      "desc": "기준연월보다작은데이터"
+     },
+     {
+      "ko": "기준연월값이검색값을포함하는데이터",
+      "name": "likeBasYm",
+      "required": false,
+      "sample": "",
+      "desc": "기준연월값이검색값을포함하는데이터"
+     },
+     {
+      "ko": "주택연금가입지역분류코드",
+      "name": "rmtgJoinAreaCcd",
+      "required": false,
+      "sample": "",
+      "desc": "주택연금가입지역분류코드"
+     },
+     {
+      "ko": "지역명",
+      "name": "areaNm",
+      "required": false,
+      "sample": "",
+      "desc": "지역명"
+     }
+    ],
+    "fields": [
+     "header",
+     "body"
+    ]
+   }
+  }
+ },
+ "GetKoreAsseInfoService": {
+  "name": "국가자산정보",
+  "topic": "국가자산공매정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15059614",
+  "operations": {
+   "getLoanSellAsse": {
+    "ko_name": "대부매각자산조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준일자",
+      "name": "basDt",
+      "required": false,
+      "sample": "20200409",
+      "desc": "작업 또는 거래의 기준이 되는 일자(년월일)"
+     },
+     {
+      "ko": "국가자산대분류코드명",
+      "name": "ntnlAstLccdNm",
+      "required": false,
+      "sample": "부동산",
+      "desc": "국가 자산을 1차로 분류한 대분류 코드의 이름"
+     },
+     {
+      "ko": "국가자산소재지시도명",
+      "name": "ntnlAstLctnSidoNm",
+      "required": false,
+      "sample": "경기도",
+      "desc": "국가재산 소재지의 시·도 이름"
+     }
+    ],
+    "fields": [
+     "basDt",
+     "ntnlAstObjcMngNo",
+     "ntnlAstObjcNm",
+     "dsslAstPusaNo",
+     "ntnlAstObjcScd",
+     "ntnlAstObjcScdNm",
+     "dsslAstDspMcd",
+     "dsslAstDspMcdNm",
+     "pusaFbidFcnt",
+     "dsslAstMndtInstCd",
+     "dsslAstMndtInstNm",
+     "dsslAstExcuInstNo",
+     "dsslAstExcuInstNm",
+     "dsslAstInstBrofNm",
+     "dsslAstInstChgrFnm",
+     "dsslAstInstChgrTlno",
+     "dsslAstInstChgrEmadr",
+     "apsEvlAvgAmt",
+     "mnmPusaPrc",
+     "mnmBdprcCtt",
+     "dsslPbcnDt",
+     "ntnlAstLccd",
+     "ntnlAstLccdNm",
+     "ntnlAstMccd",
+     "ntnlAstMccdNm",
+     "ntnlAstSccd",
+     "ntnlAstSccdNm",
+     "ntnlAstLctnOzpno",
+     "ntnlAstLctnNoloAdr",
+     "ntnlAstLctnSidoNm",
+     "ntnlAstLctnSggNm",
+     "ntnlAstLctnDtadr",
+     "ntnlAstLctnRdnmAdr",
+     "ntnlAstLctnRdnmDtadr",
+     "ntnlAstLctnRoadNm",
+     "ntnlAstEvcuRspCtt",
+     "ntnlAstDspCondCtt",
+     "ntnlAstAlocDemaLastDt",
+     "ntnlAstBldArVal",
+     "ntnlAstLandArVal",
+     "ntnlAstAccdInvDt",
+     "ntnlAstPstnNghbPresCtt",
+     "ntnlAstUzPresCtt",
+     "ntnlAstDtlCtt",
+     "objcScrtCorpNm",
+     "etcCmdtNm",
+     "pcwWrpeFnm",
+     "pcwStndCtt",
+     "mvasSizeCtt",
+     "vhclNoCtt",
+     "scrsKindNm",
+     "scrsSicNm",
+     "scrsItmsNm",
+     "scrsShrRat",
+     "scrsShrStckCnt",
+     "scrsIssuCmpyRprFnm",
+     "dsslAstMbcrdNm",
+     "dsslAstMbcrdNoCtt",
+     "dsslAstPntpCtt",
+     "mbcrdActCnt",
+     "mnpbPaymMthCtt"
+    ]
+   }
+  }
+ },
+ "GetPublDispAsseInfoService": {
+  "name": "공매자산정보",
+  "topic": "국가자산공매정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15043362",
+  "operations": {
+   "getPublDispAsse": {
+    "ko_name": "공매자산조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "서비스키",
+      "name": "ServiceKey",
+      "required": false,
+      "sample": "-",
+      "desc": "공공데이터포털에서 받은 인증키"
+     },
+     {
+      "ko": "기준일자",
+      "name": "basDt",
+      "required": false,
+      "sample": "",
+      "desc": "작업 또는 거래의 기준이 되는 일자(년월일)"
+     }
+    ],
+    "fields": [
+     "basDt",
+     "ntnlAstObjcMngNo",
+     "pusaDt",
+     "ntnlAstObjcScd",
+     "ntnlAstObjcStusNm",
+     "pusaFbidFcnt",
+     "ntnlAstObjcNm",
+     "dsslAstDspMcd",
+     "dsslAstDspMcdNm",
+     "dsslAstMndtInstCd",
+     "dsslAstMndtInstNm",
+     "dsslAstExcuInstNo",
+     "dsslAstExcuInstNm",
+     "dsslAstInstBrofNm",
+     "dsslAstInstChgrFnm",
+     "dsslAstInstChgrTlno",
+     "dsslAstInstChgrEmadr",
+     "ntnlAstLccd",
+     "ntnlAstLccdNm",
+     "ntnlAstMccd",
+     "ntnlAstMccdNm",
+     "ntnlAstSccd",
+     "ntnlAstSccdNm",
+     "apsEvlAvgAmt",
+     "mnmPusaPric",
+     "mnmBdprcRat",
+     "fstPbcnDt",
+     "pusaBidEcd",
+     "pusaBidEcdNm",
+     "opbiDt",
+     "ntnlAstLctnOzpno",
+     "ntnlAstLctnNoloAdr",
+     "ntnlAstLctnSidoNm",
+     "ntnlAstLctnSggNm",
+     "ntnlAstLctnDtadr",
+     "ntnlAstLctnRdnmAdr",
+     "ntnlAstLctnRdnmDtadr",
+     "ntnlAstLctnRoadNm",
+     "ntnlAstEvcuRspCtt",
+     "ntnlAstDspCondCtt",
+     "ntnlAstAlocDemaLastDt",
+     "ntnlAstBldArVal",
+     "ntnlAstLandArVal",
+     "ntnlAstAccdInvDt",
+     "ntnlAstPstnNghbPresCtt",
+     "ntnlAstUzPresCtt",
+     "ntnlAstDtlCtt",
+     "ntnlAstPtrnNm",
+     "pcwWrpeFnm",
+     "pcwStndCtt",
+     "mvasSizeCtt",
+     "vhclNoCtt",
+     "scrsKindNm",
+     "objcScrtCorpNm",
+     "sicNm",
+     "scrsItmsNm",
+     "ntnlAstShrRat",
+     "scrsShrStckCnt",
+     "scrsIssuCmpyRprFnm",
+     "astMbcrdNm",
+     "astMbcrdNoCtt",
+     "dsslAstPntpCtt",
+     "mbcrdActCnt",
+     "mnpbPaymMthCtt",
+     "opbiDt2"
+    ]
+   }
+  }
+ },
+ "GetInfoOpenPropService": {
+  "name": "정보공개재산정보",
+  "topic": "국가자산공매정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15059581",
+  "operations": {
+   "getInfoOpenProp": {
+    "ko_name": "정보공개재산조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준일자",
+      "name": "basDt",
+      "required": false,
+      "sample": "20200409",
+      "desc": "작업 또는 거래의 기준이 되는 일자(년월일)"
+     },
+     {
+      "ko": "국가자산소재지시도명",
+      "name": "ntnlAstLctnSidoNm",
+      "required": false,
+      "sample": "강원도",
+      "desc": "국가재산 소재지의 시·도 이름"
+     }
+    ],
+    "fields": [
+     "basDt",
+     "ntnlAstObjcMngNo",
+     "ntnlAstObjcMngId",
+     "ntnlAstObjcNm",
+     "kamcoMngInstNo",
+     "instKcd",
+     "instKcdNm",
+     "kamcoMngInstNm",
+     "objcMngInstNm",
+     "pptDcd",
+     "pptDcdNm",
+     "ntnlAstLccd",
+     "ntnlAstLccdNm",
+     "ntnlAstMccd",
+     "ntnlAstMccdNm",
+     "ntnlAstSccd",
+     "ntnlAstSccdNm",
+     "ntnlAstMngScd",
+     "ntnlAstMngStusCtt",
+     "ntnlAstLandArVal",
+     "ntnlAstBldArVal",
+     "ntnlAstOzpno",
+     "ntnlAstLctnNoloAdr",
+     "ntnlAstLctnSidoNm",
+     "ntnlAstLctnSggNm",
+     "ntnlAstLctnDtadr",
+     "ntnlAstLctnRdnmAdr",
+     "ntnlAstLctnRdnmDtadr",
+     "ntnlAstTlno",
+     "ntnlAstAccdInvDt"
+    ]
+   }
+  }
+ },
+ "GetAgriCoopInfoService": {
+  "name": "금융통계농업협동조합정보",
+  "topic": "금융회사통계정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15061344",
+  "operations": {
+   "getAgriCoopGeneInfo": {
+    "ko_name": "농업협동조합일반현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "농협_일반현황_임직원현황",
+      "desc": "농업협동조합일반현황조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201112",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "xcsmCnt",
+     "xcsmDcd",
+     "xcsmDcdNm"
+    ]
+   },
+   "getAgriCoopFinaInfo": {
+    "ko_name": "농업협동조합재무현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "농협_재무현황_요약재무상태표(자산)",
+      "desc": "농업협동조합재무현황조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201406",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "astSmryBlnshClsfAmt",
+     "astSmryBlnshClsfCmpsRto",
+     "astSmryBlnshDcd",
+     "astSmryBlnshDcdNm",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   },
+   "getAgriCoopKeyManaIndi": {
+    "ko_name": "농업협동조합주요경영지표조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "농협_주요경영지표_여신건전성",
+      "desc": "농업협동조합주요경영지표조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201312",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "cdlSdnsClsfAmt",
+     "cdlSdnsDcd",
+     "cdlSdnsDcdNm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   }
+  }
+ },
+ "GetForeCoopInfoService": {
+  "name": "금융통계산림조합정보",
+  "topic": "금융회사통계정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15061349",
+  "operations": {
+   "getForeCoopGeneInfo": {
+    "ko_name": "산림조합일반현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "산림조합_일반현황_임직원현황",
+      "desc": "산림조합일반현황조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201312",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "xcsmCnt",
+     "xcsmDcd",
+     "xcsmDcdNm"
+    ]
+   },
+   "getForeCoopFinaInfo": {
+    "ko_name": "산림조합재무현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "산림조합_재무현황_요약재무상태표(자산)",
+      "desc": "산림조합재무현황조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201306",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "astSmryBlnshAcitAmt",
+     "astSmryBlnshAcitCd",
+     "astSmryBlnshAcitCdNm",
+     "astSmryBlnshAcitCmpsRto",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   },
+   "getForeCoopKeyManaIndi": {
+    "ko_name": "산림조합주요경영지표조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "산림조합_주요경영지표_여신건전성",
+      "desc": "산림조합주요경영지표조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201406",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "cdlSdnsClsfVal",
+     "cdlSdnsDcd",
+     "cdlSdnsDcdNm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   }
+  }
+ },
+ "GetInstFinaCompInfoService": {
+  "name": "금융통계할부금융사정보",
+  "topic": "금융회사통계정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15061356",
+  "operations": {
+   "getInstFinaCompGeneInfo": {
+    "ko_name": "할부금융사일반현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "할부금융_일반현황_임직원현황",
+      "desc": "할부금융사일반현황조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201512",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "xcsmCnt",
+     "xcsmDcd",
+     "xcsmDcdNm"
+    ]
+   },
+   "getInstFinaCompFinaInfo": {
+    "ko_name": "할부금융사재무현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "할부금융_재무현황_요약재무상태표(자산)(07.12월이전)",
+      "desc": "할부금융사재무현황조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "200906",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "astSmryStfnpsAcitAmt",
+     "astSmryStfnpsAcitCd",
+     "astSmryStfnpsAcitCdNm",
+     "astSmryStfnpsAcitCmpsRto",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   },
+   "getInstFinaCompKeyManaIndi": {
+    "ko_name": "할부금융사주요경영지표조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "할부금융_주요경영지표_자본적정성",
+      "desc": "할부금융사주요경영지표조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "200906",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "cpaqItemCd",
+     "cpaqItemCdNm",
+     "cpaqItemValCtt",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   },
+   "getInstFinaCompMajoBusiActi": {
+    "ko_name": "할부금융사주요영업활동조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "할부금융_주요영업활동_부문별 영업실적",
+      "desc": "할부금융사주요영업활동조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201609",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "sctnClsfValCtt",
+     "sctnDcd",
+     "sctnDcdNm"
+    ]
+   }
+  }
+ },
+ "GetInveAdviCompInfoService": {
+  "name": "금융통계투자자문사정보",
+  "topic": "금융회사통계정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15061358",
+  "operations": {
+   "getInveAdviCompGeneInfo": {
+    "ko_name": "투자자문사일반현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "투자자문_일반현황_임직원현황(09.03월이전)",
+      "desc": "투자자문_일반현황"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "200903",
+      "desc": "작업 또는 거래의 기준이 되는 일자(년월일)"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "xcsmCnt",
+     "xcsmDcd",
+     "xcsmDcdNm"
+    ]
+   },
+   "getInveAdviCompFinaInfo": {
+    "ko_name": "투자자문사재무현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "투자자문_재무현황_요약재무상태표(07.03월이전)",
+      "desc": "투자자문사재무현황조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "200409",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "smryStfnpsAcitAmt",
+     "smryStfnpsAcitCd",
+     "smryStfnpsAcitCdNm",
+     "smryStfnpsAcitCmpsRto"
+    ]
+   }
+  }
+ },
+ "GetLeasCompInfoService": {
+  "name": "금융통계리스사정보",
+  "topic": "금융회사통계정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15061331",
+  "operations": {
+   "getLeasCompGeneInfo": {
+    "ko_name": "리스사일반현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "리스사_일반현황_임직원현황",
+      "desc": "리스사일반현황조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201406",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "xcsmCnt",
+     "xcsmDcd",
+     "xcsmDcdNm"
+    ]
+   },
+   "getLeasCompFinaInfo": {
+    "ko_name": "리스사재무현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "리스사_재무현황_요약재무상태표(자산)(07.12월이전)",
+      "desc": "리스사재무현황조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "200512",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "astSmryBlnshAcitAmt",
+     "astSmryBlnshAcitCd",
+     "astSmryBlnshAcitCdNm",
+     "astSmryBlnshAcitCmpsRto",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   },
+   "getLeasCompKeyManaIndi": {
+    "ko_name": "리스사주요경영지표조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "리스사_주요경영지표_자본적정성",
+      "desc": "리스사주요경영지표조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201503",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "cpaqClsfAmt",
+     "cpaqDcd",
+     "cpaqDcdNm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   },
+   "getLeasCompPresReleStat": {
+    "ko_name": "리스사보도자료통계조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "리스사_주요경영지표_부문별영업실적",
+      "desc": "리스사보도자료통계조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201509",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "sctnBzopAtrsClsfAmt",
+     "sctnBzopAtrsDcd",
+     "sctnBzopAtrsDcdNm"
+    ]
+   }
+  }
+ },
+ "GetLifeInsuCompInfoService": {
+  "name": "금융통계생명보험정보",
+  "topic": "금융회사통계정보",
+  "adoption_priority": 1,
+  "adoption_note": "보험 업권 지표. 지급여력 맥락",
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15061306",
+  "operations": {
+   "getLifeInsuCompGeneInfo": {
+    "ko_name": "생명보험일반현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "생보_일반현황_임직원 및 설계사 현황",
+      "desc": "생보_일반현황"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201603",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "xcsmPlnpnCnt",
+     "xcsmPlnpnDcd",
+     "xcsmPlnpnDcdNm"
+    ]
+   },
+   "getLifeInsuCompFinaInfo": {
+    "ko_name": "생명보험재무현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "생보_재무현황_요약재무상태표(자산-전체)",
+      "desc": "생보_재무현황"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201309",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "astSmryStfnpsAcitAmt",
+     "astSmryStfnpsAcitCd",
+     "astSmryStfnpsAcitCdNm",
+     "astSmryStfnpsAcitCmpsRto",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   },
+   "getLifeInsuCompMajoBusiActi": {
+    "ko_name": "생명보험주요영업활동조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "생보_주요영업활동_신계약",
+      "desc": "생보_주요영업활동"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "200412",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "spacsbClsfThqrAmt",
+     "spacsbClsfThqrCcnt",
+     "spacsbDcd",
+     "spacsbDcdNm"
+    ]
+   },
+   "getLifeInsuCompKeyManaIndi": {
+    "ko_name": "생명보험주요경영지표조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "생보_주요경영지표_자본적정성",
+      "desc": "생보_주요경영지표"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201809",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "cpaqItemAmt",
+     "cpaqItemCd",
+     "cpaqItemCdNm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   }
+  }
+ },
+ "GetMercBankInfoService": {
+  "name": "금융통계종합금융회사정보",
+  "topic": "금융회사통계정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "callable",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15061312",
+  "operations": {
+   "getMercBankGeneInfo": {
+    "ko_name": "종합금융회사일반현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "종금사_일반현황_임직원현황",
+      "desc": "종금사_일반현황"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "199909",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "xcsmCnt",
+     "xcsmDcd",
+     "xcsmDcdNm"
+    ]
+   },
+   "getMercBankFinaInfo": {
+    "ko_name": "종합금융회사재무현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "종금사_재무현황_요약재무상태표(자산)(11.03월이전)",
+      "desc": "종금사_재무현황"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "200909",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "astSmryBlnshClsfAbl",
+     "astSmryBlnshCmpsRtoCtt",
+     "astSmryBlnshDcd",
+     "astSmryBlnshDcdNm",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   },
+   "getMercBankKeyManaIndi": {
+    "ko_name": "종합금융회사주요경영지표조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "종금사_주요경영지표_자본적정성",
+      "desc": "종금사_주요경영지표"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201306",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "cpaqClsfValCtt",
+     "cpaqDcd",
+     "cpaqDcdNm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   }
+  }
+ },
+ "GetMutuSaviBankInfoService": {
+  "name": "금융통계저축은행정보",
+  "topic": "금융회사통계정보",
+  "adoption_priority": 1,
+  "adoption_note": "FinLife 저축은행 금리와 짝. 건전성까지 봐야 비교가 성립",
+  "access": "callable",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15061316",
+  "operations": {
+   "getMutuSaviBankGeneInfo": {
+    "ko_name": "저축은행일반현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "저축_일반현황_임직원현황",
+      "desc": "저축은행 일반현황"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "200506",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "xcsmCnt",
+     "xcsmDcd",
+     "xcsmDcdNm"
+    ]
+   },
+   "getMutuSaviBankFinaInfo": {
+    "ko_name": "저축은행재무현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "저축_재무현황_요약재무상태표(자산)",
+      "desc": "저축은행 재무현황"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201912",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "astSmryStfnpsAcitCd",
+     "astSmryStfnpsAcitCdAmt",
+     "astSmryStfnpsAcitCdCmpsRto",
+     "astSmryStfnpsAcitCdNm",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   },
+   "getMutuSaviBankKeyManaIndi": {
+    "ko_name": "저축은행주요경영지표조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "저축_주요경영지표_여신건전성",
+      "desc": "저축은행 주요경영지표"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "200012",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "cdlSdnsItemCd",
+     "cdlSdnsItemCdNm",
+     "cdlSdnsItemValCtt",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   }
+  }
+ },
+ "GetNewTechVentCapiCompInfoService": {
+  "name": "금융통계신기술금융사정보",
+  "topic": "금융회사통계정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "callable",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15061336",
+  "operations": {
+   "getNewTechVentCapiCompGeneInfo": {
+    "ko_name": "신기술금융사일반현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "신기술금융_일반현황_임직원현황",
+      "desc": "신기술금융사일반현황조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201706",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "xcsmCnt",
+     "xcsmDcd",
+     "xcsmDcdNm"
+    ]
+   },
+   "getNewTechVentCapiCompFinaInfo": {
+    "ko_name": "신기술금융사재무현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "신기술금융_재무현황_요약재무상태표(자산)(07.12이전)",
+      "desc": "신기술금융사재무현황조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "200512",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "astSmryStfnpsAcitAmt",
+     "astSmryStfnpsAcitCd",
+     "astSmryStfnpsAcitCdNm",
+     "astSmryStfnpsAcitCmpsRto",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   },
+   "getNewTechVentCapiCompKeyManaIndi": {
+    "ko_name": "신기술금융사주요경영지표조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "신기술금융_주요경영지표_자본적정성",
+      "desc": "신기술금융사주요경영지표조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201909",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "cpaqItemCd",
+     "cpaqItemCdNm",
+     "cpaqItemValCtt",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   },
+   "getNewTechVentCapiCompMajoBusiActi": {
+    "ko_name": "신기술금융사주요영업활동조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "신기술금융_주요영업활동_부문별 영업실적",
+      "desc": "신기술금융사주요영업활동조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201912",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "sctnClsfAmt",
+     "sctnDcd",
+     "sctnDcdNm"
+    ]
+   }
+  }
+ },
+ "GetNonlInsuCompInfoService": {
+  "name": "금융통계손해보험정보",
+  "topic": "금융회사통계정보",
+  "adoption_priority": 1,
+  "adoption_note": "보험 업권 지표",
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15061307",
+  "operations": {
+   "getNonlInsuCompGeneInfo": {
+    "ko_name": "손해보험일반현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "손보_일반현황_임직원및설계사현황",
+      "desc": "손보_일반현황"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201409",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "xcsmPlnpnCnt",
+     "xcsmPlnpnDcd",
+     "xcsmPlnpnDcdNm"
+    ]
+   },
+   "getNonlInsuCompFinaInfo": {
+    "ko_name": "손해보험재무현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "손보_재무현황_요약재무상태표(자산-전체)",
+      "desc": "손보_재무현황"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201306",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "astSmryStfnpsAcitAmt",
+     "astSmryStfnpsAcitCd",
+     "astSmryStfnpsAcitCdNm",
+     "astSmryStfnpsAcitCmpsRto",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   },
+   "getNonlInsuCompMajoBusiActi": {
+    "ko_name": "손해보험주요영업활동조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "손보_주요영업활동_보험종류별 경과손해율",
+      "desc": "손보_주요영업활동"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201606",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "isuKindElpsLosRatClsfAmt",
+     "isuKindElpsLosRatDcd",
+     "isuKindElpsLosRatDcdNm"
+    ]
+   },
+   "getNonlInsuCompKeyManaIndi": {
+    "ko_name": "손해보험주요경영지표조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "손보_주요경영지표_자본적정성",
+      "desc": "손보_주요경영지표"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201609",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "cpaqItemCd",
+     "cpaqItemCdNm",
+     "cpaqItemValCtt",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   }
+  }
+ },
+ "GetRealEstaTrusCompInfoService": {
+  "name": "금융통계부동산신탁정보",
+  "topic": "금융회사통계정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15061335",
+  "operations": {
+   "getRealEstaTrusCompGeneInfo": {
+    "ko_name": "부동산신탁일반현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "부동산신탁_일반현황_임직원현황",
+      "desc": "부동산신탁일반현황조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201909",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "nopeCnt",
+     "xcsmDcd",
+     "xcsmDcdNm"
+    ]
+   },
+   "getRealEstaTrusCompFinaInfo": {
+    "ko_name": "부동산신탁재무현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "부동산신탁_재무현황_요약재무상태표(신탁계정)",
+      "desc": "부동산신탁재무현황조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201809",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "trstAcctSmryStfnpsAcitAmt",
+     "trstAcctSmryStfnpsAcitCd",
+     "trstAcctSmryStfnpsAcitCdNm"
+    ]
+   },
+   "getRealEstaTrusCompKeyManaIndi": {
+    "ko_name": "부동산신탁주요경영지표조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "부동산신탁_주요경영지표_자본적정성_영업용순자본비율",
+      "desc": "부동산신탁주요경영지표조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201403",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "froprNcptRtoItemCd",
+     "froprNcptRtoItemCdNm",
+     "froprNcptRtoItemVal"
+    ]
+   }
+  }
+ },
+ "GetCredCardCompInfoService": {
+  "name": "금융통계신용카드사정보",
+  "topic": "금융회사통계정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "callable",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15061308",
+  "operations": {
+   "getCredCardCompGeneInfo": {
+    "ko_name": "신용카드사일반현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "신용카드_일반현황_임직원현황",
+      "desc": "신용카드사 일반현황"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201312",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "xcsmCnt",
+     "xcsmDcd",
+     "xcsmDcdNm"
+    ]
+   },
+   "getCredCardCompFinaInfo": {
+    "ko_name": "신용카드사재무현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "신용카드_재무현황_요약재무상태표(자산)(07.12월이전)",
+      "desc": "신용카드사 재무현황"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "200612",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "astSmryStfnpsAcitAmt",
+     "astSmryStfnpsAcitCd",
+     "astSmryStfnpsAcitCdNm",
+     "astSmryStfnpsAcitCmpsRto",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   },
+   "getCredCardCompKeyManaIndi": {
+    "ko_name": "신용카드사주요경영지표조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "신용카드_주요경영지표_자본적정성",
+      "desc": "신용카드사 주요경영지표"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201706",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "cpaqItemCd",
+     "cpaqItemCdNm",
+     "cpaqItemValCtt",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   },
+   "getCredCardCompMajoBusiActi": {
+    "ko_name": "신용카드사주요영업활동조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "신용카드_주요영업활동_신용카드이용실적",
+      "desc": "신용카드사 주요영업활동"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201609",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crcdUzAtrsItemCd",
+     "crcdUzAtrsItemCdNm",
+     "crcdUzAtrsItemCmtlAmt",
+     "crcdUzAtrsItemThqrAmt",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   }
+  }
+ },
+ "GetCredUnioInfoService": {
+  "name": "금융통계신용협동조합정보",
+  "topic": "금융회사통계정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15061337",
+  "operations": {
+   "getCredUnioGeneInfo": {
+    "ko_name": "신용협동조합일반현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "신협_일반현황_임직원현황",
+      "desc": "신용협동조합일반현황조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201806",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "xcsmCnt",
+     "xcsmDcd",
+     "xcsmDcdNm"
+    ]
+   },
+   "getCredUnioKeyFinaInfo": {
+    "ko_name": "신용협동조합재무현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "신협_재무현황_요약재무상태표(자산)(08.06월이전)",
+      "desc": "신용협동조합재무현황조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "200303",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "astSmryStfnpsAcitAmt",
+     "astSmryStfnpsAcitCd",
+     "astSmryStfnpsAcitCdNm",
+     "astSmryStfnpsAcitCmpsRto",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   },
+   "getCredUnioKeyManaIndi": {
+    "ko_name": "신용협동조합주요경영지표조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "신협_주요경영지표_여신건전성",
+      "desc": "신용협동조합주요경영지표조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201912",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "cdlSdnsItemCd",
+     "cdlSdnsItemCdNm",
+     "cdlSdnsItemValCtt",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   }
+  }
+ },
+ "GetFinaHoldCompInfoService": {
+  "name": "금융통계금융지주회사정보",
+  "topic": "금융회사통계정보",
+  "adoption_priority": 1,
+  "adoption_note": "지주 단위 분석. DART 별도/연결 해석과 연결",
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15061333",
+  "operations": {
+   "getFinaHoldCompGeneInfo": {
+    "ko_name": "금융지주회사일반현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "금융지주_일반현황_자회사 등",
+      "desc": "금융지주회사일반현황조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201009",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCcmpClsfCtt",
+     "fncoCcmpInvtAmt",
+     "fncoCcmpInvtAt",
+     "fncoCcmpInvtRto",
+     "fncoCcmpNm",
+     "fncoCcmpOselfCptlAmt",
+     "fncoCd",
+     "fncoNm"
+    ]
+   },
+   "getFinaHoldCompFinaInfo": {
+    "ko_name": "금융지주회사재무현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "금융지주_재무현황_요약연결재무상태표(자산)",
+      "desc": "금융지주회사재무현황조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201209",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "astSmryLnkStfnpsAcitAmt",
+     "astSmryLnkStfnpsAcitCd",
+     "astSmryLnkStfnpsAcitCdNm",
+     "astSmryLnkStfnpsAcitCmpsRto",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   },
+   "getFinaHoldCompKeyManaIndi": {
+    "ko_name": "금융지주회사주요경영지표조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "금융지주_주요경영지표_자본적정성",
+      "desc": "금융지주회사주요경영지표조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201709",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "cpaqItemCd",
+     "cpaqItemCdNm",
+     "cpaqItemValCtt",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   }
+  }
+ },
+ "GetFishCoopInfoService": {
+  "name": "금융통계수산업협동조합정보",
+  "topic": "금융회사통계정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15061340",
+  "operations": {
+   "getFishCoopGeneInfo": {
+    "ko_name": "수산업협동조합일반현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "수협_일반현황_임직원현황",
+      "desc": "산업협동조합일반현황조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201512",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "xcsmCnt",
+     "xcsmDcd",
+     "xcsmDcdNm"
+    ]
+   },
+   "getFishCoopFinaInfo": {
+    "ko_name": "수산업협동조합재무현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "수협_재무현황_요약재무상태표(자산)",
+      "desc": "수산업협동조합재무현황조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201812",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "astSmryStfnpsAcitAmt",
+     "astSmryStfnpsAcitCd",
+     "astSmryStfnpsAcitCdNm",
+     "astSmryStfnpsAcitCmpsRto",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   },
+   "getFishCoopKeyManaIndi": {
+    "ko_name": "수산업협동조합주요경영지표조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "수협_재무현황_여신건전성",
+      "desc": "수협_재무현황_여신건전성"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201212",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "cdlSdnsItemAmt",
+     "cdlSdnsItemCd",
+     "cdlSdnsItemCdNm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ]
+   }
+  }
+ },
+ "GetForeBankBranInfoService": {
+  "name": "금융통계외은지점정보",
+  "topic": "금융회사통계정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "ajax",
+  "public_data_pk": "15061329",
+  "operations": {
+   "getForeBankBranGeneInfo": {
+    "ko_name": "외은지점일반현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "외은_일반현황_임직원현황(18.6월이전)",
+      "desc": "외은지점일반현황조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "200912",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "xcsmCnt",
+     "xcsmDcd",
+     "xcsmDcdNm"
+    ]
+   },
+   "getForeBankBranFinaInfo": {
+    "ko_name": "외은지점재무현황조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "외은_재무현황_요약재무상태표",
+      "desc": "외은지점재무현황조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201812",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "smryStfnpsAcitAmt",
+     "smryStfnpsAcitCd",
+     "smryStfnpsAcitCdNm"
+    ]
+   },
+   "getForeBankBranKeyManaIndi": {
+    "ko_name": "외은지점주요경영지표조회",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "타이틀",
+      "name": "title",
+      "required": false,
+      "sample": "외은_주요경영지표_수익성",
+      "desc": "외은지점주요경영지표조회"
+     },
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "201906",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "pfbtItemCd",
+     "pfbtItemCdNm",
+     "pfbtItemVal"
+    ]
+   }
+  }
+ },
+ "GetKinfaResultInfoService": {
+  "name": "서민금융지원실적정보",
+  "topic": "금융회사통계정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "unknown",
+  "approval": "개발단계",
+  "base_url": "http://openapi.fsc.go.kr/service",
+  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "spec_source": "swagger",
+  "public_data_pk": "15094801",
+  "operations": {
+   "getSunshineLoanInfo": {
+    "ko_name": "햇살론지원실적",
+    "desc": "서민금융진흥원에서 제공하는 서민금융지원실적 관련 정보미소금융지원실적, 햇살론지원실적에 대한 오퍼레이션을 제공한다.",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "검색값과 기준일자가 일치하는 데이터를 검색",
+      "name": "basYm",
+      "required": false,
+      "sample": "",
+      "desc": "검색값과 기준일자가 일치하는 데이터를 검색"
+     },
+     {
+      "ko": "기준일자가 검색값보다 크거나 같은 데이터를 검색",
+      "name": "beginBasYm",
+      "required": false,
+      "sample": "",
+      "desc": "기준일자가 검색값보다 크거나 같은 데이터를 검색"
+     },
+     {
+      "ko": "기준일자가 검색값보다 작은 데이터를 검색",
+      "name": "endBasYm",
+      "required": false,
+      "sample": "",
+      "desc": "기준일자가 검색값보다 작은 데이터를 검색"
+     },
+     {
+      "ko": "기준년월값이 검색값을 포함하는 데이터를 검색",
+      "name": "likeBasYm",
+      "required": false,
+      "sample": "",
+      "desc": "기준년월값이 검색값을 포함하는 데이터를 검색"
+     },
+     {
+      "ko": "검색값과 보증상품구분이 일치하는 데이터를 검색",
+      "name": "grnPrdCtg",
+      "required": false,
+      "sample": "",
+      "desc": "검색값과 보증상품구분이 일치하는 데이터를 검색"
+     },
+     {
+      "ko": "보증상품구분이 검색값을 포함하는 데이터를 검색",
+      "name": "likeGrnPrdCtg",
+      "required": false,
+      "sample": "",
+      "desc": "보증상품구분이 검색값을 포함하는 데이터를 검색"
+     },
+     {
+      "ko": "보증건수가 검색값보다 크거나 같은 데이터를 검색",
+      "name": "beginGrnCcnt",
+      "required": false,
+      "sample": "",
+      "desc": "보증건수가 검색값보다 크거나 같은 데이터를 검색"
+     },
+     {
+      "ko": "보증건수가 검색값보다 작은 데이터를 검색",
+      "name": "endGrnCcnt",
+      "required": false,
+      "sample": "",
+      "desc": "보증건수가 검색값보다 작은 데이터를 검색"
+     },
+     {
+      "ko": "보증금액이 검색값보다 크거나 같은 데이터를 검색",
+      "name": "beginGrnAmt",
+      "required": false,
+      "sample": "",
+      "desc": "보증금액이 검색값보다 크거나 같은 데이터를 검색"
+     },
+     {
+      "ko": "보증금액이 검색값보다 작은 데이터를 검색",
+      "name": "endGrnAmt",
+      "required": false,
+      "sample": "",
+      "desc": "보증금액이 검색값보다 작은 데이터를 검색"
+     }
+    ],
+    "fields": [
+     "header",
+     "body"
+    ]
+   }
+  }
+ },
+ "GetFSSaleActInfoService": {
+  "name": "자산운용사 영업활동통계정보",
+  "topic": "금융회사통계정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계",
+  "base_url": "http://openapi.fsc.go.kr/service",
+  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "spec_source": "swagger",
+  "public_data_pk": "15139266",
+  "operations": {
+   "getInvdPptOperPresInfo": {
+    "ko_name": "투자일임 재산운용현황",
+    "desc": "기준연월, 금융회사코드, 금융회사명, 통계항목코드, 통계항목명, 통계항목국내금액, 통계항목해외금액 조회기능",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준연월",
+      "name": "basYm",
+      "required": true,
+      "sample": "201106",
+      "desc": "기준연월"
+     },
+     {
+      "ko": "기준연월보다크거나같은데이터",
+      "name": "beginBasYm",
+      "required": false,
+      "sample": "201106",
+      "desc": "기준연월보다크거나같은데이터"
+     },
+     {
+      "ko": "기준연월보다작은데이터",
+      "name": "endBasYm",
+      "required": false,
+      "sample": "201107",
+      "desc": "기준연월보다작은데이터"
+     },
+     {
+      "ko": "기준연월값이검색값을포함하는데이터",
+      "name": "likeBasYm",
+      "required": false,
+      "sample": "201106",
+      "desc": "기준연월값이검색값을포함하는데이터"
+     },
+     {
+      "ko": "금융회사코드",
+      "name": "FncoCd",
+      "required": false,
+      "sample": "0010205",
+      "desc": "금융회사코드"
+     },
+     {
+      "ko": "금융회사명",
+      "name": "FncoNm",
+      "required": false,
+      "sample": "미래에셋자산운용",
+      "desc": "금융회사명"
+     },
+     {
+      "ko": "통계항목코드",
+      "name": "sttsItemCd",
+      "required": false,
+      "sample": "A",
+      "desc": "통계항목코드"
+     },
+     {
+      "ko": "통계항목명",
+      "name": "sttsItemNm",
+      "required": false,
+      "sample": "유동성자산",
+      "desc": "통계항목명"
+     }
+    ],
+    "fields": [
+     "header",
+     "body"
+    ]
+   }
+  }
+ },
+ "GetFSSaleManaIndInfoService": {
+  "name": "투자자문사 영업 및 경영지표통계정보",
+  "topic": "금융회사통계정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계",
+  "base_url": "http://openapi.fsc.go.kr/service",
+  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "spec_source": "swagger",
+  "public_data_pk": "15139267",
+  "operations": {
+   "getInvdPptOperPresInfo": {
+    "ko_name": "투자일임 재산운용현황",
+    "desc": "기준연월, 금융회사코드, 금융회사명, 통계항목코드, 통계항목명, 통계항목국내금액, 통계항목해외금액 조회기능",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준연월",
+      "name": "basYm",
+      "required": true,
+      "sample": "201106",
+      "desc": "기준연월"
+     },
+     {
+      "ko": "기준연월보다크거나같은데이터",
+      "name": "beginBasYm",
+      "required": false,
+      "sample": "201106",
+      "desc": "기준연월보다크거나같은데이터"
+     },
+     {
+      "ko": "기준연월보다작은데이터",
+      "name": "endBasYm",
+      "required": false,
+      "sample": "201107",
+      "desc": "기준연월보다작은데이터"
+     },
+     {
+      "ko": "기준연월값이검색값을포함하는데이터",
+      "name": "likeBasYm",
+      "required": false,
+      "sample": "201106",
+      "desc": "기준연월값이검색값을포함하는데이터"
+     },
+     {
+      "ko": "금융회사코드",
+      "name": "FncoCd",
+      "required": false,
+      "sample": "0012298",
+      "desc": "금융회사코드"
+     },
+     {
+      "ko": "금융회사명",
+      "name": "FncoNm",
+      "required": false,
+      "sample": "다원투자자문",
+      "desc": "금융회사명"
+     },
+     {
+      "ko": "통계항목코드",
+      "name": "sttsItemCd",
+      "required": false,
+      "sample": "B",
+      "desc": "통계항목코드"
+     },
+     {
+      "ko": "통계항목명",
+      "name": "sttsItemNm",
+      "required": false,
+      "sample": "증권",
+      "desc": "통계항목명"
+     }
+    ],
+    "fields": [
+     "header",
+     "body"
+    ]
+   }
+  }
+ },
+ "GetFSSocialFinanSupInfoService": {
+  "name": "사회적금융지원정보",
+  "topic": "금융회사통계정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계",
+  "base_url": "http://openapi.fsc.go.kr/service",
+  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "spec_source": "swagger",
+  "public_data_pk": "15139269",
+  "operations": {
+   "getScfinInfoSvcInfo": {
+    "ko_name": "사회적금융 한눈에 정보서비스",
+    "desc": "기준연월, 지원사업명, 지원대상명, 지원대상 상세내용, 지원방법내용, 주관기관명, 운영기관명, 사업개요내용, 모집일정내용, 모집일정 상세내용, 문의처내용, 신청방법내용, 참고내용 조회기능",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준연월",
+      "name": "basYm",
+      "required": true,
+      "sample": "202409",
+      "desc": "기준연월"
+     },
+     {
+      "ko": "기준연월보다크거나같은데이터",
+      "name": "beginBasYm",
+      "required": false,
+      "sample": "202409",
+      "desc": "기준연월보다크거나같은데이터"
+     },
+     {
+      "ko": "기준연월보다작은데이터",
+      "name": "endBasYm",
+      "required": false,
+      "sample": "202410",
+      "desc": "기준연월보다작은데이터"
+     },
+     {
+      "ko": "기준연월값이검색값을포함하는데이터",
+      "name": "likeBasYm",
+      "required": false,
+      "sample": "202409",
+      "desc": "기준연월값이검색값을포함하는데이터"
+     },
+     {
+      "ko": "지원사업명",
+      "name": "sprtBizNm",
+      "required": false,
+      "sample": "민간사업",
+      "desc": "지원사업명"
+     },
+     {
+      "ko": "주관기관명",
+      "name": "sprvsnInstNm",
+      "required": false,
+      "sample": "서민금융진흥원",
+      "desc": "주관기관명"
+     },
+     {
+      "ko": "운영기관명",
+      "name": "operInstNm",
+      "required": false,
+      "sample": "더좋은세상",
+      "desc": "운영기관명"
+     }
+    ],
+    "fields": [
+     "header",
+     "body"
+    ]
+   }
+  }
+ },
+ "GetMedicalReimbursementInsuranceInfoService": {
+  "name": "실손보험정보",
+  "topic": "금융상품기본정보",
+  "adoption_priority": 3,
+  "adoption_note": "보험 상품 비교 확장",
+  "access": "callable",
+  "approval": "개발단계",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://openapi.fsc.go.kr/service",
+  "spec_source": "swagger",
+  "public_data_pk": "15094797",
+  "operations": {
+   "getInsuranceInfo": {
+    "ko_name": "실손보험정보",
+    "desc": "생명/손해보험회사에서 운용하는 실손보험의 유형, 담보, 성별에 따른 보험료 등 실손보험에 대한 정보를 제공",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "검색값과 기준일자가 일치하는 데이터를 검색",
+      "name": "basDt",
+      "required": false,
+      "sample": "",
+      "desc": "검색값과 기준일자가 일치하는 데이터를 검색"
+     },
+     {
+      "ko": "기준일자가 검색값보다 크거나 같은 데이터를 검색",
+      "name": "beginBasDt",
+      "required": false,
+      "sample": "",
+      "desc": "기준일자가 검색값보다 크거나 같은 데이터를 검색"
+     },
+     {
+      "ko": "기준일자가 검색값보다 작은 데이터를 검색",
+      "name": "endBasDt",
+      "required": false,
+      "sample": "",
+      "desc": "기준일자가 검색값보다 작은 데이터를 검색"
+     },
+     {
+      "ko": "기준일자값이 검색값을 포함하는 데이터를 검색",
+      "name": "likeBasDt",
+      "required": false,
+      "sample": "",
+      "desc": "기준일자값이 검색값을 포함하는 데이터를 검색"
+     },
+     {
+      "ko": "검색값과 회사코드가 일치하는 데이터를 검색",
+      "name": "cmpyCd",
+      "required": false,
+      "sample": "",
+      "desc": "검색값과 회사코드가 일치하는 데이터를 검색"
+     },
+     {
+      "ko": "검색값과 회사명이 일치하는 데이터를 검색",
+      "name": "cmpyNm",
+      "required": false,
+      "sample": "",
+      "desc": "검색값과 회사명이 일치하는 데이터를 검색"
+     },
+     {
+      "ko": "회사명이 검색값을 포함하는 데이터를 검색",
+      "name": "likeCmpyNm",
+      "required": false,
+      "sample": "",
+      "desc": "회사명이 검색값을 포함하는 데이터를 검색"
+     },
+     {
+      "ko": "검색값과 유형이 일치하는 데이터를 검색",
+      "name": "ptrn",
+      "required": false,
+      "sample": "",
+      "desc": "검색값과 유형이 일치하는 데이터를 검색"
+     },
+     {
+      "ko": "검색값과 담보가 일치하는 데이터를 검색",
+      "name": "mog",
+      "required": false,
+      "sample": "",
+      "desc": "검색값과 담보가 일치하는 데이터를 검색"
+     },
+     {
+      "ko": "검색값과 상품명이 일치하는 데이터를 검색",
+      "name": "prdNm",
+      "required": false,
+      "sample": "",
+      "desc": "검색값과 상품명이 일치하는 데이터를 검색"
+     },
+     {
+      "ko": "상품명이 검색값을 포함하는 데이터를 검색",
+      "name": "likePrdNm",
+      "required": false,
+      "sample": "",
+      "desc": "상품명이 검색값을 포함하는 데이터를 검색"
+     },
+     {
+      "ko": "검색값과 연령이 일치하는 데이터를 검색",
+      "name": "age",
+      "required": false,
+      "sample": "",
+      "desc": "검색값과 연령이 일치하는 데이터를 검색"
+     },
+     {
+      "ko": "제공기관명이 검색값과 일치하는 데이터를 검색",
+      "name": "ofrInstNm",
+      "required": false,
+      "sample": "",
+      "desc": "제공기관명이 검색값과 일치하는 데이터를 검색"
+     }
+    ],
+    "fields": [
+     "header",
+     "body"
+    ]
+   }
+  }
+ },
+ "GetVariableInsuranceInfoService": {
+  "name": "변액보험기본정보",
+  "topic": "금융상품기본정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계",
+  "base_url": "http://openapi.fsc.go.kr/service",
+  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "spec_source": "swagger",
+  "public_data_pk": "15094793",
+  "operations": {
+   "getFundInfo": {
+    "ko_name": "변액보험펀드별정보",
+    "desc": "생명보험회사에서 운용하는 변액보험의 펀드명, 순자산금액 등 펀드별 정보를 제공",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "검색값과 회사코드가 일치하는 데이터를 검색",
+      "name": "cmpyCd",
+      "required": false,
+      "sample": "",
+      "desc": "검색값과 회사코드가 일치하는 데이터를 검색"
+     },
+     {
+      "ko": "검색값과 회사명이 일치하는 데이터를 검색",
+      "name": "cmpyNm",
+      "required": false,
+      "sample": "",
+      "desc": "검색값과 회사명이 일치하는 데이터를 검색"
+     },
+     {
+      "ko": "회사명이 검색값을 포함하는 데이터를 검색",
+      "name": "likeCmpyNm",
+      "required": false,
+      "sample": "",
+      "desc": "회사명이 검색값을 포함하는 데이터를 검색"
+     },
+     {
+      "ko": "검색값과 펀드명이 일치하는 데이터를 검색",
+      "name": "fndNm",
+      "required": false,
+      "sample": "",
+      "desc": "검색값과 펀드명이 일치하는 데이터를 검색"
+     },
+     {
+      "ko": "펀드명이 검색값을 포함하는 데이터를 검색",
+      "name": "likeFndNm",
+      "required": false,
+      "sample": "",
+      "desc": "펀드명이 검색값을 포함하는 데이터를 검색"
+     },
+     {
+      "ko": "검색값과 펀드코드가 일치하는 데이터를 검색",
+      "name": "fndCd",
+      "required": false,
+      "sample": "",
+      "desc": "검색값과 펀드코드가 일치하는 데이터를 검색"
+     },
+     {
+      "ko": "검색값과 기준일자가 일치하는 데이터를 검색",
+      "name": "basDt",
+      "required": false,
+      "sample": "",
+      "desc": "검색값과 기준일자가 일치하는 데이터를 검색"
+     },
+     {
+      "ko": "기준일자가 검색값보다 크거나 같은 데이터를 검색",
+      "name": "beginBasDt",
+      "required": false,
+      "sample": "",
+      "desc": "기준일자가 검색값보다 크거나 같은 데이터를 검색"
+     },
+     {
+      "ko": "기준일자가 검색값보다 작은 데이터를 검색",
+      "name": "endBasDt",
+      "required": false,
+      "sample": "",
+      "desc": "기준일자가 검색값보다 작은 데이터를 검색"
+     },
+     {
+      "ko": "기준일자값이 검색값을 포함하는 데이터를 검색",
+      "name": "likeBasDt",
+      "required": false,
+      "sample": "",
+      "desc": "기준일자값이 검색값을 포함하는 데이터를 검색"
+     }
+    ],
+    "fields": [
+     "header",
+     "body"
+    ]
+   }
+  }
+ },
+ "GetSmallLoanFinanceInstituteInfoService": {
+  "name": "서민금융상품기본정보",
+  "topic": "금융상품기본정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계",
+  "base_url": "http://openapi.fsc.go.kr/service",
+  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "spec_source": "swagger",
+  "public_data_pk": "15094787",
+  "operations": {
+   "getOrdinaryFinanceInfo": {
+    "ko_name": "서민금융한눈에",
+    "desc": "서민금융진흥원에서 취급하는 대출상품, 자산형성상품, 사회적금융에 대한 정보를 제공",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "검색값과 기준일자가 일치하는 데이터를 검색",
+      "name": "basYm",
+      "required": false,
+      "sample": "",
+      "desc": "검색값과 기준일자가 일치하는 데이터를 검색"
+     },
+     {
+      "ko": "기준일자가 검색값보다 크거나 같은 데이터를 검색",
+      "name": "beginBasYm",
+      "required": false,
+      "sample": "",
+      "desc": "기준일자가 검색값보다 크거나 같은 데이터를 검색"
+     },
+     {
+      "ko": "기준일자가 검색값보다 작은 데이터를 검색",
+      "name": "endBasYm",
+      "required": false,
+      "sample": "",
+      "desc": "기준일자가 검색값보다 작은 데이터를 검색"
+     },
+     {
+      "ko": "기준년월값이 검색값을 포함하는 데이터를 검색",
+      "name": "likeBasYm",
+      "required": false,
+      "sample": "",
+      "desc": "기준년월값이 검색값을 포함하는 데이터를 검색"
+     },
+     {
+      "ko": "검색값과 금융상품명이 일치하는 데이터를 검색",
+      "name": "finPrdNm",
+      "required": false,
+      "sample": "",
+      "desc": "검색값과 금융상품명이 일치하는 데이터를 검색"
+     },
+     {
+      "ko": "금융상품명이 검색값을 포함하는 데이터를 검색",
+      "name": "likeFinPrdNm",
+      "required": false,
+      "sample": "",
+      "desc": "금융상품명이 검색값을 포함하는 데이터를 검색"
+     },
+     {
+      "ko": "용도가 검색값을 포함하는 데이터를 검색",
+      "name": "likeUsge",
+      "required": false,
+      "sample": "",
+      "desc": "용도가 검색값을 포함하는 데이터를 검색"
+     },
+     {
+      "ko": "대상이 검색값을 포함하는 데이터를 검색",
+      "name": "likeTrgt",
+      "required": false,
+      "sample": "",
+      "desc": "대상이 검색값을 포함하는 데이터를 검색"
+     },
+     {
+      "ko": "검색값과 상품구분이 일치하는 데이터를 검색",
+      "name": "prdCtg",
+      "required": false,
+      "sample": "",
+      "desc": "검색값과 상품구분이 일치하는 데이터를 검색"
+     },
+     {
+      "ko": "상품구분이 검색값을 포함하는 데이터를 검색",
+      "name": "likeHdlInst",
+      "required": false,
+      "sample": "",
+      "desc": "상품구분이 검색값을 포함하는 데이터를 검색"
+     },
+     {
+      "ko": "검색값과 상품존재여부가 일치하는 데이터를 검색",
+      "name": "prdExisYn",
+      "required": false,
+      "sample": "",
+      "desc": "검색값과 상품존재여부가 일치하는 데이터를 검색"
+     },
+     {
+      "ko": "검색값과 대출한도가 일치하는 데이터를 검색",
+      "name": "lnLmt",
+      "required": false,
+      "sample": "",
+      "desc": "검색값과 대출한도가 일치하는 데이터를 검색"
+     },
+     {
+      "ko": "대출한도가 검색값을 포함하는 데이터를 검색",
+      "name": "likeLnLmt",
+      "required": false,
+      "sample": "",
+      "desc": "대출한도가 검색값을 포함하는 데이터를 검색"
+     },
+     {
+      "ko": "검색값과 금리구분이 일치하는 데이터를 검색",
+      "name": "irtCtg",
+      "required": false,
+      "sample": "",
+      "desc": "검색값과 금리구분이 일치하는 데이터를 검색"
+     },
+     {
+      "ko": "검색값과 금리가 일치하는 데이터를 검색",
+      "name": "irt",
+      "required": false,
+      "sample": "",
+      "desc": "검색값과 금리가 일치하는 데이터를 검색"
+     },
+     {
+      "ko": "금리가 검색값을 포함하는 데이터를 검색",
+      "name": "likeIrt",
+      "required": false,
+      "sample": "",
+      "desc": "금리가 검색값을 포함하는 데이터를 검색"
+     },
+     {
+      "ko": "코로나19 지원구분이 검색값을 포함하는 데이터를 검색",
+      "name": "likeCv19SuprCtg",
+      "required": false,
+      "sample": "",
+      "desc": "코로나19 지원구분이 검색값을 포함하는 데이터를 검색"
+     }
+    ],
+    "fields": [
+     "header",
+     "body"
+    ]
+   }
+  }
+ },
+ "GetFPAtmbInsujoinInfoService": {
+  "name": "자동차보험가입정보",
+  "topic": "금융상품기본정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계",
+  "base_url": "http://openapi.fsc.go.kr/service",
+  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "spec_source": "swagger",
+  "public_data_pk": "15124891",
+  "operations": {
+   "getVictimInfo": {
+    "ko_name": "자동차사고 피해자정보",
+    "desc": "자동차사고 피해자정보의 기준년월, 사망부상구분, 장애여부, 부상급수, 장애급수, 인원수 정보 제공",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "자동차사고종결년월",
+      "name": "atmbAcdnCnlsYm",
+      "required": false,
+      "sample": "202308",
+      "desc": "자동차사고종결년월"
+     },
+     {
+      "ko": "자동차사고종결년월보다크거나같은데이터",
+      "name": "beginAtmbAcdnCnlsYm",
+      "required": false,
+      "sample": "202308",
+      "desc": "자동차사고종결년월보다크거나같은데이터"
+     },
+     {
+      "ko": "자동차사고종결년월보다작은데이터",
+      "name": "endAtmbAcdnCnlsYm",
+      "required": false,
+      "sample": "202309",
+      "desc": "자동차사고종결년월보다작은데이터"
+     },
+     {
+      "ko": "자동차사고종결년월값이검색값을포함하는데이터",
+      "name": "likeAtmbAcdnCnlsYm",
+      "required": true,
+      "sample": "202308",
+      "desc": "자동차사고종결년월값이검색값을포함하는데이터"
+     },
+     {
+      "ko": "사망부상구분명",
+      "name": "dthInjClsfNm",
+      "required": false,
+      "sample": "부상",
+      "desc": "사망부상구분명"
+     },
+     {
+      "ko": "장애여부",
+      "name": "impYn",
+      "required": false,
+      "sample": "N",
+      "desc": "장애여부"
+     },
+     {
+      "ko": "부상급수코드",
+      "name": "injLvlcntCd",
+      "required": false,
+      "sample": "00",
+      "desc": "부상급수코드"
+     },
+     {
+      "ko": "장애급수코드",
+      "name": "impLvlcntCd",
+      "required": false,
+      "sample": "00",
+      "desc": "장애급수코드"
+     }
+    ],
+    "fields": [
+     "header",
+     "body"
+    ]
+   }
+  }
+ },
+ "GetFPLifeInsuJoinInfoService": {
+  "name": "생명보험가입정보",
+  "topic": "금융상품기본정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계",
+  "base_url": "http://openapi.fsc.go.kr/service",
+  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "spec_source": "swagger",
+  "public_data_pk": "15124892",
+  "operations": {
+   "getIndividualAnnuityInsuInfo": {
+    "ko_name": "﻿개인연금보험 가입정보",
+    "desc": "개인연금보험 가입정보의 ﻿기준년도, 도달연령, 세제적격, 납입방법, 모집형태, 납입기간, 가입건수 정보 제공",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "통계집적대상년도",
+      "name": "sttsAccmlTrgtYr",
+      "required": false,
+      "sample": "2021",
+      "desc": "통계집적대상년도"
+     },
+     {
+      "ko": "통계집적대상년도보다크거나같은데이터",
+      "name": "beginSttsAccmlTrgtYr",
+      "required": false,
+      "sample": "2021",
+      "desc": "통계집적대상년도보다크거나같은데이터"
+     },
+     {
+      "ko": "통계집적대상년도보다작은데이터",
+      "name": "endSttsAccmlTrgtYr",
+      "required": false,
+      "sample": "2022",
+      "desc": "통계집적대상년도보다작은데이터"
+     },
+     {
+      "ko": "통계집적대상년도값이검색값을포함하는데이터",
+      "name": "likeSttsAccmlTrgtYr",
+      "required": true,
+      "sample": "2021",
+      "desc": "통계집적대상년도값이검색값을포함하는데이터"
+     },
+     {
+      "ko": "도달연령대",
+      "name": "rchnAggr",
+      "required": false,
+      "sample": "20대",
+      "desc": "도달연령대"
+     },
+     {
+      "ko": "세제적격여부",
+      "name": "taxPrqlYn",
+      "required": false,
+      "sample": "Y",
+      "desc": "세제적격여부"
+     },
+     {
+      "ko": "납입방법명",
+      "name": "pymtMthNm",
+      "required": false,
+      "sample": "일시납",
+      "desc": "납입방법명"
+     },
+     {
+      "ko": "모집형태명",
+      "name": "offrTyNm",
+      "required": false,
+      "sample": "설계사",
+      "desc": "모집형태명"
+     },
+     {
+      "ko": "년단위납입기간",
+      "name": "yerUnitPymtTerm",
+      "required": false,
+      "sample": "80",
+      "desc": "년단위납입기간"
+     }
+    ],
+    "fields": [
+     "header",
+     "body"
+    ]
+   }
+  }
+ },
+ "GetFPPptInsuJoinInfoService": {
+  "name": "일반손해보험가입정보",
+  "topic": "금융상품기본정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계",
+  "base_url": "http://openapi.fsc.go.kr/service",
+  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "spec_source": "swagger",
+  "public_data_pk": "15124894",
+  "operations": {
+   "getPropertyInsuJoinInfo": {
+    "ko_name": "기업성 재물(재산종합) 보험가입정보",
+    "desc": "기업이 재물(재산종합) 보험에 가입한 정보에 관련된 항목인 기준년도, 담보구분, 물건구분, 계약건수, 보험료 정보를 제공 합니다.",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "통계집적대상년도",
+      "name": "sttsAccmlTrgtYr",
+      "required": false,
+      "sample": "2022",
+      "desc": "통계집적대상년도"
+     },
+     {
+      "ko": "통계집적대상년도보다크거나같은데이터",
+      "name": "beginSttsAccmlTrgtYr",
+      "required": false,
+      "sample": "2022",
+      "desc": "통계집적대상년도보다크거나같은데이터"
+     },
+     {
+      "ko": "통계집적대상년도보다작은데이터",
+      "name": "endSttsAccmlTrgtYr",
+      "required": false,
+      "sample": "2023",
+      "desc": "통계집적대상년도보다작은데이터"
+     },
+     {
+      "ko": "통계집적대상년도값이검색값을포함하는데이터",
+      "name": "likeSttsAccmlTrgtYr",
+      "required": true,
+      "sample": "2022",
+      "desc": "통계집적대상년도값이검색값을포함하는데이터"
+     },
+     {
+      "ko": "담보구분명",
+      "name": "mogClsfNm",
+      "required": false,
+      "sample": "재물손해",
+      "desc": "담보구분명"
+     },
+     {
+      "ko": "물건구분명",
+      "name": "objcClsfNm",
+      "required": false,
+      "sample": "일반물건",
+      "desc": "물건구분명"
+     }
+    ],
+    "fields": [
+     "header",
+     "body"
+    ]
+   }
+  }
+ },
+ "GetAutoInsVicInfoService": {
+  "name": "자동차보험 피해자 통계정보",
+  "topic": "금융상품기본정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계",
+  "base_url": "http://openapi.fsc.go.kr/service",
+  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "spec_source": "swagger",
+  "public_data_pk": "15151234",
+  "operations": {
+   "getAutoInsVicMonthInfo": {
+    "ko_name": "자동차보험 피해자 월간통계정보",
+    "desc": "기준연월, 사망부상구분명, 장애여부, 부상급수코드, 장애급수코드, 인원수, 평균1인당대인보험금 조회기능",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준연월",
+      "name": "basYm",
+      "required": false,
+      "sample": "202406",
+      "desc": "기준연월"
+     },
+     {
+      "ko": "기준연월보다크거나같은데이터",
+      "name": "beginBasYm",
+      "required": false,
+      "sample": "202406",
+      "desc": "기준연월보다크거나같은데이터"
+     },
+     {
+      "ko": "기준연월보다작은데이터",
+      "name": "endBasYm",
+      "required": false,
+      "sample": "202407",
+      "desc": "기준연월보다작은데이터"
+     },
+     {
+      "ko": "기준연월값이검색값을포함하는데이터",
+      "name": "likeBasYm",
+      "required": false,
+      "sample": "202406",
+      "desc": "기준연월값이검색값을포함하는데이터"
+     },
+     {
+      "ko": "사망부상구분명",
+      "name": "dthInjClsfNm",
+      "required": false,
+      "sample": "1",
+      "desc": "사망부상구분명"
+     },
+     {
+      "ko": "장애여부",
+      "name": "impYn",
+      "required": false,
+      "sample": "0",
+      "desc": "장애여부"
+     },
+     {
+      "ko": "부상급수코드",
+      "name": "injLvlcntCd",
+      "required": false,
+      "sample": "01",
+      "desc": "부상급수코드"
+     },
+     {
+      "ko": "장애급수코드",
+      "name": "impLvlcntCd",
+      "required": false,
+      "sample": "00",
+      "desc": "장애급수코드"
+     }
+    ],
+    "fields": [
+     "header",
+     "body"
+    ]
+   }
+  }
+ },
+ "GetLifeAccInfoService": {
+  "name": "생명보험 사고원인정보",
+  "topic": "금융상품기본정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계",
+  "base_url": "http://openapi.fsc.go.kr/service",
+  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "spec_source": "swagger",
+  "public_data_pk": "15151237",
+  "operations": {
+   "getLfinsTop5CancOccrInfo": {
+    "ko_name": "생명보험 5대 암발생 정보",
+    "desc": "기준연도, 성별코드, 암발생연령대, 암발생순위, 한국표준질병사인분류명, 한국표준질병사인분류코드, 암발생인원수 조회기능",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준연도",
+      "name": "basYr",
+      "required": false,
+      "sample": "2023",
+      "desc": "기준연도"
+     },
+     {
+      "ko": "기준연도보다크거나같은데이터",
+      "name": "beginBasYr",
+      "required": false,
+      "sample": "2023",
+      "desc": "기준연도보다크거나같은데이터"
+     },
+     {
+      "ko": "기준연도보다작은데이터",
+      "name": "endBasYr",
+      "required": false,
+      "sample": "2024",
+      "desc": "기준연도보다작은데이터"
+     },
+     {
+      "ko": "기준연도값이검색값을포함하는데이터",
+      "name": "likeBasYr",
+      "required": false,
+      "sample": "2023",
+      "desc": "기준연도값이검색값을포함하는데이터"
+     },
+     {
+      "ko": "성별코드",
+      "name": "sexCd",
+      "required": false,
+      "sample": "2",
+      "desc": "성별코드"
+     },
+     {
+      "ko": "암발생연령대",
+      "name": "cancOccrAggr",
+      "required": false,
+      "sample": "80",
+      "desc": "암발생연령대"
+     }
+    ],
+    "fields": [
+     "header",
+     "body"
+    ]
+   }
+  }
+ },
+ "GetSBProfileInfoService": {
+  "name": "개인사업자기본정보",
+  "topic": "개인사업자정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계",
+  "base_url": "http://openapi.fsc.go.kr/service",
+  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "spec_source": "swagger",
+  "public_data_pk": "15108168",
+  "operations": {
+   "getCsdoStatus": {
+    "ko_name": "개인사업자휴폐업정보조회",
+    "desc": "개인사업자의 휴업, 폐업 정보 제공",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "",
+      "desc": "기준년월"
+     }
+    ],
+    "fields": [
+     "header",
+     "body"
+    ]
+   }
+  }
+ },
+ "GetSBFinanceInfoService": {
+  "name": "개인사업자재무정보",
+  "topic": "개인사업자정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계",
+  "base_url": "http://openapi.fsc.go.kr/service",
+  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "spec_source": "swagger",
+  "public_data_pk": "15108171",
+  "operations": {
+   "getDbtInfo": {
+    "ko_name": "개인사업자부채정보조회",
+    "desc": "개인사업자의 부채총계 정보 제공",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "",
+      "desc": "기준년월"
+     },
+     {
+      "ko": "사업 지역명",
+      "name": "bizAreaNm",
+      "required": false,
+      "sample": "",
+      "desc": "사업 지역명"
+     },
+     {
+      "ko": "사업 업종명",
+      "name": "bizBzcCdNm",
+      "required": false,
+      "sample": "",
+      "desc": "사업 업종명"
+     },
+     {
+      "ko": "사업 업종코드",
+      "name": "bizBzcCd",
+      "required": false,
+      "sample": "",
+      "desc": "사업 업종코드"
+     },
+     {
+      "ko": "부채총합계금액min",
+      "name": "debtTsumAmtMin",
+      "required": false,
+      "sample": "",
+      "desc": "부채총합계금액min"
+     },
+     {
+      "ko": "부채총합계금액max",
+      "name": "debtTsumAmtMax",
+      "required": false,
+      "sample": "",
+      "desc": "부채총합계금액max"
+     }
+    ],
+    "fields": [
+     "header",
+     "body"
+    ]
+   }
+  }
+ },
+ "GetSBBankingInfoService": {
+  "name": "개인사업자금융정보",
+  "topic": "개인사업자정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계",
+  "base_url": "http://openapi.fsc.go.kr/service",
+  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "spec_source": "swagger",
+  "public_data_pk": "15108175",
+  "operations": {
+   "getDpstLoanInfo": {
+    "ko_name": "개인사업자예금대출정보조회",
+    "desc": "개인사업자의 예금평잔, 대출평잔 등 예금대출 정보 제공",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "",
+      "desc": "기준년월"
+     },
+     {
+      "ko": "사업 지역명",
+      "name": "bizAreaNm",
+      "required": false,
+      "sample": "",
+      "desc": "사업 지역명"
+     },
+     {
+      "ko": "사업 업종명",
+      "name": "bizBzcCdNm",
+      "required": false,
+      "sample": "",
+      "desc": "사업 업종명"
+     },
+     {
+      "ko": "사업 업종코드",
+      "name": "bizBzcCd",
+      "required": false,
+      "sample": "",
+      "desc": "사업 업종코드"
+     },
+     {
+      "ko": "예금평잔min",
+      "name": "depAblMin",
+      "required": false,
+      "sample": "",
+      "desc": "예금평잔min"
+     },
+     {
+      "ko": "예금평잔max",
+      "name": "depAblMax",
+      "required": false,
+      "sample": "",
+      "desc": "예금평잔max"
+     },
+     {
+      "ko": "대출평잔min",
+      "name": "loanAblMin",
+      "required": false,
+      "sample": "",
+      "desc": "대출평잔min"
+     },
+     {
+      "ko": "대출평잔max",
+      "name": "loanAblMax",
+      "required": false,
+      "sample": "",
+      "desc": "대출평잔max"
+     }
+    ],
+    "fields": [
+     "header",
+     "body"
+    ]
+   }
+  }
+ },
+ "GetSBCreditInfoService": {
+  "name": "개인사업자평가정보",
+  "topic": "개인사업자정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계",
+  "base_url": "http://openapi.fsc.go.kr/service",
+  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "spec_source": "swagger",
+  "public_data_pk": "15108177",
+  "operations": {
+   "getEvlInfo": {
+    "ko_name": "개인사업자평가정보조회",
+    "desc": "개인사업자의 성별, 연령, 설립명도 및 평가 정보 제공",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준년월",
+      "name": "basYm",
+      "required": false,
+      "sample": "",
+      "desc": "기준년월"
+     },
+     {
+      "ko": "사업 지역명",
+      "name": "bizAreaNm",
+      "required": false,
+      "sample": "",
+      "desc": "사업 지역명"
+     },
+     {
+      "ko": "사업 업종명",
+      "name": "bizBzcCdNm",
+      "required": false,
+      "sample": "",
+      "desc": "사업 업종명"
+     },
+     {
+      "ko": "사업 업종코드",
+      "name": "bizBzcCd",
+      "required": false,
+      "sample": "",
+      "desc": "사업 업종코드"
+     },
+     {
+      "ko": "평가정보",
+      "name": "crEvlGdNm",
+      "required": false,
+      "sample": "",
+      "desc": "평가정보"
+     }
+    ],
+    "fields": [
+     "header",
+     "body"
+    ]
+   }
+  }
+ },
+ "GetASLundService": {
+  "name": "침수차량진위확인",
+  "topic": "진위서비스",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "unknown",
+  "approval": "개발단계",
+  "base_url": "http://openapi.fsc.go.kr/service",
+  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "spec_source": "swagger",
+  "public_data_pk": "15124895",
+  "operations": {
+   "getAutomobileLundinfo": {
+    "ko_name": "침수여부",
+    "desc": "자료기준일자, 사고발생일시, 사고종류, 현재차량번호 정보를 제공",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "사고발생일시",
+      "name": "acdnOccrDtm",
+      "required": false,
+      "sample": "2022-08-08 13:45:00",
+      "desc": "사고발생일시"
+     },
+     {
+      "ko": "사고발생일시보다크거나같은데이터",
+      "name": "beginAcdnOccrDtm",
+      "required": false,
+      "sample": "2022-08-08 13:45:00",
+      "desc": "사고발생일시보다크거나같은데이터"
+     },
+     {
+      "ko": "사고발생일시보다작은데이터",
+      "name": "endAcdnOccrDtm",
+      "required": false,
+      "sample": "2022-08-08 13:46:00",
+      "desc": "사고발생일시보다작은데이터"
+     },
+     {
+      "ko": "사고발생일시보다검색값을포함하는데이터",
+      "name": "likeAcdnOccrDtm",
+      "required": false,
+      "sample": "2022-08-08 13:45:00",
+      "desc": "사고발생일시보다검색값을포함하는데이터"
+     },
+     {
+      "ko": "사고종류명",
+      "name": "acdnKindNm",
+      "required": false,
+      "sample": "침수분손",
+      "desc": "사고종류명"
+     },
+     {
+      "ko": "현재차량번호",
+      "name": "nowVhclNo",
+      "required": true,
+      "sample": "49가8930",
+      "desc": "현재차량번호"
+     }
+    ],
+    "fields": [
+     "header",
+     "body"
+    ]
+   }
+  }
+ }
+}
