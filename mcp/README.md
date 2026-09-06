@@ -3,6 +3,29 @@
 국내 금융·경제 공공 API를 **MCP(Model Context Protocol) 서버**로 감싸 Cloud Run에
 배포하고, **Gemini Enterprise**에 연결하는 샘플입니다.
 
+> [!IMPORTANT]
+> **기본 사용 방식은 GCP 배포 + Gemini Enterprise 연결입니다.** 서버를 Cloud Run에
+> 올리고 Gemini Enterprise의 **Custom MCP Server 데이터 스토어**로 붙여, 어시스턴트
+> 채팅에서 쓰는 것을 전제로 만들었습니다.
+>
+> 로컬 MCP 클라이언트에 붙이는 경로는 상정하지 않았습니다. 전송이
+> `streamable-http` 전용이라 stdio가 없고, 호출 신원이 Discovery Engine 서비스
+> 에이전트에 맞춰져 있으며, 도구 수를 억제한 것과 모든 도구에 `readOnlyHint`를
+> 붙인 것도 Gemini Enterprise에서 여러 서버를 함께 붙였을 때를 기준으로 한
+> 결정입니다.
+>
+> **MCP 서버만으로는 한 벌이 아닙니다.** 세 층을 함께 올려야 의도한 대로
+> 동작합니다.
+>
+> | 층 | 무엇을 담당하나 | 어디에 있나 |
+> |---|---|---|
+> | MCP 서버 8종 | 데이터를 가져온다 | 이 디렉터리 — [배포하기](#배포하기) |
+> | 시스템 지시 | 답변 기준과 규제 가드레일을 세운다 | [`SYSTEM_PROMPT.md`](./SYSTEM_PROMPT.md) |
+> | 스킬 8종 | 가져온 데이터를 어떻게 읽어야 하는지 알려준다 | [`../skills`](../skills) |
+>
+> [`SCENARIOS.md`](./SCENARIOS.md)의 시나리오 13개는 세 층이 모두 올라간 상태를
+> 기준으로 씌어 있습니다.
+
 연결하고 나면 Gemini Enterprise 채팅에서 이렇게 물어볼 수 있습니다.
 
 > "삼성전자 작년 배당 얼마였어?"

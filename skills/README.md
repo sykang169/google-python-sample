@@ -5,10 +5,17 @@
 스킬(Agent Skill)은 AI가 필요할 때 꺼내 읽는 참고 문서입니다. 질문에 맞는 스킬이
 자동으로 선택되어, AI가 답하기 전에 그 분야의 규칙을 먼저 확인하게 됩니다.
 
-[Agent Skills 표준](https://agentskills.io/specification)을 따르므로 **특정 도구에
-묶여 있지 않습니다.** Antigravity, Gemini CLI, Claude Code, Cursor, Codex CLI,
-GitHub Copilot, Gemini Enterprise에서 같은 파일을 그대로 씁니다 — 두는 위치만
-다릅니다([설치](#설치) 참고). 스킬 기능이 없는 도구를 위한 경로도 있습니다.
+**기본 사용처는 Gemini Enterprise입니다.** 이 저장소의
+[MCP 서버 8종](../mcp)과 짝을 이뤄 GE 어시스턴트에 함께 올리는 것을 전제로
+썼습니다 — 데이터는 MCP가 가져오고, 그 데이터를 어떻게 읽어야 하는지를 스킬이
+알려주는 구조입니다. 올리는 방법은 [Gemini Enterprise](#gemini-enterprise)에
+있습니다.
+
+다만 형식은 [Agent Skills 표준](https://agentskills.io/specification)이라 **특정
+도구에 묶여 있지 않습니다.** Antigravity, Gemini CLI, Claude Code, Cursor,
+Codex CLI, GitHub Copilot에서 같은 파일을 그대로 씁니다 — 두는 위치만
+다릅니다([다른 도구에 설치하기](#다른-도구에-설치하기) 참고). 스킬 기능이 없는
+도구를 위한 경로도 있습니다.
 
 여기 담은 8종은 **데이터를 어떻게 가져오는지가 아니라, 가져온 다음 어떻게 읽어야
 하는지**를 다룹니다.
@@ -121,8 +128,77 @@ GitHub Copilot, Gemini Enterprise에서 같은 파일을 그대로 씁니다 —
 
 ## 설치
 
-스킬 형식([Agent Skills](https://agentskills.io/specification))은 도구마다 같고
-**두는 위치만 다릅니다.** 스크립트에 경로를 주면 8종을 연결합니다.
+**기본 경로는 Gemini Enterprise입니다.** 다른 도구에 넣는 방법은
+[아래](#다른-도구에-설치하기)에 이어집니다.
+
+### Gemini Enterprise
+
+올리는 방법이 두 가지입니다.
+
+어느 쪽이든 먼저 패키징 스크립트를 돌려야 합니다. Gemini Enterprise는 `references/`
+폴더를 읽지 않기 때문입니다(필요할 때만 꺼내 읽는 기능이 없습니다). 스크립트가
+참조 문서를 `SKILL.md` 끝에 부록으로 붙여서 내용이 빠지지 않게 합니다.
+
+**(A) 웹앱 업로드** — 한 번 올려 보고 끝내실 때
+
+```bash
+python3 scripts/package_for_gemini_enterprise.py --all
+```
+
+생성된 `dist/*.zip`을 웹앱에서 올리시면 됩니다.
+
+```
+웹앱 → 스킬 → 추가(+) → 스킬 업로드 → 드래그 → 가져오기
+```
+
+업로드하면 기본으로 사용 설정됩니다. 호출 방법은 세 가지입니다 — 채팅에서
+`@스킬이름` 또는 `/`로 멘션, 프롬프트에서 이름을 직접 언급, 그리고 `description`
+기반 자동 선택입니다. 자동 선택이 잘 되도록 `description`에 사용자가 실제로 쓸
+표현을 넣어 두었습니다.
+
+**(B) Skill Registry API** — CI에 넣거나 여러 환경에 반복 배포하실 때
+
+```bash
+gcloud auth application-default login
+python3 scripts/upload_to_skill_registry.py --all \
+    --project <PROJECT_ID> --location us-central1
+```
+
+이미 등록된 스킬을 덮어쓰려면 `--update`, 확인만 하려면 `--dry-run`을 붙이세요.
+
+`POST .../v1beta1/projects/{p}/locations/{l}/skills?skillId={id}`에 ZIP을
+base64(`zippedFilesystem`)로 실어 보냅니다. 생성·수정·삭제가 장기 실행 작업이라
+스크립트가 완료까지 기다립니다. 필요한 권한은 `roles/aiplatform.user`와
+`roles/serviceusage.serviceUsageConsumer`입니다.
+
+### Gemini Enterprise에서 알아 두실 제약
+
+| 항목 | 내용 |
+| --- | --- |
+| 에이전트 | **스킬은 에이전트와 함께 쓸 수 없습니다.** GE 어시스턴트 전용입니다 |
+| 실행 언어 | `scripts/`는 Python과 Bash만 지원합니다 |
+| 크기 | 업로드 파일 총합 100MB 이하 |
+| 스킬 이름 | 조직 내에서 고유해야 합니다. 소문자·숫자·하이픈 |
+| skillId (API) | 1~63자, 문자로 시작하고 문자/숫자로 끝나며 `gcp-` 접두사는 예약되어 있습니다 |
+| 삭제 후 재사용 | 삭제한 skillId는 **24시간** 동안 다시 쓸 수 없습니다 |
+| 숨김 파일 | `.DS_Store`, `__pycache__`, `*.pyc`가 있으면 업로드가 실패합니다 (스크립트가 제외합니다) |
+| 상대 링크 | `../다른-스킬/SKILL.md`는 ZIP 안에서 풀리지 않습니다 |
+| 웹앱 편집기 | `SKILL.md` 한 장짜리만 편집할 수 있습니다. 스크립트가 있으면 ZIP 업로드만 가능합니다 |
+
+> [!WARNING]
+> **Skill Registry 제공 리전은 `us-central1` / `europe-west4` / `us-east5`뿐이고
+> 서울(`asia-northeast3`)이 없습니다.** 국내 금융회사 배포에서는
+> [`kr-financial-ai-compliance`](kr-financial-ai-compliance/SKILL.md)의 데이터
+> 레지던시 항목과 정면으로 부딪히는 지점입니다. 스킬 본문에 고객 데이터를 넣지
+> 않는다는 전제를 확인하시고 법무·준법감시인과 정리하신 뒤 올려 주세요.
+>
+> 파일명 대소문자는 문서가 엇갈립니다(한국어 `skill.md` / 영어 `SKILL.md`).
+> 기본은 `SKILL.md`이며, 가져오기가 실패하면 `--lowercase`로 다시 만들어 보세요.
+
+### 다른 도구에 설치하기
+
+Gemini Enterprise 밖에서는 패키징이 필요 없습니다. 파일을 그대로 두고 **위치만**
+맞춰 주면 됩니다. 스크립트에 경로를 주면 8종을 연결합니다.
 
 ```bash
 cd skills
@@ -166,70 +242,6 @@ Cursor, Codex CLI, GitHub Copilot도 `SKILL.md`를 읽습니다. 경로만 각 �
 시스템 프롬프트에 스킬 8종의 `description`만 목록으로 넣고, 모델이 고른 스킬의
 본문을 그때 이어붙이는 방식이 가장 효율적입니다. 8종 전부를 항상 넣으면 약
 23,000토큰을 매 호출 지불하게 됩니다(`description`만이면 2,000토큰 남짓).
-
-### Gemini Enterprise
-
-올리는 방법이 두 가지입니다.
-
-어느 쪽이든 먼저 패키징 스크립트를 돌려야 합니다. Gemini Enterprise는 `references/`
-폴더를 읽지 않기 때문입니다(필요할 때만 꺼내 읽는 기능이 없습니다). 스크립트가
-참조 문서를 `SKILL.md` 끝에 부록으로 붙여서 내용이 빠지지 않게 합니다.
-
-**(A) 웹앱 업로드** — 한 번 올려 보고 끝내실 때
-
-```bash
-python3 scripts/package_for_gemini_enterprise.py --all
-```
-
-생성된 `dist/*.zip`을 웹앱에서 올리시면 됩니다.
-
-```
-웹앱 → 스킬 → 추가(+) → 스킬 업로드 → 드래그 → 가져오기
-```
-
-업로드하면 기본으로 사용 설정됩니다. 호출 방법은 세 가지입니다 — 채팅에서
-`@스킬이름` 또는 `/`로 멘션, 프롬프트에서 이름을 직접 언급, 그리고 `description`
-기반 자동 선택입니다. 자동 선택이 잘 되도록 `description`에 사용자가 실제로 쓸
-표현을 넣어 두었습니다.
-
-**(B) Skill Registry API** — CI에 넣거나 여러 환경에 반복 배포하실 때
-
-```bash
-gcloud auth application-default login
-python3 scripts/upload_to_skill_registry.py --all \
-    --project <PROJECT_ID> --location us-central1
-```
-
-이미 등록된 스킬을 덮어쓰려면 `--update`, 확인만 하려면 `--dry-run`을 붙이세요.
-
-`POST .../v1beta1/projects/{p}/locations/{l}/skills?skillId={id}`에 ZIP을
-base64(`zippedFilesystem`)로 실어 보냅니다. 생성·수정·삭제가 장기 실행 작업이라
-스크립트가 완료까지 기다립니다. 필요한 권한은 `roles/aiplatform.user`와
-`roles/serviceusage.serviceUsageConsumer`입니다.
-
-### 알아 두실 제약
-
-| 항목 | 내용 |
-| --- | --- |
-| 에이전트 | **스킬은 에이전트와 함께 쓸 수 없습니다.** GE 어시스턴트 전용입니다 |
-| 실행 언어 | `scripts/`는 Python과 Bash만 지원합니다 |
-| 크기 | 업로드 파일 총합 100MB 이하 |
-| 스킬 이름 | 조직 내에서 고유해야 합니다. 소문자·숫자·하이픈 |
-| skillId (API) | 1~63자, 문자로 시작하고 문자/숫자로 끝나며 `gcp-` 접두사는 예약되어 있습니다 |
-| 삭제 후 재사용 | 삭제한 skillId는 **24시간** 동안 다시 쓸 수 없습니다 |
-| 숨김 파일 | `.DS_Store`, `__pycache__`, `*.pyc`가 있으면 업로드가 실패합니다 (스크립트가 제외합니다) |
-| 상대 링크 | `../다른-스킬/SKILL.md`는 ZIP 안에서 풀리지 않습니다 |
-| 웹앱 편집기 | `SKILL.md` 한 장짜리만 편집할 수 있습니다. 스크립트가 있으면 ZIP 업로드만 가능합니다 |
-
-> [!WARNING]
-> **Skill Registry 제공 리전은 `us-central1` / `europe-west4` / `us-east5`뿐이고
-> 서울(`asia-northeast3`)이 없습니다.** 국내 금융회사 배포에서는
-> [`kr-financial-ai-compliance`](kr-financial-ai-compliance/SKILL.md)의 데이터
-> 레지던시 항목과 정면으로 부딪히는 지점입니다. 스킬 본문에 고객 데이터를 넣지
-> 않는다는 전제를 확인하시고 법무·준법감시인과 정리하신 뒤 올려 주세요.
->
-> 파일명 대소문자는 문서가 엇갈립니다(한국어 `skill.md` / 영어 `SKILL.md`).
-> 기본은 `SKILL.md`이며, 가져오기가 실패하면 `--lowercase`로 다시 만들어 보세요.
 
 ## 검증
 
