@@ -116,6 +116,13 @@ def get_financial_statement(params: dict | None = None, rows: int = 20, page: in
 def get_corp_outline(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
     """기업 개요를 조회한다. 법인등록번호(crno) 확정의 출발점.
 
+설립일·상장일·종업원수·대표자·업종이 있다. **재무 수치는 없다** —
+get_financial_statement를 쓴다.
+
+**상장사만 있는 게 아니다.** 외국 법인과 비상장이 함께 들어 있어
+회사명으로 찾으면 의도하지 않은 법인이 먼저 나올 수 있다. 돌아온
+행의 corpNm을 확인하고 crno로 대상을 고정한다.
+
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         actnAudpnNm, audtRptOpnnCtt, bzno, corpDcd, corpDcdNm, corpEnsnNm, corpNm, corpRegMrktDcd, corpRegMrktDcdNm, crno, empeAvgCnwkTermCtt, enpBsadr, enpDtadr, enpEmpeCnt, enpEstbDt, enpFxno, enpHmpgUrl, enpKosdaqLstgAbolDt, enpKosdaqLstgDt, enpKrxLstgAbolDt, enpKrxLstgDt, enpMainBizNm, enpMntrBnkNm, enpOzpno, enpPbanCmpyNm, enpPn1AvgSlryAmt, enpRprFnm, enpStacMm, enpTlno, enpXchgLstgAbolDt, enpXchgLstgDt, fssCorpChgDtm, fssCorpUnqNo, fstOpegDt, lastOpegDt, sicNm, smenpYn
 
@@ -130,6 +137,14 @@ def get_corp_outline(params: dict | None = None, rows: int = 20, page: int = 1) 
 @mcp.tool(annotations=READ_ONLY)
 def get_affiliates(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
     """계열회사 목록을 조회한다. 지배구조 맵을 그릴 때 쓴다.
+crno로 걸어야 그 기업의 계열사가 나온다.
+
+**지분율은 없다.** 계열사 이름·법인번호·상장여부(lstgYn)뿐이라
+지배구조의 모양은 알 수 없다. '지분 몇 %'를 물으면 이 도구로는
+답할 수 없다고 말한다.
+
+**계열사 이름이 상장 종목명과 다르다.** 시세로 넘기기 전에
+find_listed_item으로 대조한다.
 
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         afilCmpyCrno, afilCmpyNm, basDt, crno, lstgYn
@@ -145,9 +160,17 @@ def get_affiliates(params: dict | None = None, rows: int = 20, page: int = 1) ->
 @mcp.tool(annotations=READ_ONLY)
 def get_executives(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
     """임원 현황을 조회한다. 사외이사 수 같은 지배구조 질문의 근거.
+crno로 거른다.
 
 **행을 세는 것은 서버가 한다.** 응답의 건수와 범주 분포를 쓰고,
-JSON을 직접 세지 않는다. 보수는 search_apis로 getExecRemuStat을 찾는다.
+JSON을 직접 세지 않는다.
+
+**보수는 없다.** search_apis로 getExecRemuStat(임원 보수 통계)을,
+주주 현황은 getStockholderInfo를 찾아 call_api한다.
+
+**오래된 기준일 행은 대부분 공란이다.** 이름·직위가 비어 있으면
+임원이 없는 게 아니라 그 시점 수록이 비어 있는 것이다. 최신 basDt를
+먼저 확인하고 그 시점으로 거른다.
 
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         basDt, crno, dataSqno, exutFnm, exutBornYm, exutJbttNm, rgstExutYn, rgstExutCtt, fltmsvYn, fltmsvCtt, exutChrgBzwrNm, exutMainCrrCtt, ownOnskCnt, ownPfstCnt, exutHdfTermCtt, exutJbttXpryDt, sexCd, sexCdNm, exutOwnOnskCnt, exutOwnPfstCnt

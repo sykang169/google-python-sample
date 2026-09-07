@@ -95,6 +95,22 @@ def call_api(
 def get_bond_basic(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
     """채권 기본정보(마스터)를 조회한다. 종목 식별의 출발점이다.
 
+**신용등급이 여기 있다.** 시세나 종목마스터에는 없다. 세 평가사의
+등급이 각각 kbpScrsItmsKcdNm, kisScrsItmsKcdNm, niceScrsItmsKcdNm으로
+온다. 필드 이름이 '증권종목종류'로 보이지만 값은 AAA·AA-·A+ 같은
+등급이다.
+
+**세 평가사가 같은 등급을 다르게 적는다** — 한 곳의 A를 다른 곳은
+A0으로 적는다. 표기 차이를 등급 차이로 읽지 않는다. 어느 평가사
+기준인지 밝힌다.
+
+**일반회사채는 등급이 빈 행이 많다.** 공란은 무등급이 아니라
+미수록이다. '등급이 없다'가 아니라 '이 데이터에 실려 있지 않다'로
+구분해 적는다.
+
+발행조건(쿠폰 bondSrfcInrt, 만기 bondExprDt, 발행액 bondIssuAmt)이
+여기 있다. 시세·수익률은 fsc-market의 get_bond_price다.
+
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         basDt, bnkHldyIntPydyDcd, bnkHldyIntPydyDcdNm, bondBal, bondExprDt, bondGrnInstNm, bondIntTcd, bondIntTcdNm, bondIssuAmt, bondIssuCurCd, bondIssuCurCdNm, bondIssuDt, bondIsurNm, bondOffrMcd, bondOffrMcdNm, bondPymtAmt, bondRegInstDcd, bondRegInstDcdNm, bondRnknDcd, bondRnknDcdNm, bondSrfcInrt, bondUndtInstNm, cpbdMngCmpyNm, cptUsgeDcd, cptUsgeDcdNm, crfndYn, crno, elpsIntPayYn, fnScrsItmsKcd, fnScrsItmsKcdNm, grnDcd, grnDcdNm, intCmpuMcd, intCmpuMcdNm, intPayCyclCtt, intPayMmntDcd, intPayMmntDcdNm, irtChngDcd, irtChngDcdNm, isinCd, isinCdNm, issuDptyNm, kbpScrsItmsKcd, kbpScrsItmsKcdNm, kisScrsItmsKcd, kisScrsItmsKcdNm, lstgDt, niceScrsItmsKcd, niceScrsItmsKcdNm, nxtmCopnDt, optnTcd, optnTcdNm, pamtRdptMcd, pamtRdptMcdNm, pclrBondKcd, pclrBondKcdNm, piamPayBrofNm, piamPayInstNm, prisLnkgBondYn, prmncBondTmnDt, prmncBondYn, qibTmnDt, qibTrgtScrtYn, rbfCopnDt, rgtExertMnbdDcd, rgtExertMnbdDcdNm, scrsItmsKcd, scrsItmsKcdNm, sicNm, stripsNm, stripsPsblYn, sttrHldyIntPydyDcd, sttrHldyIntPydyDcdNm, txtnDcd, txtnDcdNm
 
@@ -108,7 +124,13 @@ def get_bond_basic(params: dict | None = None, rows: int = 20, page: int = 1) ->
 
 @mcp.tool(annotations=READ_ONLY)
 def get_bond_principal_interest(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
-    """채권 원리금 정보를 조회한다. 캐시플로 산출의 근거.
+    """채권 원리금 지급 내역을 조회한다. 캐시플로 산출의 근거.
+
+한 행이 한 번의 지급이다. piamDcdNm이 이자인지 원금인지를 가른다.
+구분하지 않고 더하면 원금을 이자에 섞게 된다.
+
+**과거 지급분이 함께 온다.** 지급일(piamPayDt)로 걸러야 앞으로의
+캐시플로가 된다. 이 오퍼레이션에는 기준일(basDt)이 없다.
 
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         bondIssuCurCd, bondIssuCurCdNm, bondIsurNm, bondSrfcInrt, crno, hldyAplPiamPayDt, intPayAmt, isinCd, isinCdNm, pamtPayAmt, piamDcd, piamDcdNm, piamPayDt, rmanDpsgCnt, scrsItmsKcd, scrsItmsKcdNm, ttwBasInt
@@ -123,7 +145,10 @@ def get_bond_principal_interest(params: dict | None = None, rows: int = 20, page
 
 @mcp.tool(annotations=READ_ONLY)
 def get_bond_right_schedule(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
-    """채권 권리행사 일정(이자지급·상환)을 조회한다.
+    """채권 권리행사 일정을 조회한다. scrsScedDcdNm이 무슨 일정인지를
+가른다(이자지급일·원리금지급일 등).
+
+**금액은 없다.** 일정만 있고 지급액은 get_bond_principal_interest다.
 
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         basDt, bondExprDt, bondIntTcd, bondIntTcdNm, bondIssuAmt, bondIssuDt, bondIssuFrmtNm, bondIsurNm, crno, irtChngDcd, irtChngDcdNm, isinCd, isinCdNm, scrsItmsKcd, scrsItmsKcdNm, scrsScedDcd, scrsScedDcdNm
@@ -138,7 +163,14 @@ def get_bond_right_schedule(params: dict | None = None, rows: int = 20, page: in
 
 @mcp.tool(annotations=READ_ONLY)
 def get_bond_call_redemption(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
-    """옵션부채권의 조기상환(콜) 내역을 조회한다. 콜 리스크 점검용.
+    """옵션부채권의 조기상환 내역을 조회한다. 콜 리스크 점검용.
+
+**콜만 있는 게 아니다.** optnTcdNm이 CALL·PUT 등을 가른다. 콜을
+물었으면 이 값을 확인하고 거른다.
+
+**이미 일어난 상환 이력이다.** opbdClrdDt가 상환일이므로 앞으로
+행사 가능한 채권을 찾는 것과는 다르다. 예정 일정은
+get_bond_right_schedule을 함께 본다.
 
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         bondIssuAmt, bondIssuFrmtNm, crno, intCmpuMcd, intCmpuMcdNm, isinCd, isinCdNm, opbdClrdDt, opbdExprDt, opbdIntPayAmt, opbdIssuAmt, opbdIssuDt, opbdIsurNm, opbdPamtPayAmt, optnExertRto, optnTcd, optnTcdNm
@@ -154,6 +186,13 @@ def get_bond_call_redemption(params: dict | None = None, rows: int = 20, page: i
 @mcp.tool(annotations=READ_ONLY)
 def get_retail_bond_yield(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
     """소매채권 수익률을 조회한다. 리테일 채권 판매에 바로 쓰이는 값이다.
+
+**개별 종목이 아니라 구간 요약이다.** 신용등급(crdtSc)과 잔존만기
+(ctg) 구간으로 묶인 값이고 종목 식별자가 없다. 특정 채권의
+수익률로 제시하면 구간 평균을 그 종목 값으로 답하게 된다.
+
+개별 종목은 fsc-market의 get_bond_price(시세)와 get_bond_basic
+(발행조건·등급)을 쓴다.
 
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         basDt, bnfRt, crdtSc, ctg

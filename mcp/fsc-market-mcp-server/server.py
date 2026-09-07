@@ -114,8 +114,14 @@ def get_stock_price(params: dict | None = None, rows: int = 20, page: int = 1) -
 def get_market_index(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
     """주가지수 시세를 조회한다. KOSPI/KOSDAQ 대표지수와 섹터지수를 모두 담는다.
 
-idxNm으로 지수명(예: 'IT 서비스'), idxCsf로 계열(KOSPI시리즈/KOSDAQ시리즈)을
-거른다. 개별 종목의 초과수익률을 낼 때 이 값이 벤치마크가 된다.
+idxNm으로 지수명, idxCsf로 계열(KOSPI시리즈/KOSDAQ시리즈)을 거른다.
+개별 종목의 초과수익률을 낼 때 이 값이 벤치마크가 된다.
+
+**같은 이름의 지수가 계열마다 따로 있다.** idxCsf를 고정하지 않으면
+KOSPI 계열과 KOSDAQ 계열이 한 시계열에 섞인다.
+
+**구성종목은 없다.** 편입종목 수(epyItmsCnt)만 있고 어떤 종목인지는
+이 데이터에 없다. 지수에 무엇이 들어 있는지 물으면 답할 수 없다.
 
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         basDt, basIdx, basPntm, clpr, epyItmsCnt, fltRt, hipr, idxCsf, idxNm, lopr, lsYrEdVsFltRg, lsYrEdVsFltRt, lstgMrktTotAmt, mkp, trPrc, trqu, vs, yrWRcrdHgst, yrWRcrdHgstDt, yrWRcrdLwst, yrWRcrdLwstDt
@@ -131,8 +137,13 @@ idxNm으로 지수명(예: 'IT 서비스'), idxCsf로 계열(KOSPI시리즈/KOSD
 @mcp.tool(annotations=READ_ONLY)
 def get_etf_price(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
     """ETF 시세를 조회한다. 주식시세 API에는 ETF가 없으므로 여기를 쓴다.
+순자산가치는 nav, 기초지수는 bssIdxIdxNm·bssIdxClpr다.
 
 ETN은 get_etn_price, ELW는 search_apis로 getELWPriceInfo를 찾아 call_api한다.
+
+**구성종목·보수·분배금은 없다.** 무엇을 담고 있는지 물으면 이
+도구로는 답할 수 없다. 괴리율 필드도 없다 — 종가(clpr)와 nav로
+직접 계산했다면 계산했다고 밝힌다.
 
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         basDt, bssIdxClpr, bssIdxIdxNm, clpr, fltRt, hipr, isinCd, itmsNm, lopr, mkp, mrktTotAmt, nPptTotAmt, nav, srtnCd, stLstgCnt, trPrc, trqu, vs
@@ -147,7 +158,14 @@ ETN은 get_etn_price, ELW는 search_apis로 getELWPriceInfo를 찾아 call_api�
 
 @mcp.tool(annotations=READ_ONLY)
 def get_etn_price(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
-    """ETN 시세를 조회한다.
+    """ETN 시세를 조회한다. 기초지수는 bssIdxIdxNm, 그 종가는 bssIdxClpr,
+지표가치는 indcVal이다.
+
+**ETF가 아니다.** ETF는 get_etf_price, ELW는 search_apis로
+getELWPriceInfo를 찾아 call_api한다.
+
+괴리는 종가(clpr)와 지표가치(indcVal)의 차이다. 직접 계산했다면
+계산했다고 밝힌다 — 응답에 괴리율 필드는 없다.
 
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         basDt, bssIdxClpr, bssIdxIdxNm, clpr, fltRt, hipr, indcVal, indcValTotAmt, isinCd, itmsNm, lopr, lstgScrtCnt, mkp, mrktTotAmt, srtnCd, trPrc, trqu, vs
@@ -163,8 +181,16 @@ def get_etn_price(params: dict | None = None, rows: int = 20, page: int = 1) -> 
 @mcp.tool(annotations=READ_ONLY)
 def get_bond_price(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
     """채권 시세를 조회한다. 개별 채권의 수익률·가격 흐름을 볼 때 쓴다.
+종가 clprPrc, 종가수익률 clprBnfRt다.
 
 거시 금리(기준금리·국고채)는 이 API가 아니라 한국은행 ECOS다.
+
+**발행조건과 신용등급은 없다.** 쿠폰·만기·등급은 fsc-ficc의
+get_bond_basic이다.
+
+**연속 시계열이 아니다.** 개별 회사채는 거래가 드물어 체결일이 띄엄
+띄엄하다. 빠진 날을 보간하지 말고 체결일만 점으로 제시하고 관측
+일수를 밝힌다.
 
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         basDt, clprBnfRt, clprPrc, clprVs, hiprBnfRt, hiprPrc, isinCd, itmsCtg, itmsNm, loprBnfRt, loprPrc, mkpBnfRt, mkpPrc, mrktCtg, srtnCd, trPrc, trqu, xpYrCnt
@@ -203,6 +229,10 @@ def get_warrant_price(params: dict | None = None, rows: int = 20, page: int = 1)
 purRgtScrtItmsNm/purRgtScrtItmsClpr가 기초가 되는 주권의 이름과 종가이므로,
 행사가(exertPric)와 함께 보면 내가격 여부를 가늠할 수 있다.
 
+**내가격 여부는 계산 결과이지 데이터가 아니다.** 응답에 그런 필드는
+없으므로 직접 비교했다면 비교했다고 밝힌다. 행사 가능 기간은
+subtPdSttgDt~subtPdEdDt다.
+
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         basDt, clpr, exertPric, fltRt, hipr, isinCd, itmsNm, lopr, lstgScrtCnt, mkp, mrktCtg, mrktTotAmt, purRgtScrtItmsCd, purRgtScrtItmsClpr, purRgtScrtItmsNm, srtnCd, subtPdEdDt, subtPdSttgDt, trPrc, trqu, vs
 
@@ -220,6 +250,10 @@ def get_subscription_right_price(params: dict | None = None, rows: int = 20, pag
 
 증권(WR)이 아니라 증서(R)다. 증권은 get_warrant_price다.
 dltDt(상장폐지일)가 가까우면 거래 가능 기간이 얼마 남지 않았다는 뜻이다.
+
+**청약 일정과 배정 내역은 없다.** 증자 일정은 fsc-equity-ops의
+get_right_schedule, 결정 공시는 DART다. nstIssPrc는 신주 발행가이지
+청약 금액이 아니다.
 
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         basDt, clpr, dltDt, fltRt, hipr, isinCd, itmsNm, lopr, lstgCtfCnt, mkp, mrktCtg, mrktTotAmt, nstIssPrc, purRgtScrtItmsCd, purRgtScrtItmsClpr, purRgtScrtItmsNm, srtnCd, trPrc, trqu, vs
