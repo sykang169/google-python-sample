@@ -72,6 +72,7 @@ SERVERS = {
      ('이 회사채 국고채 대비 스프레드가 얼마야?', 'get_bond_basic + ECOS (서버 2개)'),
      ('다음 분기에 콜 행사 가능한 채권 목록', 'get_bond_call_redemption'),
      ('CP 91일물 금리가 기준금리 대비 어떻게 움직였어?', 'get_short_term_rate + ECOS'),
+     ('이 CP 종목 발행일이랑 금리 알려줘', 'get_short_term_issue (종목별은 여기만 있다)'),
      ('지금 리테일에 팔 만한 채권 수익률 알려줘', 'get_retail_bond_yield (구간별 요약)'),
      ('이 채권 이자지급일 언제야', 'get_bond_right_schedule'),
      ('올해 회사채 발행 규모 상위 보여줘', "search_apis('발행실적') + call_api"),
@@ -91,9 +92,27 @@ SERVERS = {
       "doc": "옵션부채권의 조기상환(콜) 내역을 조회한다. 콜 리스크 점검용."},
      {"name": "get_retail_bond_yield", "svc": "GetBondInfoService", "op": "getBondSecurityBenefitRate",
       "doc": "소매채권 수익률을 조회한다. 리테일 채권 판매에 바로 쓰이는 값이다."},
-     {"name": "get_short_term_rate", "svc": "GetShorTermSecuTradInfoService_V2", "op": "getBuyAndSellAmou_V2",
-      "doc": "단기금융증권(CP·CD)의 매매 금액·금리를 조회한다.\n\n"
-             "발행 정보가 아니라 **실거래** 기준이라 단기자금 운용의 체감 금리에 가깝다."},
+     {"name": "get_short_term_rate", "svc": "GetShorTermSecuTradInfoService_V2", "op": "getBuyAndSellInteRate_V2",
+      "doc": "단기금융증권(CP·전단채 등)의 매매 수익률을 조회한다. 금리 값은\n"
+             "rmngExprTrdBnfRt다.\n\n"
+             "발행 조건이 아니라 **실거래** 기준이라 단기자금 운용의 체감 금리에 가깝다.\n\n"
+             "**개별 종목이 아니라 집계다.** 발행인 업종(isurPtrnNm)·상품구분\n"
+             "(shtrFinPrdDcdNm)·잔존만기(shtrPrdRmngExprDcdNm)로 묶인 값이라\n"
+             "여기에 종목 식별자가 없다. 종목별 금리는 get_short_term_issue를 쓴다.\n"
+             "거래 규모는 get_short_term_trade_amount다."},
+     {"name": "get_short_term_trade_amount", "svc": "GetShorTermSecuTradInfoService_V2", "op": "getBuyAndSellAmou_V2",
+      "doc": "단기금융증권의 잔존만기별 매매 **금액**을 조회한다(rmngExprTrdAmt).\n\n"
+             "**금리가 아니다.** 이 오퍼레이션에는 금리 필드가 없다. 금리는\n"
+             "get_short_term_rate를 쓴다. 여기 값을 금리로 읽으면 자릿수가 억 단위인\n"
+             "금액을 수익률로 제시하게 된다.\n\n"
+             "매도/매수는 trdDcdNm으로 갈린다. 합산하면 같은 거래를 두 번 세게 된다."},
+     {"name": "get_short_term_issue", "svc": "GetShorTermSecuTradInfoService_V2", "op": "getCaseBuyAndSellInfo_V2",
+      "doc": "단기금융증권 **건별** 매매 내역을 조회한다. 이 서비스에서 종목\n"
+             "식별자(isinCd·isinCdNm)가 있는 유일한 오퍼레이션이다.\n\n"
+             "종목별 발행일(shtrFinPrdIssuDt)·만기(shtrFinPrdExprDt)·금리\n"
+             "(shtrFinPrdIrt)·거래금액(shtrFinPrdTrdAmt)이 한 행에 있다.\n"
+             "특정 CP의 조건을 물으면 여기를 본다.\n\n"
+             "매수·매도 주체가 각각 다른 필드(buynShtrFinBzcDcdNm/slngShtrFinBzcDcdNm)다."},
    ],
  },
  "research": {
@@ -125,9 +144,16 @@ SERVERS = {
       "doc": "임원 현황을 조회한다. 사외이사 수 같은 지배구조 질문의 근거.\n\n"
              "**행을 세는 것은 서버가 한다.** 응답의 건수와 범주 분포를 쓰고,\n"
              "JSON을 직접 세지 않는다. 보수는 search_apis로 getExecRemuStat을 찾는다."},
-     {"name": "get_disclosure", "svc": "GetDiscInfoService_V2", "op": "getDiviDiscInfo_V2",
-      "doc": "배당 공시를 조회한다. 이 서비스에는 유상증자·합병 등 32종의 공시\n"
-             "오퍼레이션이 있으므로, 다른 공시는 search_apis로 찾아 call_api로 실행한다."},
+     {"name": "get_dividend_disclosure", "svc": "GetDiscInfoService_V2", "op": "getDiviDiscInfo_V2",
+      "doc": "**배당 공시만** 조회한다. 공시 일반이 아니다.\n\n"
+             "이 서비스에는 유상증자·합병·자기주식·소송 등 30종이 넘는 공시\n"
+             "오퍼레이션이 있고 이 도구는 그중 배당 하나만 감싼다. 다른 공시를\n"
+             "물으면 search_apis로 해당 오퍼레이션을 찾아 call_api로 실행한다.\n"
+             "**여기서 0건이 나온 것을 '공시가 없다'로 답하지 않는다.**\n\n"
+             "당기·전기·전전기 세 시점이 crtm/pvtr/bpvtr 접두사로 한 행에 함께 온다.\n"
+             "접두사를 확인하지 않으면 전기 값을 당기로 답하게 된다.\n\n"
+             "배당 기준일·지급일 같은 권리 일정은 여기가 아니라 fsc-equity-ops의\n"
+             "get_dividend다. 공시 **원문 본문**은 DART 서버를 쓴다."},
    ],
  },
  "equity-ops": {
@@ -135,7 +161,8 @@ SERVERS = {
      ('이 주권 사고 등록된 거 아니야?', "check_irregular_stock — 실패를 '이상 없음'으로 답하지 않는다"),
      ('다음 달 배당 기준일인 종목 알려줘', 'get_dividend'),
      ('이번 분기 청약 일정 정리해줘', 'get_right_schedule'),
-     ('대차잔고 높은 종목 보여줘', 'get_stock_lending — 대차 ≠ 공매도'),
+     ('대차잔고 높은 종목 보여줘', 'get_stock_lending — 종목별. 대차 ≠ 공매도'),
+     ('대차 시장 전체 규모 추이', 'get_lending_market_total — 월별 시장 합계'),
      ('REPO 금리 추이 보여줘', 'get_repo_rate (담보 종류별로 갈린다)'),
    ],
    "title": "권리·대차",
@@ -167,9 +194,22 @@ SERVERS = {
              "엉뚱한 종목의 사고를 보고하게 된다.\n"
              "돌아온 행의 isinCd가 조회하려던 종목과 같은지 **반드시 대조한다.**\n\n"
              "**조회에 실패했을 때 \'사고 없음\'으로 답하지 않는다.** 실패는 실패로 보고한다."},
-     {"name": "get_stock_lending", "svc": "GetStocLendBorrInfoService_V2", "op": "getMontLendAndBorrStatu_V2",
-      "doc": "주식 대차 현황을 조회한다. 대차잔고는 공매도 압력의 대리지표로 읽히지만,\n"
-             "대차가 곧 공매도는 아니라는 점을 답변에 밝힌다."},
+     {"name": "get_stock_lending", "svc": "GetStocLendBorrInfoService_V2", "op": "getStItemLendAndBorrStatu_V2",
+      "doc": "**종목별** 대차거래 현황을 조회한다. isinCd 또는 isinCdNm으로 거른다.\n\n"
+             "체결(lnbCclStckCnt)·잔고(lnbRmanStckCnt)·상환(lnbRdptStckCnt) 주식 수다.\n"
+             "금액이 아니라 **주식 수**이므로 잔고 금액을 물으면 종가를 곱해야 하고,\n"
+             "곱했다는 사실을 밝힌다.\n\n"
+             "대차잔고는 공매도 압력의 대리지표로 읽히지만 **대차가 곧 공매도는\n"
+             "아니다.** 차입 후 공매도하지 않는 경우가 있으므로 답변에 밝힌다.\n"
+             "공매도 잔고 자체는 이 데이터에 없다.\n\n"
+             "시장 전체 합계는 get_lending_market_total이다."},
+     {"name": "get_lending_market_total", "svc": "GetStocLendBorrInfoService_V2", "op": "getMontLendAndBorrStatu_V2",
+      "doc": "대차거래 **월별 시장 전체 합계**를 조회한다.\n\n"
+             "**종목별이 아니다.** 이 오퍼레이션에는 종목 식별자가 없고 한 달에 한\n"
+             "행뿐이다. 특정 종목의 대차잔고를 물으면 get_stock_lending을 쓴다.\n"
+             "여기 값을 한 종목의 잔고로 제시하면 시장 전체를 그 종목 것으로\n"
+             "답하게 된다.\n\n"
+             "기준일(basDt)이 월 단위라 일별 추이는 낼 수 없다."},
      {"name": "get_repo_rate", "svc": "GetRepoItemInfoService_V2", "op": "getInteRateInfo_V2",
       "doc": "REPO 금리를 조회한다. 단기 조달비용의 기준."},
    ],

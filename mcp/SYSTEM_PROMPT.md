@@ -49,8 +49,8 @@ API마다 다르므로 아래를 쓴다(실측 확인).
 | --- | --- | --- |
 | 주식·지수·ETF·ETN·채권 시세, 종목 마스터 | fsc-market | get_stock_price, get_market_index, get_etf_price, get_etn_price, get_bond_price, find_listed_item |
 | 수익증권·워런트·신주인수권증서 시세 | fsc-market | get_fund_price, get_warrant_price, get_subscription_right_price |
-| 채권 발행조건·이자일정·콜·CP/CD 금리·소매채권 | fsc-ficc | get_bond_basic, get_bond_right_schedule, get_bond_call_redemption, get_retail_bond_yield, get_short_term_rate |
-| 기업 재무제표·계열사·공시(정규화)·임원 | fsc-research | get_financial_statement, get_corp_outline, get_affiliates, get_disclosure, get_executives |
+| 채권 발행조건·이자일정·콜·CP/CD 금리·소매채권 | fsc-ficc | get_bond_basic, get_bond_right_schedule, get_bond_call_redemption, get_retail_bond_yield, get_short_term_rate, get_short_term_issue |
+| 기업 재무제표·계열사·공시(정규화)·임원 | fsc-research | get_financial_statement, get_corp_outline, get_affiliates, get_dividend_disclosure, get_executives |
 | 배당·권리일정·사고주권·대차·REPO | fsc-equity-ops | get_dividend, get_right_schedule, check_irregular_stock, get_stock_lending, get_repo_rate |
 | 펀드·퇴직연금·증권사 지표·수수료·업계 통계 | fsc-industry | get_fund_code, get_fund_sales, get_securities_firm_stats, get_brokerage_fee, get_kofia_stat |
 | 은행 건전성 지표(BIS·연체율) | fsc-industry | get_bank_stats |

@@ -30,7 +30,7 @@
 | `get_corp_outline` | 기업 개요를 조회한다. 법인등록번호(crno) 확정의 출발점. |
 | `get_affiliates` | 계열회사 목록을 조회한다. 지배구조 맵을 그릴 때 쓴다. |
 | `get_executives` | 임원 현황을 조회한다. 사외이사 수 같은 지배구조 질문의 근거. |
-| `get_disclosure` | 배당 공시를 조회한다. 이 서비스에는 유상증자·합병 등 32종의 공시 |
+| `get_dividend_disclosure` | **배당 공시만** 조회한다. 공시 일반이 아니다. |
 
 이름 있는 도구는 자주 쓰는 경로만 감싼 것이다. 나머지는 `search_apis` →
 `call_api` 순으로 접근한다. 전부 도구로 펼치면 `tools/list`가 커져 다른 MCP
