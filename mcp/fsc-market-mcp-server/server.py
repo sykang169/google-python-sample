@@ -145,6 +145,13 @@ ETN은 get_etn_price, ELW는 search_apis로 getELWPriceInfo를 찾아 call_api�
 도구로는 답할 수 없다. 괴리율 필드도 없다 — 종가(clpr)와 nav로
 직접 계산했다면 계산했다고 밝힌다.
 
+**기초지수는 기초자산이 아니다.** bssIdxClpr는 그 ETF가 추종하도록
+설계된 지수이지 원자재 현물 가격이 아니다. 통화와 현선물 구조가
+달라 수익률이 크게 갈리고 부호가 반대인 구간도 생긴다.
+**'실제 금값 대비' 같은 질문에 기초지수로 답하지 않는다.**
+국내 현물 시세는 GetGeneralProductInfoService에 따로 있다
+(search_apis로 확인한다).
+
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         basDt, bssIdxClpr, bssIdxIdxNm, clpr, fltRt, hipr, isinCd, itmsNm, lopr, mkp, mrktTotAmt, nPptTotAmt, nav, srtnCd, stLstgCnt, trPrc, trqu, vs
 
@@ -166,6 +173,9 @@ getELWPriceInfo를 찾아 call_api한다.
 
 괴리는 종가(clpr)와 지표가치(indcVal)의 차이다. 직접 계산했다면
 계산했다고 밝힌다 — 응답에 괴리율 필드는 없다.
+
+**기초지수는 기초자산이 아니다.** 원자재 현물 가격을 물으면
+bssIdxClpr로 답하지 말고 GetGeneralProductInfoService를 쓴다.
 
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         basDt, bssIdxClpr, bssIdxIdxNm, clpr, fltRt, hipr, indcVal, indcValTotAmt, isinCd, itmsNm, lopr, lstgScrtCnt, mkp, mrktTotAmt, srtnCd, trPrc, trqu, vs
