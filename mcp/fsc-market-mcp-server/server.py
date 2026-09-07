@@ -182,7 +182,7 @@ def get_fund_price(params: dict | None = None, rows: int = 20, page: int = 1) ->
     """수익증권(자산운용사 공모펀드) 시세를 조회한다.
 
 ETF가 아니다. ETF는 get_etf_price, ETN은 get_etn_price를 쓴다.
-여기 담긴 것은 "한투한미핵심성장포커스1(A)" 같은 공모펀드이고 일자당 100건 안팎이다.
+여기 담긴 것은 자산운용사가 설정한 공모펀드이고 일자당 100건 안팎이다.
 
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         basDt, clpr, fltRt, hipr, isinCd, itmsNm, lopr, mkp, mrktTotAmt, srtnCd, stLstgCnt, trPrc, trqu, vs
@@ -240,8 +240,8 @@ def find_listed_item(params: dict | None = None, rows: int = 20, page: int = 1) 
 인한 오인을 막을 수 있다.
 
 **사용자가 말한 이름과 종목명이 다른 경우가 많다.** 종목명은 KRX
-등록 표기라 축약형이 정식이거나(현대차) 영문이거나(NAVER, LG화학)
-앞부분만 영문이기도(POSCO홀딩스) 하다. 어긋나면 오류가 아니라 0건이
+등록 표기라 축약형이 정식이거나 영문 표기이거나 한글과 영문이 섞이기도
+한다. 어긋나면 오류가 아니라 0건이
 나온다. **0건을 '그런 종목이 없다'로 답하지 않는다.**
 
   1. 짧고 확실한 조각으로 likeItmsNm 부분 일치를 건다. 회사 형태를
