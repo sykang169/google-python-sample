@@ -486,9 +486,9 @@ fsc-industry get_kofia_stat        금투협 종합통계
 
 ```
 1턴  fsc-market      find_listed_item → get_stock_price → get_market_index
-2턴  fsc-research    get_corp_outline → get_financial_statement
-     dart            resolve_company → call_dart_api("list") → get_disclosure_outline
-                     → get_disclosure_section (필요한 항목만)
+2턴  dart            resolve_company → call_dart_api("fnlttSinglAcnt")   재무
+     dart            call_dart_api("list") → get_disclosure_outline
+                     → get_disclosure_section (필요한 항목만)             공시 원문
 3턴  fsc-ficc        get_bond_basic → get_bond_call_redemption
      fsc-market      get_bond_price
      ecos            search_statistic_tables → get_statistic_series
@@ -505,6 +505,16 @@ fsc-industry get_kofia_stat        금투협 종합통계
 - **대상 선정이 조건입니다.** 상장 주식과 회사채를 모두 가지고 업계 통계에도 잡히는
   회사여야 일곱 서버가 한 대상에서 만납니다. 비상장이거나 채권을 발행하지 않은
   회사면 절반이 비어 있게 됩니다.
+- **2턴 재무는 DART로 갑니다.** 대상이 증권사라 금융위 정규화 재무제표에는
+  없습니다 — `get_financial_statement`가 **0건**을 돌려줍니다(실측: 미래에셋증권
+  0건, 삼성증권 0건). 권한 문제가 아니라 수록 범위 밖이며, 0건을 "데이터 없음"
+  으로 답하지 말고 DART `fnlttSinglAcnt`로 넘어갑니다.
+- **동명 법인을 먼저 걸러냅니다.** DART에서 "미래에셋증권"으로 찾으면 법인이
+  **둘** 나옵니다 — `00311030`(종목 037620)과 `00111722`(종목 006800). 앞의
+  것으로 재무를 조회하면 013(데이터 없음)이 나오고, 현재 상장사는 뒤의
+  것입니다(2024 연결 자본총계 12.26조). **`stock_code`로 대상을 확정**한 뒤
+  조회합니다
+  ([kr-entity-resolution](../skills/kr-entity-resolution/SKILL.md)).
 - **증권사에 제조업 지표를 그대로 쓰지 않습니다.** 고객 예탁금이 회계상 부채라
   부채비율이 업종 기준으로는 정상입니다
   ([kr-corporate-financials](../skills/kr-corporate-financials/SKILL.md)).
