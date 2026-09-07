@@ -17,6 +17,8 @@
 | "최근 유상증자 결정 공시 있었어?" | search_apis('유상증자') + call_api |
 | "자기주식 취득 공시 확인해줘" | search_apis('자기주식') + call_api |
 | "2010년 재무제표도 볼 수 있어?" | get_financial_statement (DART는 2015년 이후만) |
+| "이 회사 사외이사 몇 명이야?" | get_executives — 건수는 서버가 센다 |
+| "증권사 순이익 뽑아줘" | get_financial_statement는 0건이다 → dart-mcp로 간다 |
 
 ## 도구
 

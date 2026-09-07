@@ -17,6 +17,7 @@
 | "업계 ELS 발행 규모 알려줘" | search_apis('ELS') + call_api |
 | "IRP 라인업에 넣을 펀드 후보" | get_fund_code + search_apis('퇴직연금') |
 | "경쟁 증권사 경영지표 비교해줘" | get_securities_firm_stats — basYm 필수 |
+| "이 은행 BIS비율이랑 연체율 얼마야?" | get_bank_stats — 재무제표로는 안 보이는 건전성 지표 |
 
 ## 도구
 
