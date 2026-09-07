@@ -136,7 +136,13 @@ SERVERS = {
       "doc": "권리행사 사유별 일정을 조회한다. 청약·행사 업무의 달력."},
      {"name": "check_irregular_stock", "svc": "GetStocTradInfoService_V2", "op": "getIrreRigforSecu_V2",
       "doc": "사고주권 여부를 조회한다. 실물 입고 심사에서 확인이 필요한 항목이다.\n\n"
-             "**조회에 실패했을 때 '사고 없음'으로 답하지 않는다.** 실패는 실패로 보고한다."},
+             "**필터로 isinCd를 쓴다.** 종목명으로 거르려면 isinCdNm 또는\n"
+             "stckIssuCmpyNm이다. like를 붙인 이름(likeIsinCdNm 등)은 이 API가\n"
+             "받지 않는데 **오류 없이 무시되고 전체 목록이 돌아온다**(실측: 필터를\n"
+             "붙여도 21만 건 그대로). 그 결과를 그 종목의 사고 이력으로 읽으면\n"
+             "엉뚱한 종목의 사고를 보고하게 된다.\n"
+             "돌아온 행의 isinCd가 조회하려던 종목과 같은지 **반드시 대조한다.**\n\n"
+             "**조회에 실패했을 때 \'사고 없음\'으로 답하지 않는다.** 실패는 실패로 보고한다."},
      {"name": "get_stock_lending", "svc": "GetStocLendBorrInfoService_V2", "op": "getMontLendAndBorrStatu_V2",
       "doc": "주식 대차 현황을 조회한다. 대차잔고는 공매도 압력의 대리지표로 읽히지만,\n"
              "대차가 곧 공매도는 아니라는 점을 답변에 밝힌다."},
