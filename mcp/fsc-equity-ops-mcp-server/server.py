@@ -125,11 +125,11 @@ def get_right_schedule(params: dict | None = None, rows: int = 20, page: int = 1
 def check_irregular_stock(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
     """사고주권 여부를 조회한다. 실물 입고 심사에서 확인이 필요한 항목이다.
 
-**필터는 isinCdNm 또는 stckIssuCmpyNm을 쓴다**(실측 확인: 둘 다
-삼성전자 565건으로 걸러지고 isinCd가 KR7005930003으로 일치한다).
+**필터는 isinCdNm 또는 stckIssuCmpyNm을 쓴다.**
 like를 붙인 이름(likeIsinCdNm 등)은 이 API가
-받지 않는데 **오류 없이 무시되고 전체 목록이 돌아온다**(실측: 필터를
-붙여도 21만 건 그대로). 그 결과를 그 종목의 사고 이력으로 읽으면
+받지 않는데 **오류 없이 무시되고 전체 목록이 돌아온다.**
+건수가 수만 단위면 필터가 안 걸린 것이다. 그 결과를 그 종목의
+사고 이력으로 읽으면
 엉뚱한 종목의 사고를 보고하게 된다.
 돌아온 행의 isinCd가 조회하려던 종목과 같은지 **반드시 대조한다.**
 

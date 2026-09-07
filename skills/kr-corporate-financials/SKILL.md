@@ -62,12 +62,12 @@ metadata:
 > [!WARNING]
 > **금융회사를 정규화 재무제표 API에서 찾으면 0건이 나온다. 권한 문제가
 > 아니다.** 금융위 재무제표 API(`GetFinaStatInfoService_V2`)는 금융회사를
-> 수록하지 않는다 — 같은 인증키로 삼성전자는 194건, 삼성증권은 0건이다
-> (2026-09 실측). 미승인이면 `resultCode 30`이 났을 것이고, 호출은 성공했다.
+> 수록하지 않는다. 같은 인증키로 일반기업은 조회되고 금융회사만 0건이 나오므로
+> **권한 문제가 아니다.** 미승인이면 `resultCode 30`이 났을 것이고, 호출 자체는
+> 성공했다.
 >
 > 0건을 "데이터 없음"이나 "권한 없음"으로 답하지 말고 **DART로 간다.**
-> 상장 금융회사는 DART 단일회사 주요계정(`fnlttSinglAcnt`)에 있다
-> (삼성증권 2024 연결 자본총계 7.32조 확인).
+> 상장 금융회사는 DART 단일회사 주요계정(`fnlttSinglAcnt`)에 있다.
 
 계정 코드 체계와 대표 지표의 상세는
 [references/financial-statements.md](references/financial-statements.md)를 읽는다.
