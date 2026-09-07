@@ -168,9 +168,36 @@ def get_retail_bond_yield(params: dict | None = None, rows: int = 20, page: int 
 
 @mcp.tool(annotations=READ_ONLY)
 def get_short_term_rate(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
-    """단기금융증권(CP·CD)의 매매 금액·금리를 조회한다.
+    """단기금융증권(CP·전단채 등)의 매매 수익률을 조회한다. 금리 값은
+rmngExprTrdBnfRt다.
 
-발행 정보가 아니라 **실거래** 기준이라 단기자금 운용의 체감 금리에 가깝다.
+발행 조건이 아니라 **실거래** 기준이라 단기자금 운용의 체감 금리에 가깝다.
+
+**개별 종목이 아니라 집계다.** 발행인 업종(isurPtrnNm)·상품구분
+(shtrFinPrdDcdNm)·잔존만기(shtrPrdRmngExprDcdNm)로 묶인 값이라
+여기에 종목 식별자가 없다. 종목별 금리는 get_short_term_issue를 쓴다.
+거래 규모는 get_short_term_trade_amount다.
+
+    필터로 쓸 수 있는 필드(응답 필드와 같다):
+        basDt, curCd, curCdNm, isurPtrnNm, rmngExprTrdBnfRt, shtrFinPrdDcd, shtrFinPrdDcdNm, shtrPrdRmngExprDcd, shtrPrdRmngExprDcdNm, stlSqno
+
+    Args:
+        params: 필터 딕셔너리 (예: {"basDt": "20260831"}). 비우면 최신부터 반환한다.
+        rows: 페이지당 건수 (최대 권장 100).
+        page: 페이지 번호.
+    """
+    return fsc_core.call(CATALOG, 'GetShorTermSecuTradInfoService_V2', 'getBuyAndSellInteRate_V2', params, rows, page)
+
+
+@mcp.tool(annotations=READ_ONLY)
+def get_short_term_trade_amount(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
+    """단기금융증권의 잔존만기별 매매 **금액**을 조회한다(rmngExprTrdAmt).
+
+**금리가 아니다.** 이 오퍼레이션에는 금리 필드가 없다. 금리는
+get_short_term_rate를 쓴다. 여기 값을 금리로 읽으면 자릿수가 억 단위인
+금액을 수익률로 제시하게 된다.
+
+매도/매수는 trdDcdNm으로 갈린다. 합산하면 같은 거래를 두 번 세게 된다.
 
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         basDt, rmngExprTrdAmt, shtrFinBzcDcd, shtrFinBzcDcdNm, shtrFinPrdDcd, shtrFinPrdDcdNm, shtrPrdRmngExprDcd, shtrPrdRmngExprDcdNm, stlSqno, trdDcd, trdDcdNm
@@ -181,6 +208,28 @@ def get_short_term_rate(params: dict | None = None, rows: int = 20, page: int = 
         page: 페이지 번호.
     """
     return fsc_core.call(CATALOG, 'GetShorTermSecuTradInfoService_V2', 'getBuyAndSellAmou_V2', params, rows, page)
+
+
+@mcp.tool(annotations=READ_ONLY)
+def get_short_term_issue(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
+    """단기금융증권 **건별** 매매 내역을 조회한다. 이 서비스에서 종목
+식별자(isinCd·isinCdNm)가 있는 유일한 오퍼레이션이다.
+
+종목별 발행일(shtrFinPrdIssuDt)·만기(shtrFinPrdExprDt)·금리
+(shtrFinPrdIrt)·거래금액(shtrFinPrdTrdAmt)이 한 행에 있다.
+특정 CP의 조건을 물으면 여기를 본다.
+
+매수·매도 주체가 각각 다른 필드(buynShtrFinBzcDcdNm/slngShtrFinBzcDcdNm)다.
+
+    필터로 쓸 수 있는 필드(응답 필드와 같다):
+        basDt, buynShtrFinBzcDcd, buynShtrFinBzcDcdNm, curCd, curCdNm, isinCd, isinCdNm, shtrFinPrdDcd, shtrFinPrdDcdNm, shtrFinPrdExprDt, shtrFinPrdIrt, shtrFinPrdIssuDt, shtrFinPrdTrdAmt, shtrPrdRmngExprDcd, shtrPrdRmngExprDcdNm, slngShtrFinBzcDcd, slngShtrFinBzcDcdNm, stlSqno
+
+    Args:
+        params: 필터 딕셔너리 (예: {"basDt": "20260831"}). 비우면 최신부터 반환한다.
+        rows: 페이지당 건수 (최대 권장 100).
+        page: 페이지 번호.
+    """
+    return fsc_core.call(CATALOG, 'GetShorTermSecuTradInfoService_V2', 'getCaseBuyAndSellInfo_V2', params, rows, page)
 
 
 if __name__ == "__main__":

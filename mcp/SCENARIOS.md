@@ -156,7 +156,7 @@ dart         get_disclosure_outline  →  get_disclosure_section       원문 �
 fsc-research get_affiliates          계열회사 목록
 fsc-market   find_listed_item        상장 여부·ISIN 확정
 fsc-research get_financial_statement
-fsc-research get_disclosure          배당 공시
+fsc-research get_dividend_disclosure 배당 공시
 ```
 
 **정확도의 조건**
@@ -178,7 +178,7 @@ fsc-research get_disclosure          배당 공시
 
 ```
 fsc-equity-ops get_repo_rate          담보 종류별
-fsc-ficc       get_short_term_rate    CP·CD 실거래
+fsc-ficc       get_short_term_rate    CP·전단채 실거래 수익률
 ecos           get_statistic_series   기준금리
 ```
 
@@ -224,7 +224,7 @@ ecos     get_statistic_series       국고채 커브
 fsc-market     find_listed_item     시장구분(코스닥) 확인
 fsc-market     get_stock_price
 fsc-market     get_market_index     idxCsf = KOSDAQ 계열
-fsc-equity-ops get_stock_lending    대차 현황
+fsc-equity-ops get_stock_lending    종목별 대차 현황
 ```
 
 **정확도의 조건**
@@ -290,7 +290,7 @@ YYYY-MM-DD" 형식의 명시적 표현, 담당자 확인 안내.
 ```
 fsc-equity-ops get_dividend       기준일·주당 금액
 fsc-market     get_stock_price    배당수익률 계산
-fsc-research   get_disclosure     배당 공시 교차확인
+fsc-research   get_dividend_disclosure  배당 공시 교차확인
 ```
 
 **정확도의 조건**

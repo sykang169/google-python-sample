@@ -161,9 +161,19 @@ JSON을 직접 세지 않는다. 보수는 search_apis로 getExecRemuStat을 찾
 
 
 @mcp.tool(annotations=READ_ONLY)
-def get_disclosure(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
-    """배당 공시를 조회한다. 이 서비스에는 유상증자·합병 등 32종의 공시
-오퍼레이션이 있으므로, 다른 공시는 search_apis로 찾아 call_api로 실행한다.
+def get_dividend_disclosure(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
+    """**배당 공시만** 조회한다. 공시 일반이 아니다.
+
+이 서비스에는 유상증자·합병·자기주식·소송 등 30종이 넘는 공시
+오퍼레이션이 있고 이 도구는 그중 배당 하나만 감싼다. 다른 공시를
+물으면 search_apis로 해당 오퍼레이션을 찾아 call_api로 실행한다.
+**여기서 0건이 나온 것을 '공시가 없다'로 답하지 않는다.**
+
+당기·전기·전전기 세 시점이 crtm/pvtr/bpvtr 접두사로 한 행에 함께 온다.
+접두사를 확인하지 않으면 전기 값을 당기로 답하게 된다.
+
+배당 기준일·지급일 같은 권리 일정은 여기가 아니라 fsc-equity-ops의
+get_dividend다. 공시 **원문 본문**은 DART 서버를 쓴다.
 
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         basDt, bpvtrCashDvdnTndnCtt, bpvtrCashTdvdAmt, bpvtrIdvCrtmNpf, bpvtrOnskCashDvdnAmt, bpvtrOnskCashDvdnBnfRt, bpvtrOnskStckDvdnAmt, bpvtrOnskStckDvdnBnfRt, bpvtrParPrc, bpvtrPfstCashDvdnAmt, bpvtrPfstCashDvdnBnfRt, bpvtrPfstStckDvdnAmt, bpvtrPfstStckDvdnBnfRt, bpvtrPstcNpf, bpvtrStckTdvdAmt, crno, crtmCashDvdnTndnCtt, crtmCashTdvdAmt, crtmIdvCrtmNpf, crtmOnskCashDvdnAmt, crtmOnskCashDvdnBnfRt, crtmOnskStckDvdnAmt, crtmOnskStckDvdnBnfRt, crtmParPrc, crtmPfstCashDvdnAmt, crtmPfstCashDvdnBnfRt, crtmPfstStckDvdnAmt, crtmPfstStckDvdnBnfRt, crtmPstcNpf, crtmStckTdvdAmt, enpCrtmNpf, fnclCrtmNpf, pvtrCashDvdnTndnCtt, pvtrCashTdvdAmt, pvtrCrtmNpf, pvtrIdvCrtmNpf, pvtrOnskCashDvdnAmt, pvtrOnskCashDvdnBnfRt, pvtrOnskStckDvdnAmt, pvtrOnskStckDvdnBnfRt, pvtrParPrc, pvtrPfstCashDvdnAmt, pvtrPfstCashDvdnBnfRt, pvtrPfstStckDvdnAmt, pvtrPfstStckDvdnBnfRt, pvtrPstcNpf, pvtrStckTdvdAmt

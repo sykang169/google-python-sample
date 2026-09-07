@@ -161,8 +161,39 @@ like를 붙인 이름(likeIsinCdNm 등)은 이 API가
 
 @mcp.tool(annotations=READ_ONLY)
 def get_stock_lending(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
-    """주식 대차 현황을 조회한다. 대차잔고는 공매도 압력의 대리지표로 읽히지만,
-대차가 곧 공매도는 아니라는 점을 답변에 밝힌다.
+    """**종목별** 대차거래 현황을 조회한다. isinCd 또는 isinCdNm으로 거른다.
+
+체결(lnbCclStckCnt)·잔고(lnbRmanStckCnt)·상환(lnbRdptStckCnt) 주식 수다.
+금액이 아니라 **주식 수**이므로 잔고 금액을 물으면 종가를 곱해야 하고,
+곱했다는 사실을 밝힌다.
+
+대차잔고는 공매도 압력의 대리지표로 읽히지만 **대차가 곧 공매도는
+아니다.** 차입 후 공매도하지 않는 경우가 있으므로 답변에 밝힌다.
+공매도 잔고 자체는 이 데이터에 없다.
+
+시장 전체 합계는 get_lending_market_total이다.
+
+    필터로 쓸 수 있는 필드(응답 필드와 같다):
+        basDt, isinCd, isinCdNm, lnbCclStckCnt, lnbRdptStckCnt, lnbRmanStckCnt
+
+    Args:
+        params: 필터 딕셔너리 (예: {"basDt": "20260831"}). 비우면 최신부터 반환한다.
+        rows: 페이지당 건수 (최대 권장 100).
+        page: 페이지 번호.
+    """
+    return fsc_core.call(CATALOG, 'GetStocLendBorrInfoService_V2', 'getStItemLendAndBorrStatu_V2', params, rows, page)
+
+
+@mcp.tool(annotations=READ_ONLY)
+def get_lending_market_total(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
+    """대차거래 **월별 시장 전체 합계**를 조회한다.
+
+**종목별이 아니다.** 이 오퍼레이션에는 종목 식별자가 없고 한 달에 한
+행뿐이다. 특정 종목의 대차잔고를 물으면 get_stock_lending을 쓴다.
+여기 값을 한 종목의 잔고로 제시하면 시장 전체를 그 종목 것으로
+답하게 된다.
+
+기준일(basDt)이 월 단위라 일별 추이는 낼 수 없다.
 
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         basDt, lnbBal, lnbCclAmt, lnbCclStckCnt, lnbExprItmsCnt, lnbRdptAmt, lnbRdptStckCnt, lnbRmanStckCnt

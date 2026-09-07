@@ -15,6 +15,7 @@
 | "이 회사채 국고채 대비 스프레드가 얼마야?" | get_bond_basic + ECOS (서버 2개) |
 | "다음 분기에 콜 행사 가능한 채권 목록" | get_bond_call_redemption |
 | "CP 91일물 금리가 기준금리 대비 어떻게 움직였어?" | get_short_term_rate + ECOS |
+| "이 CP 종목 발행일이랑 금리 알려줘" | get_short_term_issue (종목별은 여기만 있다) |
 | "지금 리테일에 팔 만한 채권 수익률 알려줘" | get_retail_bond_yield (구간별 요약) |
 | "이 채권 이자지급일 언제야" | get_bond_right_schedule |
 | "올해 회사채 발행 규모 상위 보여줘" | search_apis('발행실적') + call_api |
@@ -30,7 +31,9 @@
 | `get_bond_right_schedule` | 채권 권리행사 일정(이자지급·상환)을 조회한다. |
 | `get_bond_call_redemption` | 옵션부채권의 조기상환(콜) 내역을 조회한다. 콜 리스크 점검용. |
 | `get_retail_bond_yield` | 소매채권 수익률을 조회한다. 리테일 채권 판매에 바로 쓰이는 값이다. |
-| `get_short_term_rate` | 단기금융증권(CP·CD)의 매매 금액·금리를 조회한다. |
+| `get_short_term_rate` | 단기금융증권(CP·전단채 등)의 매매 수익률을 조회한다. 금리 값은 |
+| `get_short_term_trade_amount` | 단기금융증권의 잔존만기별 매매 **금액**을 조회한다(rmngExprTrdAmt). |
+| `get_short_term_issue` | 단기금융증권 **건별** 매매 내역을 조회한다. 이 서비스에서 종목 |
 
 이름 있는 도구는 자주 쓰는 경로만 감싼 것이다. 나머지는 `search_apis` →
 `call_api` 순으로 접근한다. 전부 도구로 펼치면 `tools/list`가 커져 다른 MCP

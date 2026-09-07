@@ -15,7 +15,8 @@
 | "이 주권 사고 등록된 거 아니야?" | check_irregular_stock — 실패를 '이상 없음'으로 답하지 않는다 |
 | "다음 달 배당 기준일인 종목 알려줘" | get_dividend |
 | "이번 분기 청약 일정 정리해줘" | get_right_schedule |
-| "대차잔고 높은 종목 보여줘" | get_stock_lending — 대차 ≠ 공매도 |
+| "대차잔고 높은 종목 보여줘" | get_stock_lending — 종목별. 대차 ≠ 공매도 |
+| "대차 시장 전체 규모 추이" | get_lending_market_total — 월별 시장 합계 |
 | "REPO 금리 추이 보여줘" | get_repo_rate (담보 종류별로 갈린다) |
 
 ## 도구
@@ -27,7 +28,8 @@
 | `get_dividend` | 주식 배당정보(기준일·금액)를 조회한다. 배당락 처리와 고객 안내의 근거. |
 | `get_right_schedule` | 권리행사 사유별 일정을 조회한다. 청약·행사 업무의 달력. |
 | `check_irregular_stock` | 사고주권 여부를 조회한다. 실물 입고 심사에서 확인이 필요한 항목이다. |
-| `get_stock_lending` | 주식 대차 현황을 조회한다. 대차잔고는 공매도 압력의 대리지표로 읽히지만, |
+| `get_stock_lending` | **종목별** 대차거래 현황을 조회한다. isinCd 또는 isinCdNm으로 거른다. |
+| `get_lending_market_total` | 대차거래 **월별 시장 전체 합계**를 조회한다. |
 | `get_repo_rate` | REPO 금리를 조회한다. 단기 조달비용의 기준. |
 
 이름 있는 도구는 자주 쓰는 경로만 감싼 것이다. 나머지는 `search_apis` →
