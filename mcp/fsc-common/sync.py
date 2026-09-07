@@ -27,8 +27,7 @@ SKILL_OF = {
     "research": "kr-corporate-financials",
     "equity-ops": "kr-equity-operations",
     "industry": "kr-product-comparison",
-    # 보험 도메인 스킬은 아직 없다. 서버만 있고 짝이 없는 상태를 숨기지 않는다.
-    "insurance": None,
+    "insurance": "kr-insurance",
 }
 
 REQUIREMENTS = "mcp==1.27.0\nhttpx==0.28.1\nuvicorn==0.35.0\n"

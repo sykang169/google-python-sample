@@ -60,6 +60,7 @@ CASES: list[tuple[str, str | None]] = [
     ("배당락일이 정확히 언제인지 어떻게 계산해?", "kr-market-calendar"),
     ("삼성전자 ISIN 코드가 뭐야?", "kr-entity-resolution"),
     ("금융 챗봇 만들 때 개인정보를 어떻게 처리해야 해?", "kr-financial-ai-compliance"),
+    ("40세 남자 실손보험료 회사별로 비교해줘", "kr-insurance"),
     # 돌려 물은 것 — 스킬 설명에 없는 표현
     ("이 회사 빚이 너무 많은 거 아니야?", "kr-corporate-financials"),
     ("요즘 예금 넣으면 얼마나 받아?", "kr-product-comparison"),
@@ -70,6 +71,8 @@ CASES: list[tuple[str, str | None]] = [
     ("이거 언제까지 사야 배당 받을 수 있어?", "kr-equity-operations"),
     ("삼성전자랑 삼성전자우랑 다른 거야?", "kr-entity-resolution"),
     ("삼성전자 지금 사도 될까?", "kr-financial-ai-compliance"),
+    ("실비보험 어디가 제일 싸?", "kr-insurance"),
+    ("보험회사 재무 건전성 어떻게 봐?", "kr-insurance"),
     # 대조군 — 아무것도 붙지 않아야 한다
     ("오늘 점심 뭐 먹을까?", None),
     ("파이썬에서 리스트 정렬하는 법 알려줘", None),

@@ -5,7 +5,7 @@
 금융위원회가 공공데이터포털에 개방한 API 중 **보험** 계열
 9종(오퍼레이션 20개)을 MCP 도구로 노출한다.
 
-- 짝이 되는 스킬: 아직 없다. 이 데스크의 도메인 규칙은 시스템 지시로만 걸린다
+- 짝이 되는 스킬: [`kr-insurance`](../../skills/kr-insurance/SKILL.md)
 - Cloud Run 서비스명: `fsc-insurance-mcp`
 
 ## 이런 질문에 답한다

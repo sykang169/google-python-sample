@@ -6,7 +6,7 @@
 자동으로 선택되어, AI가 답하기 전에 그 분야의 규칙을 먼저 확인하게 됩니다.
 
 **기본 사용처는 Gemini Enterprise입니다.** 이 저장소의
-[MCP 서버 8종](../mcp)과 짝을 이뤄 GE 어시스턴트에 함께 올리는 것을 전제로
+[MCP 서버 9종](../mcp)과 짝을 이뤄 GE 어시스턴트에 함께 올리는 것을 전제로
 썼습니다 — 데이터는 MCP가 가져오고, 그 데이터를 어떻게 읽어야 하는지를 스킬이
 알려주는 구조입니다. 올리는 방법은 [Gemini Enterprise](#gemini-enterprise)에
 있습니다.
@@ -17,7 +17,7 @@ Codex CLI, GitHub Copilot에서 같은 파일을 그대로 씁니다 — 두는 
 다릅니다([다른 도구에 설치하기](#다른-도구에-설치하기) 참고). 스킬 기능이 없는
 도구를 위한 경로도 있습니다.
 
-여기 담은 8종은 **데이터를 어떻게 가져오는지가 아니라, 가져온 다음 어떻게 읽어야
+여기 담은 9종은 **데이터를 어떻게 가져오는지가 아니라, 가져온 다음 어떻게 읽어야
 하는지**를 다룹니다.
 
 ## 어떤 실수를 막나
@@ -49,7 +49,7 @@ Codex CLI, GitHub Copilot에서 같은 파일을 그대로 씁니다 — 두는 
 
 ## 어떤 질문에 어떤 스킬이 쓰이나
 
-**업무 스킬 5종** — 데이터가 어디서 오는지가 아니라, **실무에서 하는 일**로
+**업무 스킬 6종** — 데이터가 어디서 오는지가 아니라, **실무에서 하는 일**로
 나눴습니다. 질문 하나가 여러 데이터 소스를 넘나드는 경우가 많기 때문입니다.
 
 | 스킬 | 이런 질문에 | 필요한 데이터 |
@@ -59,6 +59,7 @@ Codex CLI, GitHub Copilot에서 같은 파일을 그대로 씁니다 — 두는 
 | [`kr-corporate-financials`](kr-corporate-financials/) | "부채비율 3년 추이", "유상증자 공시 원문", "사외이사 몇 명" | 재무제표 + 전자공시 |
 | [`kr-product-comparison`](kr-product-comparison/) | "예금 금리 제일 높은 곳", "증권사 수수료 비교", "펀드 판매 점유율" | 상품 금리 + 업계 통계 |
 | [`kr-equity-operations`](kr-equity-operations/) | "배당 기준일", "사고주권 조회", "대차잔고" | 권리·대차 |
+| [`kr-insurance`](kr-insurance/) | "실손보험료 비교", "생보사 지급여력", "경과손해율" | 보험료 + 보험사 통계 |
 
 **공통 스킬 3종** — 어떤 질문이든 밑에 깔리는 것들입니다. 업무 스킬들은 이 셋을
 링크로 가리키기만 하고, 같은 내용을 다시 적지 않습니다.
@@ -112,7 +113,7 @@ Codex CLI, GitHub Copilot에서 같은 파일을 그대로 씁니다 — 두는 
 ## 데이터는 어디서 오나
 
 스킬에는 규칙만 있고 데이터는 없습니다. 데이터는 이 저장소의
-[MCP 서버 8종](../mcp)이 가져옵니다. **다른 방법으로 같은 데이터를 조회하더라도
+[MCP 서버 9종](../mcp)이 가져옵니다. **다른 방법으로 같은 데이터를 조회하더라도
 스킬은 그대로 쓸 수 있습니다.**
 
 | 스킬 | 이 저장소의 짝 |
@@ -122,9 +123,10 @@ Codex CLI, GitHub Copilot에서 같은 파일을 그대로 씁니다 — 두는 
 | `kr-corporate-financials` | [`fsc-research-mcp-server`](../mcp/fsc-research-mcp-server) + [`dart-mcp-server`](../mcp/dart-mcp-server) |
 | `kr-product-comparison` | [`finlife-mcp-server`](../mcp/finlife-mcp-server) + [`fsc-industry-mcp-server`](../mcp/fsc-industry-mcp-server) |
 | `kr-equity-operations` | [`fsc-equity-ops-mcp-server`](../mcp/fsc-equity-ops-mcp-server) |
+| `kr-insurance` | [`fsc-insurance-mcp-server`](../mcp/fsc-insurance-mcp-server) |
 
 실제 질문이 이 스킬들을 어떻게 넘나드는지는
-[`../mcp/SCENARIOS.md`](../mcp/SCENARIOS.md)에 데스크별 시나리오 13개로 있습니다.
+[`../mcp/SCENARIOS.md`](../mcp/SCENARIOS.md)에 데스크별 시나리오 16개로 있습니다.
 
 ## 설치
 
@@ -198,7 +200,7 @@ base64(`zippedFilesystem`)로 실어 보냅니다. 생성·수정·삭제가 장
 ### 다른 도구에 설치하기
 
 Gemini Enterprise 밖에서는 패키징이 필요 없습니다. 파일을 그대로 두고 **위치만**
-맞춰 주면 됩니다. 스크립트에 경로를 주면 8종을 연결합니다.
+맞춰 주면 됩니다. 스크립트에 경로를 주면 9종을 연결합니다.
 
 ```bash
 cd skills
@@ -239,9 +241,9 @@ Cursor, Codex CLI, GitHub Copilot도 `SKILL.md`를 읽습니다. 경로만 각 �
 
 ### API를 직접 호출한다면
 
-시스템 프롬프트에 스킬 8종의 `description`만 목록으로 넣고, 모델이 고른 스킬의
-본문을 그때 이어붙이는 방식이 가장 효율적입니다. 8종 전부를 항상 넣으면 약
-23,000토큰을 매 호출 지불하게 됩니다(`description`만이면 2,000토큰 남짓).
+시스템 프롬프트에 스킬 9종의 `description`만 목록으로 넣고, 모델이 고른 스킬의
+본문을 그때 이어붙이는 방식이 가장 효율적입니다. 9종 전부를 항상 넣으면 약
+25,000토큰을 매 호출 지불하게 됩니다(`description`만이면 2,300토큰 남짓).
 
 ## 검증
 
@@ -266,7 +268,7 @@ python3 scripts/eval_triggers.py --repeat 3   # 같은 질문을 3번씩, 변동
 ```
 
 질문을 주고 "무엇을 할지 계획을 세워라"라고만 합니다. **스킬을 고르라고 유도하지
-않고**, MCP 도구 55개를 함께 제시합니다 — 모델이 스킬을 건너뛰고 도구로 직행하는
+않고**, MCP 도구 66개를 함께 제시합니다 — 모델이 스킬을 건너뛰고 도구로 직행하는
 것이 실제 위험이기 때문입니다. 금융과 무관한 질문(대조군)도 함께 돌립니다.
 발동률만 보면 "항상 읽히는" 스킬이 만점을 받으므로, 안 붙어야 할 때 안 붙는지도
 봐야 합니다.
@@ -278,9 +280,9 @@ Vertex AI Gemini를 호출하므로 `gcloud auth login`과 프로젝트 설정�
 > 재는 것은 **모델이 `description`을 읽고 고르는 경로**입니다. GE가 임베딩 검색을
 > 쓴다면 결과가 다를 수 있습니다.
 
-현재 8종 기준 측정값(`gemini-2.5-flash`, 도구 55개와 함께, temperature 1.0):
-질문 19개 발동 100%, 대조군 3개 오발동 0건. 같은 조건에서 3회 반복해도 24/24로
-같았습니다.
+현재 9종 기준 측정값(`gemini-2.5-flash`, 도구 66개와 함께, temperature 1.0,
+2026-09-07): 질문 22개 발동 100%, 대조군 3개 오발동 0건. 같은 조건에서 3회
+반복해도 75/75로 같았습니다.
 
 ## 스킬을 추가하실 때
 
