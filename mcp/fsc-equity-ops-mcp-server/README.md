@@ -30,7 +30,7 @@
 | `check_irregular_stock` | 사고주권 여부를 조회한다. 실물 입고 심사에서 확인이 필요한 항목이다. |
 | `get_stock_lending` | **종목별** 대차거래 현황을 조회한다. isinCd 또는 isinCdNm으로 거른다. |
 | `get_lending_market_total` | 대차거래 **월별 시장 전체 합계**를 조회한다. |
-| `get_repo_rate` | REPO 금리를 조회한다. 단기 조달비용의 기준. |
+| `get_repo_rate` | REPO 금리를 조회한다. 단기 조달비용의 기준. 금리는 rpInrt다. |
 
 이름 있는 도구는 자주 쓰는 경로만 감싼 것이다. 나머지는 `search_apis` →
 `call_api` 순으로 접근한다. 전부 도구로 펼치면 `tools/list`가 커져 다른 MCP

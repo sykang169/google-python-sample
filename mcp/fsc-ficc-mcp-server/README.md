@@ -27,9 +27,9 @@
 | `search_apis` | 이 서버가 다루는 오퍼레이션 검색. 응답 필드(=필터 파라미터)까지 반환 |
 | `call_api` | 찾은 오퍼레이션 실행 |
 | `get_bond_basic` | 채권 기본정보(마스터)를 조회한다. 종목 식별의 출발점이다. |
-| `get_bond_principal_interest` | 채권 원리금 정보를 조회한다. 캐시플로 산출의 근거. |
-| `get_bond_right_schedule` | 채권 권리행사 일정(이자지급·상환)을 조회한다. |
-| `get_bond_call_redemption` | 옵션부채권의 조기상환(콜) 내역을 조회한다. 콜 리스크 점검용. |
+| `get_bond_principal_interest` | 채권 원리금 지급 내역을 조회한다. 캐시플로 산출의 근거. |
+| `get_bond_right_schedule` | 채권 권리행사 일정을 조회한다. scrsScedDcdNm이 무슨 일정인지를 |
+| `get_bond_call_redemption` | 옵션부채권의 조기상환 내역을 조회한다. 콜 리스크 점검용. |
 | `get_retail_bond_yield` | 소매채권 수익률을 조회한다. 리테일 채권 판매에 바로 쓰이는 값이다. |
 | `get_short_term_rate` | 단기금융증권(CP·전단채 등)의 매매 수익률을 조회한다. 금리 값은 |
 | `get_short_term_trade_amount` | 단기금융증권의 잔존만기별 매매 **금액**을 조회한다(rmngExprTrdAmt). |

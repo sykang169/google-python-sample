@@ -123,6 +123,12 @@ search_apis가 준 fields에서 고르고 지어내지 않는다.
 def get_right_schedule(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
     """권리행사 사유별 일정을 조회한다. 청약·행사 업무의 달력.
 
+stckIssuCmpyNm(발행회사명)으로 거른다. 사유는 stckIssuRcdNm
+(무상증자·유상증자 등), 날짜 종류는 rgtExertRcdNm(기준일 등)이다.
+**둘을 구분하지 않으면 기준일과 청약일을 섞게 된다.**
+
+**배당 기준일은 여기가 아니라 get_dividend다.** 금액도 없다.
+
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         basDt, crno, issuCmpyKsdCustNo, nmlsLckEdDt, nmlsLckSttgDt, rgtExertEdDt, rgtExertRcd, rgtExertRcdNm, rgtExertSttgDt, scrsIssuMnbdCd, scrsIssuMnbdCdNm, stckIssuCmpyNm, stckIssuRcd, stckIssuRcdNm, stckParPrc, stckStacMd, trsnmDptyDcd, trsnmDptyDcdNm
 
@@ -208,7 +214,15 @@ def get_lending_market_total(params: dict | None = None, rows: int = 20, page: i
 
 @mcp.tool(annotations=READ_ONLY)
 def get_repo_rate(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
-    """REPO 금리를 조회한다. 단기 조달비용의 기준.
+    """REPO 금리를 조회한다. 단기 조달비용의 기준. 금리는 rpInrt다.
+
+**한 종목의 금리가 아니라 거래 건별이다.** 담보 증권 종류
+(rpBuyScrtKcdNm)와 환매 기간(rdptTermCcdNm), 매도·매수 업권
+(slrBzcTcdNm/purcBzcTcdNm)에 따라 같은 날에도 값이 갈린다.
+조건을 고정하지 않고 평균을 내면 서로 다른 거래를 섞게 된다.
+**어떤 조건의 금리인지 밝힌다.**
+
+기준금리·콜금리 같은 정책·시장 지표는 한국은행 ECOS다.
 
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         basDt, purcBzcTcd, purcBzcTcdNm, rdptTermCcd, rdptTermCcdNm, rpBuyAplCurCd, rpBuyAplCurCdNm, rpBuyScrtKcd, rpBuyScrtKcdNm, rpInrt, rpRmngExprDcd, rpRmngExprDcdNm, rpSqno, slrBzcTcd, slrBzcTcdNm

@@ -93,7 +93,15 @@ def call_api(
 
 @mcp.tool(annotations=READ_ONLY)
 def get_fund_code(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
-    """펀드 표준코드를 조회한다. 판매 상품 마스터.
+    """펀드 표준코드를 조회한다. 판매 상품 마스터이자 식별의 출발점.
+
+설정일(setpDt)·유형(fndTp)·운용사 구분(ctg)이 있다.
+
+**수익률·기준가·보수는 없다.** 여기는 코드와 속성만이다. 성과를
+물으면 이 도구로는 답할 수 없다.
+
+**같은 펀드의 클래스(A/C/S 등)가 각각 다른 코드다.** 이름만 보고
+묶으면 클래스가 섞인다. 표준코드로 고정한다.
 
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         asoStdCd, basDt, ctg, fndNm, fndTp, prdClsfCd, setpDt, srtnCd
@@ -108,7 +116,16 @@ def get_fund_code(params: dict | None = None, rows: int = 20, page: int = 1) -> 
 
 @mcp.tool(annotations=READ_ONLY)
 def get_fund_sales(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
-    """펀드 판매현황을 조회한다. 판매기관·고객유형·펀드유형별 점유율을 본다.
+    """펀드 판매현황을 조회한다. 고객유형(개인/일반법인/금융법인)별 판매
+잔액과 비중이다.
+
+**개별 펀드가 아니라 집계다.** 펀드 이름도 표준코드도 없다. 특정
+펀드의 판매액을 물으면 이 도구로는 답할 수 없다.
+
+**분류가 코드로만 온다.** fundItemClsfCd·fundPtrnCd·ivsAreaClsfCd에
+대응하는 이름 필드가 없어서 **코드가 무슨 유형인지 이 응답만으로는
+알 수 없다.** 코드의 뜻을 지어내지 말고, 모르면 모른다고 밝히거나
+search_apis로 같은 서비스의 다른 오퍼레이션을 확인한다.
 
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         basDt, corpCustTrprSleBalStot, finCorpCustTrprSleBal, finCorpCustTrprSleRipt, fundItemClsfCd, fundPtrnCd, fundSleBalSum, genCorpCustTrprSleBal, genCorpCustTrprSleRipt, idvpnCustTrprSleBal, idvpnCustTrprSleRipt, ivsAreaClsfCd
@@ -156,6 +173,12 @@ def get_bank_stats(params: dict | None = None, rows: int = 20, page: int = 1) ->
 어떤 상태인지 함께 봐야 하면 여기를 쓴다.
 재무현황은 search_apis로 getDomeBankFinaInfo를 찾는다.
 
+지표 이름은 cpaqItemDcdNm, 값은 cpaqItemClsfVal이다. **어느 지표를
+볼지 정하지 않고 부르면 여러 지표가 섞여 온다.**
+
+**은행만 있다.** 저축은행·증권·보험은 없다. 기준은 월(basYm)이라
+일별 추이는 낼 수 없다.
+
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         title, basYm, cpaqItemClsfVal, cpaqItemDcd, cpaqItemDcdNm, crno, fncoCd, fncoNm
 
@@ -178,11 +201,9 @@ ctg='변경후'는 수수료 금액(원), ctg='변경율'은 변경 비율이다
 **cfe가 null인 행이 절반 가까이 된다.** 그 채널 미제공이지
 수수료 0이 아니다. 최저가로 읽지 않는다.
 
-**trAmt는 금액이 아니라 구간 코드다.** 실측으로 확정한 대응은
+**trAmt는 금액이 아니라 구간 코드다.**
   100=10만원  150=50만원  200=100만원
   250=500만원 300=1000만원 350=1억원
-(정률 상품의 수수료를 각 구간 금액으로 나누면 전 구간이 같은 요율로
-떨어져 검산된다.)
 trAmt를 만원 단위로 읽으면 요율 계산이 전부 틀린다.
 
 **행마다 basDt가 다르다. 표 전체에 기준일 하나를 붙이지 않는다.**
@@ -217,8 +238,17 @@ trAmt를 만원 단위로 읽으면 요율 계산이 전부 틀린다.
 
 @mcp.tool(annotations=READ_ONLY)
 def get_kofia_stat(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
-    """금융투자협회 종합통계를 조회한다. CMA 잔고 외에 펀드 순자산·신탁 규모 등은
-search_apis로 같은 서비스의 다른 오퍼레이션을 찾는다.
+    """금융투자협회 종합통계 중 **CMA 현황**을 조회한다. 운용대상
+(mngInvTgt)과 투자자 구분(invrCtg)별 계좌수·잔액이다.
+
+**이 도구는 CMA 하나만 감싼다.** 같은 서비스에 ELS/ELB, DLS/DLB,
+펀드 순자산, 신탁 규모, 신용공여 잔고, 시가총액, 파생상품 거래
+오퍼레이션이 따로 있다. **여기서 0건이 나온 것을 '통계가 없다'로
+답하지 않는다** — search_apis로 해당 오퍼레이션을 찾아 call_api로
+실행한다.
+
+**증권사별이 아니라 업계 합계다.** 회사 수(scrtCmpyCnt)는 집계에
+포함된 회사의 개수이지 특정 회사의 값이 아니다.
 
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         actBal, actCnt, basDt, invrCtg, mngInvTgt, scrtCmpyCnt

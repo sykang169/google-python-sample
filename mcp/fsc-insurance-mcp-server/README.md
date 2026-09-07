@@ -29,7 +29,7 @@
 | `get_insurer_financials` | 보험사 재무현황을 조회한다. |
 | `get_insurer_indicators` | 보험사 주요경영지표(지급여력 등)를 조회한다. |
 | `get_nonlife_insurer_business` | 손해보험사 보종별 경과손해율을 조회한다. |
-| `get_variable_insurance_fund` | 변액보험 펀드별 기준가와 순자산을 조회한다. |
+| `get_variable_insurance_fund` | 변액보험 펀드별 기준가(basprc)와 순자산(nPptAmt)을 조회한다. |
 
 이름 있는 도구는 자주 쓰는 경로만 감싼 것이다. 나머지는 `search_apis` →
 `call_api` 순으로 접근한다. 전부 도구로 펼치면 `tools/list`가 커져 다른 MCP

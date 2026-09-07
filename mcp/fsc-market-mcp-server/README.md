@@ -28,7 +28,7 @@
 | `get_stock_price` | 주식(주권) 일별 시세를 조회한다. KOSPI/KOSDAQ/KONEX 상장 주식. |
 | `get_market_index` | 주가지수 시세를 조회한다. KOSPI/KOSDAQ 대표지수와 섹터지수를 모두 담는다. |
 | `get_etf_price` | ETF 시세를 조회한다. 주식시세 API에는 ETF가 없으므로 여기를 쓴다. |
-| `get_etn_price` | ETN 시세를 조회한다. |
+| `get_etn_price` | ETN 시세를 조회한다. 기초지수는 bssIdxIdxNm, 그 종가는 bssIdxClpr, |
 | `get_bond_price` | 채권 시세를 조회한다. 개별 채권의 수익률·가격 흐름을 볼 때 쓴다. |
 | `get_fund_price` | 수익증권(자산운용사 공모펀드) 시세를 조회한다. |
 | `get_warrant_price` | 신주인수권증권(워런트) 시세를 조회한다. |

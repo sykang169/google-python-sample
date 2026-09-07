@@ -25,16 +25,35 @@ SERVERS = {
              "**ETF·ETN·ELW는 여기 없다.** get_etf_price를 쓴다."},
      {"name": "get_market_index", "svc": "GetMarketIndexInfoService", "op": "getStockMarketIndex",
       "doc": "주가지수 시세를 조회한다. KOSPI/KOSDAQ 대표지수와 섹터지수를 모두 담는다.\n\n"
-             "idxNm으로 지수명(예: 'IT 서비스'), idxCsf로 계열(KOSPI시리즈/KOSDAQ시리즈)을\n"
-             "거른다. 개별 종목의 초과수익률을 낼 때 이 값이 벤치마크가 된다."},
+             "idxNm으로 지수명, idxCsf로 계열(KOSPI시리즈/KOSDAQ시리즈)을 거른다.\n"
+             "개별 종목의 초과수익률을 낼 때 이 값이 벤치마크가 된다.\n\n"
+             "**같은 이름의 지수가 계열마다 따로 있다.** idxCsf를 고정하지 않으면\n"
+             "KOSPI 계열과 KOSDAQ 계열이 한 시계열에 섞인다.\n\n"
+             "**구성종목은 없다.** 편입종목 수(epyItmsCnt)만 있고 어떤 종목인지는\n"
+             "이 데이터에 없다. 지수에 무엇이 들어 있는지 물으면 답할 수 없다."},
      {"name": "get_etf_price", "svc": "GetSecuritiesProductInfoService", "op": "getETFPriceInfo",
-      "doc": "ETF 시세를 조회한다. 주식시세 API에는 ETF가 없으므로 여기를 쓴다.\n\n"
-             "ETN은 get_etn_price, ELW는 search_apis로 getELWPriceInfo를 찾아 call_api한다."},
+      "doc": "ETF 시세를 조회한다. 주식시세 API에는 ETF가 없으므로 여기를 쓴다.\n"
+             "순자산가치는 nav, 기초지수는 bssIdxIdxNm·bssIdxClpr다.\n\n"
+             "ETN은 get_etn_price, ELW는 search_apis로 getELWPriceInfo를 찾아 call_api한다.\n\n"
+             "**구성종목·보수·분배금은 없다.** 무엇을 담고 있는지 물으면 이\n"
+             "도구로는 답할 수 없다. 괴리율 필드도 없다 — 종가(clpr)와 nav로\n"
+             "직접 계산했다면 계산했다고 밝힌다."},
      {"name": "get_etn_price", "svc": "GetSecuritiesProductInfoService", "op": "getETNPriceInfo",
-      "doc": "ETN 시세를 조회한다."},
+      "doc": "ETN 시세를 조회한다. 기초지수는 bssIdxIdxNm, 그 종가는 bssIdxClpr,\n"
+             "지표가치는 indcVal이다.\n\n"
+             "**ETF가 아니다.** ETF는 get_etf_price, ELW는 search_apis로\n"
+             "getELWPriceInfo를 찾아 call_api한다.\n\n"
+             "괴리는 종가(clpr)와 지표가치(indcVal)의 차이다. 직접 계산했다면\n"
+             "계산했다고 밝힌다 — 응답에 괴리율 필드는 없다."},
      {"name": "get_bond_price", "svc": "GetBondSecuritiesInfoService", "op": "getBondPriceInfo",
-      "doc": "채권 시세를 조회한다. 개별 채권의 수익률·가격 흐름을 볼 때 쓴다.\n\n"
-             "거시 금리(기준금리·국고채)는 이 API가 아니라 한국은행 ECOS다."},
+      "doc": "채권 시세를 조회한다. 개별 채권의 수익률·가격 흐름을 볼 때 쓴다.\n"
+             "종가 clprPrc, 종가수익률 clprBnfRt다.\n\n"
+             "거시 금리(기준금리·국고채)는 이 API가 아니라 한국은행 ECOS다.\n\n"
+             "**발행조건과 신용등급은 없다.** 쿠폰·만기·등급은 fsc-ficc의\n"
+             "get_bond_basic이다.\n\n"
+             "**연속 시계열이 아니다.** 개별 회사채는 거래가 드물어 체결일이 띄엄\n"
+             "띄엄하다. 빠진 날을 보간하지 말고 체결일만 점으로 제시하고 관측\n"
+             "일수를 밝힌다."},
      {"name": "get_fund_price", "svc": "GetStockSecuritiesInfoService", "op": "getSecuritiesPriceInfo",
       "doc": "수익증권(자산운용사 공모펀드) 시세를 조회한다.\n\n"
              "ETF가 아니다. ETF는 get_etf_price, ETN은 get_etn_price를 쓴다.\n"
@@ -43,11 +62,17 @@ SERVERS = {
       "doc": "신주인수권증권(워런트) 시세를 조회한다.\n\n"
              "증권(WR)과 증서(R)는 다르다. 증서는 get_subscription_right_price다.\n"
              "purRgtScrtItmsNm/purRgtScrtItmsClpr가 기초가 되는 주권의 이름과 종가이므로,\n"
-             "행사가(exertPric)와 함께 보면 내가격 여부를 가늠할 수 있다."},
+             "행사가(exertPric)와 함께 보면 내가격 여부를 가늠할 수 있다.\n\n"
+             "**내가격 여부는 계산 결과이지 데이터가 아니다.** 응답에 그런 필드는\n"
+             "없으므로 직접 비교했다면 비교했다고 밝힌다. 행사 가능 기간은\n"
+             "subtPdSttgDt~subtPdEdDt다."},
      {"name": "get_subscription_right_price", "svc": "GetStockSecuritiesInfoService", "op": "getPreemptiveRightCertificatePriceInfo",
       "doc": "신주인수권증서 시세를 조회한다. 유상증자 때 배정되어 짧게 거래되는 증서다.\n\n"
              "증권(WR)이 아니라 증서(R)다. 증권은 get_warrant_price다.\n"
-             "dltDt(상장폐지일)가 가까우면 거래 가능 기간이 얼마 남지 않았다는 뜻이다."},
+             "dltDt(상장폐지일)가 가까우면 거래 가능 기간이 얼마 남지 않았다는 뜻이다.\n\n"
+             "**청약 일정과 배정 내역은 없다.** 증자 일정은 fsc-equity-ops의\n"
+             "get_right_schedule, 결정 공시는 DART다. nstIssPrc는 신주 발행가이지\n"
+             "청약 금액이 아니다."},
      {"name": "find_listed_item", "svc": "GetKrxListedInfoService", "op": "getItemInfo",
       "doc": "KRX 상장종목 마스터에서 종목을 찾는다. 종목코드·ISIN·시장구분 해석의 기준.\n\n"
              "시세를 조회하기 전에 여기서 isinCd를 확정해 두면 동명 종목이나 우선주로\n"
@@ -83,15 +108,43 @@ SERVERS = {
            "스프레드를 계산하려면 두 소스를 함께 써야 한다.",
    "tools": [
      {"name": "get_bond_basic", "svc": "GetBondIssuInfoService_V2", "op": "getBondBasiInfo_V2",
-      "doc": "채권 기본정보(마스터)를 조회한다. 종목 식별의 출발점이다."},
+      "doc": "채권 기본정보(마스터)를 조회한다. 종목 식별의 출발점이다.\n\n"
+             "**신용등급이 여기 있다.** 시세나 종목마스터에는 없다. 세 평가사의\n"
+             "등급이 각각 kbpScrsItmsKcdNm, kisScrsItmsKcdNm, niceScrsItmsKcdNm으로\n"
+             "온다. 필드 이름이 '증권종목종류'로 보이지만 값은 AAA·AA-·A+ 같은\n"
+             "등급이다.\n\n"
+             "**세 평가사가 같은 등급을 다르게 적는다** — 한 곳의 A를 다른 곳은\n"
+             "A0으로 적는다. 표기 차이를 등급 차이로 읽지 않는다. 어느 평가사\n"
+             "기준인지 밝힌다.\n\n"
+             "**일반회사채는 등급이 빈 행이 많다.** 공란은 무등급이 아니라\n"
+             "미수록이다. '등급이 없다'가 아니라 '이 데이터에 실려 있지 않다'로\n"
+             "구분해 적는다.\n\n"
+             "발행조건(쿠폰 bondSrfcInrt, 만기 bondExprDt, 발행액 bondIssuAmt)이\n"
+             "여기 있다. 시세·수익률은 fsc-market의 get_bond_price다."},
      {"name": "get_bond_principal_interest", "svc": "GetBondTradInfoService_V2", "op": "getBondPrinAndInte_V2",
-      "doc": "채권 원리금 정보를 조회한다. 캐시플로 산출의 근거."},
+      "doc": "채권 원리금 지급 내역을 조회한다. 캐시플로 산출의 근거.\n\n"
+             "한 행이 한 번의 지급이다. piamDcdNm이 이자인지 원금인지를 가른다.\n"
+             "구분하지 않고 더하면 원금을 이자에 섞게 된다.\n\n"
+             "**과거 지급분이 함께 온다.** 지급일(piamPayDt)로 걸러야 앞으로의\n"
+             "캐시플로가 된다. 이 오퍼레이션에는 기준일(basDt)이 없다."},
      {"name": "get_bond_right_schedule", "svc": "GetBondRighScheInfoService_V2", "op": "getBondRighExerSche_V2",
-      "doc": "채권 권리행사 일정(이자지급·상환)을 조회한다."},
+      "doc": "채권 권리행사 일정을 조회한다. scrsScedDcdNm이 무슨 일정인지를\n"
+             "가른다(이자지급일·원리금지급일 등).\n\n"
+             "**금액은 없다.** 일정만 있고 지급액은 get_bond_principal_interest다."},
      {"name": "get_bond_call_redemption", "svc": "GetBondRedeInfoService_V2", "op": "getBondWithOptiCallRede_V2",
-      "doc": "옵션부채권의 조기상환(콜) 내역을 조회한다. 콜 리스크 점검용."},
+      "doc": "옵션부채권의 조기상환 내역을 조회한다. 콜 리스크 점검용.\n\n"
+             "**콜만 있는 게 아니다.** optnTcdNm이 CALL·PUT 등을 가른다. 콜을\n"
+             "물었으면 이 값을 확인하고 거른다.\n\n"
+             "**이미 일어난 상환 이력이다.** opbdClrdDt가 상환일이므로 앞으로\n"
+             "행사 가능한 채권을 찾는 것과는 다르다. 예정 일정은\n"
+             "get_bond_right_schedule을 함께 본다."},
      {"name": "get_retail_bond_yield", "svc": "GetBondInfoService", "op": "getBondSecurityBenefitRate",
-      "doc": "소매채권 수익률을 조회한다. 리테일 채권 판매에 바로 쓰이는 값이다."},
+      "doc": "소매채권 수익률을 조회한다. 리테일 채권 판매에 바로 쓰이는 값이다.\n\n"
+             "**개별 종목이 아니라 구간 요약이다.** 신용등급(crdtSc)과 잔존만기\n"
+             "(ctg) 구간으로 묶인 값이고 종목 식별자가 없다. 특정 채권의\n"
+             "수익률로 제시하면 구간 평균을 그 종목 값으로 답하게 된다.\n\n"
+             "개별 종목은 fsc-market의 get_bond_price(시세)와 get_bond_basic\n"
+             "(발행조건·등급)을 쓴다."},
      {"name": "get_short_term_rate", "svc": "GetShorTermSecuTradInfoService_V2", "op": "getBuyAndSellInteRate_V2",
       "doc": "단기금융증권(CP·전단채 등)의 매매 수익률을 조회한다. 금리 값은\n"
              "rmngExprTrdBnfRt다.\n\n"
@@ -137,13 +190,30 @@ SERVERS = {
              "**금융회사(은행·증권·보험)는 여기 없다.** 0건이 나오면 권한 문제가 아니라\n"
              "수록 범위 밖이라는 뜻이다. 그때는 dart-mcp의 fnlttSinglAcnt로 간다."},
      {"name": "get_corp_outline", "svc": "GetCorpBasicInfoService_V2", "op": "getCorpOutline_V2",
-      "doc": "기업 개요를 조회한다. 법인등록번호(crno) 확정의 출발점."},
+      "doc": "기업 개요를 조회한다. 법인등록번호(crno) 확정의 출발점.\n\n"
+             "설립일·상장일·종업원수·대표자·업종이 있다. **재무 수치는 없다** —\n"
+             "get_financial_statement를 쓴다.\n\n"
+             "**상장사만 있는 게 아니다.** 외국 법인과 비상장이 함께 들어 있어\n"
+             "회사명으로 찾으면 의도하지 않은 법인이 먼저 나올 수 있다. 돌아온\n"
+             "행의 corpNm을 확인하고 crno로 대상을 고정한다."},
      {"name": "get_affiliates", "svc": "GetCorpBasicInfoService_V2", "op": "getAffiliate_V2",
-      "doc": "계열회사 목록을 조회한다. 지배구조 맵을 그릴 때 쓴다."},
+      "doc": "계열회사 목록을 조회한다. 지배구조 맵을 그릴 때 쓴다.\n"
+             "crno로 걸어야 그 기업의 계열사가 나온다.\n\n"
+             "**지분율은 없다.** 계열사 이름·법인번호·상장여부(lstgYn)뿐이라\n"
+             "지배구조의 모양은 알 수 없다. '지분 몇 %'를 물으면 이 도구로는\n"
+             "답할 수 없다고 말한다.\n\n"
+             "**계열사 이름이 상장 종목명과 다르다.** 시세로 넘기기 전에\n"
+             "find_listed_item으로 대조한다."},
      {"name": "get_executives", "svc": "GetCorpGoveInfoService", "op": "getExecutivesInfo",
-      "doc": "임원 현황을 조회한다. 사외이사 수 같은 지배구조 질문의 근거.\n\n"
+      "doc": "임원 현황을 조회한다. 사외이사 수 같은 지배구조 질문의 근거.\n"
+             "crno로 거른다.\n\n"
              "**행을 세는 것은 서버가 한다.** 응답의 건수와 범주 분포를 쓰고,\n"
-             "JSON을 직접 세지 않는다. 보수는 search_apis로 getExecRemuStat을 찾는다."},
+             "JSON을 직접 세지 않는다.\n\n"
+             "**보수는 없다.** search_apis로 getExecRemuStat(임원 보수 통계)을,\n"
+             "주주 현황은 getStockholderInfo를 찾아 call_api한다.\n\n"
+             "**오래된 기준일 행은 대부분 공란이다.** 이름·직위가 비어 있으면\n"
+             "임원이 없는 게 아니라 그 시점 수록이 비어 있는 것이다. 최신 basDt를\n"
+             "먼저 확인하고 그 시점으로 거른다."},
      {"name": "get_dividend_disclosure", "svc": "GetDiscInfoService_V2", "op": "getDiviDiscInfo_V2",
       "doc": "**배당 공시만** 조회한다. 공시 일반이 아니다.\n\n"
              "이 서비스에는 유상증자·합병·자기주식·소송 등 30종이 넘는 공시\n"
@@ -183,7 +253,11 @@ SERVERS = {
              "**우선주는 별도 종목이다.** scrsItmsKcdNm으로 보통주/우선주를 구분해\n"
              "어느 쪽 배당인지 밝힌다."},
      {"name": "get_right_schedule", "svc": "GetStocRighScheService_V2", "op": "getRighExerReasSche_V2",
-      "doc": "권리행사 사유별 일정을 조회한다. 청약·행사 업무의 달력."},
+      "doc": "권리행사 사유별 일정을 조회한다. 청약·행사 업무의 달력.\n\n"
+             "stckIssuCmpyNm(발행회사명)으로 거른다. 사유는 stckIssuRcdNm\n"
+             "(무상증자·유상증자 등), 날짜 종류는 rgtExertRcdNm(기준일 등)이다.\n"
+             "**둘을 구분하지 않으면 기준일과 청약일을 섞게 된다.**\n\n"
+             "**배당 기준일은 여기가 아니라 get_dividend다.** 금액도 없다."},
      {"name": "check_irregular_stock", "svc": "GetStocTradInfoService_V2", "op": "getIrreRigforSecu_V2",
       "doc": "사고주권 여부를 조회한다. 실물 입고 심사에서 확인이 필요한 항목이다.\n\n"
              "**필터는 isinCdNm 또는 stckIssuCmpyNm을 쓴다.**\n"
@@ -211,7 +285,13 @@ SERVERS = {
              "답하게 된다.\n\n"
              "기준일(basDt)이 월 단위라 일별 추이는 낼 수 없다."},
      {"name": "get_repo_rate", "svc": "GetRepoItemInfoService_V2", "op": "getInteRateInfo_V2",
-      "doc": "REPO 금리를 조회한다. 단기 조달비용의 기준."},
+      "doc": "REPO 금리를 조회한다. 단기 조달비용의 기준. 금리는 rpInrt다.\n\n"
+             "**한 종목의 금리가 아니라 거래 건별이다.** 담보 증권 종류\n"
+             "(rpBuyScrtKcdNm)와 환매 기간(rdptTermCcdNm), 매도·매수 업권\n"
+             "(slrBzcTcdNm/purcBzcTcdNm)에 따라 같은 날에도 값이 갈린다.\n"
+             "조건을 고정하지 않고 평균을 내면 서로 다른 거래를 섞게 된다.\n"
+             "**어떤 조건의 금리인지 밝힌다.**\n\n"
+             "기준금리·콜금리 같은 정책·시장 지표는 한국은행 ECOS다."},
    ],
  },
  "insurance": {
@@ -245,9 +325,10 @@ SERVERS = {
       "doc": "보험사 재무현황을 조회한다.\n\n"
              "**title을 반드시 준다.** 이 API는 한 오퍼레이션 안에 여러 통계표가\n"
              "들어 있고 title이 그중 하나를 고른다. 안 주면 임의의 표가 나오는데,\n"
-             "오류가 아니라 정상 응답이라 알아채기 어렵다(실측: title 없이 부르면\n"
-             "생명보험은 대손충당금, 손해보험은 요약재무상태표가 나온다 — 그대로\n"
-             "비교하면 다른 것을 비교하게 된다).\n"
+             "오류가 아니라 정상 응답이라 알아채기 어렵다. title 없이 부르면\n"
+             "오퍼레이션 이름과 무관한 표가 오고, 업권마다 다른 표가 온다 —\n"
+             "그대로 비교하면 서로 다른 지표를 나란히 놓게 된다.\n"
+             "**돌아온 표의 이름을 확인하고 요청한 것과 같은지 대조한다.**\n"
              "  요약재무상태표  생보_재무현황_요약재무상태표(자산-전체)\n"
              "                  손보_재무현황_요약재무상태표(자산-전체)\n"
              "형식은 <업권>_<현황>_<세부표>다. 다른 표는 search_apis로 확인한다.\n\n"
@@ -268,16 +349,22 @@ SERVERS = {
      {"name": "get_nonlife_insurer_business", "svc": "GetNonlInsuCompInfoService",
       "op": "getNonlInsuCompMajoBusiActi",
       "doc": "손해보험사 보종별 경과손해율을 조회한다.\n\n"
-             "**이 표는 2019년 12월이 마지막이다**(실측). 최근 기준년월로 조회하면\n"
-             "0건이 나오는데 오류가 아니라 수록 범위 밖이다. 최신 손해율이 필요하면\n"
-             "이 도구로는 답할 수 없다고 말하고 추정하지 않는다.\n\n"
+             "**갱신이 오래 전에 멈춘 표다.** 최근 기준년월로 조회하면 0건이\n"
+             "나오는데 오류가 아니라 수록 범위 밖이다. **basYm 없이 한 번 불러\n"
+             "최신 기준년월을 먼저 확인하고**, 답변에 그 시점을 밝힌다. 오래된\n"
+             "값을 '최근 손해율'로 제시하지 않는다. 최신 손해율이 필요하면 이\n"
+             "도구로는 답할 수 없다고 말하고 추정하지 않는다.\n\n"
              "isuKindElpsLosRatDcdNm이 보종, 같은 접두사의 금액 필드가 그 값이다.\n"
              "손해율은 보종마다 정상 범위가 다르다.\n\n"
              "생명보험 쪽 같은 자리(getLifeInsuCompMajoBusiActi)는 해약환급금이라\n"
              "성격이 다르다. 하나로 묶지 않았다."},
      {"name": "get_variable_insurance_fund", "svc": "GetVariableInsuranceInfoService",
       "op": "getFundInfo",
-      "doc": "변액보험 펀드별 기준가와 순자산을 조회한다.\n\n"
+      "doc": "변액보험 펀드별 기준가(basprc)와 순자산(nPptAmt)을 조회한다.\n"
+             "회사는 cmpyNm, 펀드는 fndNm·fndCd다.\n\n"
+             "**수익률은 없다.** 기간 수익률을 물으면 두 시점의 기준가를 직접\n"
+             "조회해 계산하고, 계산했다는 사실과 두 기준일을 밝힌다.\n"
+             "**사업비·수수료도 없다.** 기준가 변화는 실제 고객 수익률과 다르다.\n\n"
              "변액보험은 투자성 상품이라 원금이 보장되지 않는다. 수익률을 제시할 때\n"
              "사업비 차감 전후를 구분하지 않고 단정하지 않는다."},
    ],
@@ -297,9 +384,21 @@ SERVERS = {
            "보이도록 지표를 골라 제시하지 않는다.",
    "tools": [
      {"name": "get_fund_code", "svc": "GetFundProductInfoService", "op": "getStandardCodeInfo",
-      "doc": "펀드 표준코드를 조회한다. 판매 상품 마스터."},
+      "doc": "펀드 표준코드를 조회한다. 판매 상품 마스터이자 식별의 출발점.\n\n"
+             "설정일(setpDt)·유형(fndTp)·운용사 구분(ctg)이 있다.\n\n"
+             "**수익률·기준가·보수는 없다.** 여기는 코드와 속성만이다. 성과를\n"
+             "물으면 이 도구로는 답할 수 없다.\n\n"
+             "**같은 펀드의 클래스(A/C/S 등)가 각각 다른 코드다.** 이름만 보고\n"
+             "묶으면 클래스가 섞인다. 표준코드로 고정한다."},
      {"name": "get_fund_sales", "svc": "GetFdSaleInfoService_V2", "op": "getCustFundSaleInfo_V2",
-      "doc": "펀드 판매현황을 조회한다. 판매기관·고객유형·펀드유형별 점유율을 본다."},
+      "doc": "펀드 판매현황을 조회한다. 고객유형(개인/일반법인/금융법인)별 판매\n"
+             "잔액과 비중이다.\n\n"
+             "**개별 펀드가 아니라 집계다.** 펀드 이름도 표준코드도 없다. 특정\n"
+             "펀드의 판매액을 물으면 이 도구로는 답할 수 없다.\n\n"
+             "**분류가 코드로만 온다.** fundItemClsfCd·fundPtrnCd·ivsAreaClsfCd에\n"
+             "대응하는 이름 필드가 없어서 **코드가 무슨 유형인지 이 응답만으로는\n"
+             "알 수 없다.** 코드의 뜻을 지어내지 말고, 모르면 모른다고 밝히거나\n"
+             "search_apis로 같은 서비스의 다른 오퍼레이션을 확인한다."},
      {"name": "get_securities_firm_stats", "svc": "GetSecuCompInfoService", "op": "getSecuCompGeneInfo",
       "doc": "증권사 일반현황(임직원·점포 등)을 조회한다.\n\n"
              "같은 서비스의 다른 오퍼레이션은 이름과 내용이 어긋나므로 주의한다\n"
@@ -316,7 +415,11 @@ SERVERS = {
       "doc": "국내은행 주요경영지표를 조회한다. BIS비율·연체율 같은 건전성 지표.\n\n"
              "재무제표로는 보이지 않는 업권 지표다. 예금 금리를 비교할 때 그 은행이\n"
              "어떤 상태인지 함께 봐야 하면 여기를 쓴다.\n"
-             "재무현황은 search_apis로 getDomeBankFinaInfo를 찾는다."},
+             "재무현황은 search_apis로 getDomeBankFinaInfo를 찾는다.\n\n"
+             "지표 이름은 cpaqItemDcdNm, 값은 cpaqItemClsfVal이다. **어느 지표를\n"
+             "볼지 정하지 않고 부르면 여러 지표가 섞여 온다.**\n\n"
+             "**은행만 있다.** 저축은행·증권·보험은 없다. 기준은 월(basYm)이라\n"
+             "일별 추이는 낼 수 없다."},
      {"name": "get_brokerage_fee", "svc": "GetOfficialNoticeInfoService", "op": "getStockTradingFeeInfo",
       "doc": "증권사 주식거래 수수료 공시를 조회한다. 가격 경쟁 포지션 확인용.\n\n"
              "**ctg로 먼저 거른다. 같은 cfe 필드에 금액과 비율이 섞여 있다.**\n"
@@ -324,11 +427,9 @@ SERVERS = {
              "나누지 않고 정렬하면 수천 원과 0.00x를 한 줄에 놓게 된다.\n\n"
              "**cfe가 null인 행이 절반 가까이 된다.** 그 채널 미제공이지\n"
              "수수료 0이 아니다. 최저가로 읽지 않는다.\n\n"
-             "**trAmt는 금액이 아니라 구간 코드다.** 실측으로 확정한 대응은\n"
+             "**trAmt는 금액이 아니라 구간 코드다.**\n"
              "  100=10만원  150=50만원  200=100만원\n"
              "  250=500만원 300=1000만원 350=1억원\n"
-             "(정률 상품의 수수료를 각 구간 금액으로 나누면 전 구간이 같은 요율로\n"
-             "떨어져 검산된다.)\n"
              "trAmt를 만원 단위로 읽으면 요율 계산이 전부 틀린다.\n\n"
              "**행마다 basDt가 다르다. 표 전체에 기준일 하나를 붙이지 않는다.**\n"
              "회사가 수수료를 바꾼 날이 곧 basDt이고 회사마다 몇 년씩 벌어진다.\n"
@@ -346,8 +447,15 @@ SERVERS = {
              "'정률'이라고 단정하지 않는다. 소액 구간만 다른 회사가 있어,\n"
              "**구간별 요율을 모두 계산해 본 뒤** 판단한다."},
      {"name": "get_kofia_stat", "svc": "GetKofiaStatisticsInfoService", "op": "getCMAStatus",
-      "doc": "금융투자협회 종합통계를 조회한다. CMA 잔고 외에 펀드 순자산·신탁 규모 등은\n"
-             "search_apis로 같은 서비스의 다른 오퍼레이션을 찾는다."},
+      "doc": "금융투자협회 종합통계 중 **CMA 현황**을 조회한다. 운용대상\n"
+             "(mngInvTgt)과 투자자 구분(invrCtg)별 계좌수·잔액이다.\n\n"
+             "**이 도구는 CMA 하나만 감싼다.** 같은 서비스에 ELS/ELB, DLS/DLB,\n"
+             "펀드 순자산, 신탁 규모, 신용공여 잔고, 시가총액, 파생상품 거래\n"
+             "오퍼레이션이 따로 있다. **여기서 0건이 나온 것을 '통계가 없다'로\n"
+             "답하지 않는다** — search_apis로 해당 오퍼레이션을 찾아 call_api로\n"
+             "실행한다.\n\n"
+             "**증권사별이 아니라 업계 합계다.** 회사 수(scrtCmpyCnt)는 집계에\n"
+             "포함된 회사의 개수이지 특정 회사의 값이 아니다."},
    ],
  },
 }
