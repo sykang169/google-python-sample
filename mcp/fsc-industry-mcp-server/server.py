@@ -132,9 +132,10 @@ def get_securities_firm_stats(params: dict | None = None, rows: int = 20, page: 
   getSecuCompKeyManaIndi '주요경영지표'지만 **유동성비율**만 들어 있다
   getSecuCompMajoBusiActi 금융투자상품 수탁수수료 항목별 실적
 
-**증권사의 자기자본·순이익·ROE는 이 저장소의 어떤 도구로도 나오지 않는다.**
-금융위 재무제표 API에도 DART 재무제표 API에도 증권사가 없다(실측 확인).
-요청받으면 없다고 답하고 추정하지 않는다.
+**증권사의 자기자본·순이익은 여기가 아니라 DART다.** 금융위 재무제표
+API(GetFinaStatInfoService_V2)에는 증권사가 없어 0건이 나온다
+(같은 키로 삼성전자는 194건, 삼성증권은 0건 — 권한이 아니라 수록 범위다).
+dart-mcp의 fnlttSinglAcnt로 가면 나온다(삼성증권 2024 자본총계 7.3조 확인).
 
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         basYm, crno, fncoCd, fncoNm, xcsmCnt, xcsmDcd, xcsmDcdNm

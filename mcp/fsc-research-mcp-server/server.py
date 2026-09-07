@@ -98,6 +98,9 @@ def get_financial_statement(params: dict | None = None, rows: int = 20, page: in
 손익계산서와 요약재무제표는 search_apis로 같은 서비스의 다른 오퍼레이션을 찾는다.
 법인등록번호(crno)와 사업연도(bizYear)로 거르는 것이 보통이다.
 
+**금융회사(은행·증권·보험)는 여기 없다.** 0건이 나오면 권한 문제가 아니라
+수록 범위 밖이라는 뜻이다. 그때는 dart-mcp의 fnlttSinglAcnt로 간다.
+
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         acitId, acitNm, basDt, bizYear, bpvtrAcitAmt, crno, crtmAcitAmt, curCd, fnclDcd, fnclDcdNm, lsqtAcitAmt, pvtrAcitAmt, thqrAcitAmt
 

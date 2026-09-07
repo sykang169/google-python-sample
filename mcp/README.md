@@ -46,7 +46,7 @@
 | [`fsc-equity-ops-mcp-server`](./fsc-equity-ops-mcp-server) | 금융위 — 배당·권리일정·대차·REPO | 7 |
 | [`fsc-industry-mcp-server`](./fsc-industry-mcp-server) | 금융위 — 펀드·증권사·은행지표·업계통계 | 8 |
 | [`fsc-research-mcp-server`](./fsc-research-mcp-server) | 금융위 — 재무제표·기업개요·계열사·임원 | 7 |
-| [`fsc-insurance-mcp-server`](./fsc-insurance-mcp-server) | 금융위 — 실손보험료·생보/손보 재무·변액보험 | 8 |
+| [`fsc-insurance-mcp-server`](./fsc-insurance-mcp-server) | 금융위 — 실손보험료·생보/손보 재무·변액보험 | 7 |
 
 금융위 6종은 [`fsc-common`](./fsc-common)의 공용 클라이언트를 공유합니다.
 `sync.py`가 각 서버 디렉터리로 복사하므로 사본을 직접 고치지 마세요.
@@ -287,7 +287,7 @@ Gemini Enterprise → 데이터 스토어 → 해당 항목 선택 → Actions �
   mcp-fsc-research      state=ACTIVE tools=7  enabled=7
   mcp-fsc-equity-ops    state=ACTIVE tools=7  enabled=7
   mcp-fsc-industry      state=ACTIVE tools=8  enabled=8
-  mcp-fsc-insurance     state=ACTIVE tools=8  enabled=8
+  mcp-fsc-insurance     state=ACTIVE tools=7  enabled=7
 ```
 
 이제 Gemini Enterprise 채팅에서 질문해 보세요.
@@ -385,7 +385,7 @@ cd ../terraform && ./build.sh dart-mcp && terraform apply
 못합니다. 게다가 사업보고서 본문은 텍스트만 80만 자여서 통째로 반환할 수도
 없습니다. 목차를 주는 `get_disclosure_outline`과 고른 항목만 주는
 `get_disclosure_section` 두 개를 따로 두었습니다(dart-mcp는 6개).
-아홉 서버를 합쳐도 도구 67개입니다.
+아홉 서버를 합쳐도 도구 66개입니다.
 
 **집계는 서버에서 처리합니다.** "임원이 몇 명인가" 같은 질문에서 모델이 JSON
 수십 행을 직접 세면 틀립니다(실제로 틀렸습니다). DART 응답에 건수와 범주형 필드
@@ -394,7 +394,7 @@ cd ../terraform && ./build.sh dart-mcp && terraform apply
 **조인도 서버에서 처리합니다.** FINLIFE는 상품 정보와 금리를 별도 배열로
 주는데, 서버가 합쳐서 상품 하나에 금리 옵션이 붙은 형태로 반환합니다.
 
-**모두 조회 전용입니다.** 67개 도구 전부 `readOnlyHint`가 붙어 있어 Gemini
+**모두 조회 전용입니다.** 66개 도구 전부 `readOnlyHint`가 붙어 있어 Gemini
 Enterprise가 사용자 확인 없이 호출합니다.
 
 ---

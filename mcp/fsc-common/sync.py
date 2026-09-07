@@ -161,6 +161,30 @@ def {name}(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
     return fsc_core.call(CATALOG, {svc!r}, {op!r}, params, rows, page)
 '''
 
+
+ROUTED_TOOL = '''
+
+@mcp.tool(annotations=READ_ONLY)
+def {name}(sector: str, params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
+    """{doc}
+
+    Args:
+        sector: {sectors} 중 하나. 업권마다 다른 API로 나뉘어 있을 뿐 형식은 같다.
+        params: 필터 딕셔너리 (예: {{"basYm": "202412"}}). 비우면 최신부터 반환한다.
+        rows: 페이지당 건수 (최대 권장 100).
+        page: 페이지 번호.
+
+    필터로 쓸 수 있는 필드(응답 필드와 같다):
+        {fields}
+    """
+    route = {route!r}
+    if sector not in route:
+        raise FscError(
+            f"sector는 {sectors} 중 하나다. 받은 값: {{sector!r}}")
+    service, operation = route[sector]
+    return fsc_core.call(CATALOG, service, operation, params, rows, page)
+'''
+
 FOOTER = '''
 
 if __name__ == "__main__":
@@ -264,6 +288,19 @@ def build(server: str) -> pathlib.Path:
     # COMMON_TOOLS는 docstring에 중괄호가 많아 format을 쓸 수 없다. 자리표시자만 바꾼다.
     parts.append(COMMON_TOOLS.replace("__HINT__", spec["hint"]))
     for tool in spec["tools"]:
+        if "route" in tool:
+            # 업권만 다르고 형식이 같은 API를 도구 하나로 묶는다. 필드는 합집합을
+            # 보여 주되 어느 쪽에만 있는지는 doc이 밝힌다.
+            fields: list[str] = []
+            for svc, op in tool["route"].values():
+                for f in subset[svc]["operations"][op]["fields"]:
+                    if f not in fields:
+                        fields.append(f)
+            parts.append(ROUTED_TOOL.format(
+                name=tool["name"], doc=tool["doc"], route=tool["route"],
+                sectors="/".join(tool["route"]),
+                fields=", ".join(fields) or "(없음)"))
+            continue
         fields = subset[tool["svc"]]["operations"][tool["op"]]["fields"]
         parts.append(TOOL.format(
             name=tool["name"], doc=tool["doc"], svc=tool["svc"], op=tool["op"],

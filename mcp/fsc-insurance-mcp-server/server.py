@@ -115,57 +115,58 @@ age는 '40' 같은 숫자다('40세'가 아니다). cmpyNm은 'KB손보',
 
 
 @mcp.tool(annotations=READ_ONLY)
-def get_life_insurer_financials(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
-    """생명보험사 재무현황(요약 재무상태표)을 조회한다.
+def get_insurer_financials(sector: str, params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
+    """보험사 재무현황(요약 재무상태표)을 조회한다. 생보·손보 응답 형식이 같다.
 
 보험사는 보험계약 준비금이 부채의 대부분이다. 제조업 기준으로 부채비율을
 읽으면 결론이 뒤집힌다. 계정은 astSmryStfnpsAcitCdNm으로 구분한다.
 기준년월(basYm)이 필수에 가깝다 — 없으면 최신 분기가 나온다.
 
-    필터로 쓸 수 있는 필드(응답 필드와 같다):
-        title, astSmryStfnpsAcitAmt, astSmryStfnpsAcitCd, astSmryStfnpsAcitCdNm, astSmryStfnpsAcitCmpsRto, basYm, crno, fncoCd, fncoNm
+**생보와 손보는 계정 체계가 달라 같은 표에 놓고 빼지 않는다.**
+업권을 섞어 순위를 매기지 않는다.
 
     Args:
-        params: 필터 딕셔너리 (예: {"basDt": "20260831"}). 비우면 최신부터 반환한다.
+        sector: 생명보험/손해보험 중 하나. 업권마다 다른 API로 나뉘어 있을 뿐 형식은 같다.
+        params: 필터 딕셔너리 (예: {"basYm": "202412"}). 비우면 최신부터 반환한다.
         rows: 페이지당 건수 (최대 권장 100).
         page: 페이지 번호.
+
+    필터로 쓸 수 있는 필드(응답 필드와 같다):
+        title, astSmryStfnpsAcitAmt, astSmryStfnpsAcitCd, astSmryStfnpsAcitCdNm, astSmryStfnpsAcitCmpsRto, basYm, crno, fncoCd, fncoNm
     """
-    return fsc_core.call(CATALOG, 'GetLifeInsuCompInfoService', 'getLifeInsuCompFinaInfo', params, rows, page)
+    route = {'생명보험': ('GetLifeInsuCompInfoService', 'getLifeInsuCompFinaInfo'), '손해보험': ('GetNonlInsuCompInfoService', 'getNonlInsuCompFinaInfo')}
+    if sector not in route:
+        raise FscError(
+            f"sector는 생명보험/손해보험 중 하나다. 받은 값: {sector!r}")
+    service, operation = route[sector]
+    return fsc_core.call(CATALOG, service, operation, params, rows, page)
 
 
 @mcp.tool(annotations=READ_ONLY)
-def get_life_insurer_indicators(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
-    """생명보험사 주요경영지표를 조회한다. 지급여력·수익성 등 업권 지표.
+def get_insurer_indicators(sector: str, params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
+    """보험사 주요경영지표를 조회한다. 지급여력·수익성 등 업권 지표.
 
 지표 종류는 cpaqItemCdNm에 들어 있다. 재무제표로는 보이지 않는
 건전성 맥락이 여기 있다.
 
-    필터로 쓸 수 있는 필드(응답 필드와 같다):
-        title, basYm, cpaqItemAmt, cpaqItemCd, cpaqItemCdNm, crno, fncoCd, fncoNm
+**값이 담기는 필드가 업권마다 다르다** — 생명보험은 cpaqItemAmt,
+손해보험은 cpaqItemValCtt다. 한쪽 이름만 찾으면 빈 값으로 읽힌다.
 
     Args:
-        params: 필터 딕셔너리 (예: {"basDt": "20260831"}). 비우면 최신부터 반환한다.
+        sector: 생명보험/손해보험 중 하나. 업권마다 다른 API로 나뉘어 있을 뿐 형식은 같다.
+        params: 필터 딕셔너리 (예: {"basYm": "202412"}). 비우면 최신부터 반환한다.
         rows: 페이지당 건수 (최대 권장 100).
         page: 페이지 번호.
-    """
-    return fsc_core.call(CATALOG, 'GetLifeInsuCompInfoService', 'getLifeInsuCompKeyManaIndi', params, rows, page)
-
-
-@mcp.tool(annotations=READ_ONLY)
-def get_nonlife_insurer_financials(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
-    """손해보험사 재무현황을 조회한다.
-
-생보와 계정 체계가 달라 같은 표에 놓고 빼지 않는다.
 
     필터로 쓸 수 있는 필드(응답 필드와 같다):
-        title, astSmryStfnpsAcitAmt, astSmryStfnpsAcitCd, astSmryStfnpsAcitCdNm, astSmryStfnpsAcitCmpsRto, basYm, crno, fncoCd, fncoNm
-
-    Args:
-        params: 필터 딕셔너리 (예: {"basDt": "20260831"}). 비우면 최신부터 반환한다.
-        rows: 페이지당 건수 (최대 권장 100).
-        page: 페이지 번호.
+        title, basYm, cpaqItemAmt, cpaqItemCd, cpaqItemCdNm, crno, fncoCd, fncoNm, cpaqItemValCtt
     """
-    return fsc_core.call(CATALOG, 'GetNonlInsuCompInfoService', 'getNonlInsuCompFinaInfo', params, rows, page)
+    route = {'생명보험': ('GetLifeInsuCompInfoService', 'getLifeInsuCompKeyManaIndi'), '손해보험': ('GetNonlInsuCompInfoService', 'getNonlInsuCompKeyManaIndi')}
+    if sector not in route:
+        raise FscError(
+            f"sector는 생명보험/손해보험 중 하나다. 받은 값: {sector!r}")
+    service, operation = route[sector]
+    return fsc_core.call(CATALOG, service, operation, params, rows, page)
 
 
 @mcp.tool(annotations=READ_ONLY)
@@ -174,6 +175,10 @@ def get_nonlife_insurer_business(params: dict | None = None, rows: int = 20, pag
 
 isuKindElpsLosRatDcdNm이 보종, 같은 접두사의 금액 필드가 그 값이다.
 손해율은 보종마다 정상 범위가 다르다.
+
+생명보험 쪽 같은 자리(getLifeInsuCompMajoBusiActi)는 경과손해율이 아니라
+**신계약 실적**이라 성격이 다르다. 하나로 묶지 않았다 — 필요하면
+search_apis로 찾는다.
 
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         title, basYm, crno, fncoCd, fncoNm, isuKindElpsLosRatClsfAmt, isuKindElpsLosRatDcd, isuKindElpsLosRatDcdNm
