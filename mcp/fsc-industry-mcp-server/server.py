@@ -250,6 +250,11 @@ def get_kofia_stat(params: dict | None = None, rows: int = 20, page: int = 1) ->
 **증권사별이 아니라 업계 합계다.** 회사 수(scrtCmpyCnt)는 집계에
 포함된 회사의 개수이지 특정 회사의 값이 아니다.
 
+**이 서비스의 통계는 차원이 여러 겹이고 소계·합계 행이 같이 온다.**
+구분 필드를 먼저 확인해 어느 축인지 정하고, 합계 행과 세부 행을
+**함께 더하지 않는다** — 이중계상이 된다. 여러 축을 합쳐서 낼
+때는 무엇을 합쳤는지 밝힌다.
+
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         actBal, actCnt, basDt, invrCtg, mngInvTgt, scrtCmpyCnt
 
