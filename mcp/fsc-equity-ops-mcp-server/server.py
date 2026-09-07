@@ -95,6 +95,19 @@ def call_api(
 def get_dividend(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
     """주식 배당정보(기준일·금액)를 조회한다. 배당락 처리와 고객 안내의 근거.
 
+**필터는 isinCd 또는 isinCdNm을 쓴다.** like를 붙인 이름
+(likeIsinCdNm 등)은 이 API가 받지 않는데 **오류 없이 무시되고 전체
+목록이 돌아온다.** 건수가 수만 단위면 필터가 안 걸린 것이고, 그 결과를
+그 종목의 배당으로 읽으면 다른 종목의 배당을 안내하게 된다.
+돌아온 행의 isinCd를 조회하려던 종목과 **대조한 뒤** 답한다.
+
+기준일은 dvdnBasDt, 현금배당 지급일은 cashDvdnPayDt,
+주당 배당금은 stckGenrDvdnAmt다. 이름이 비슷한 필드가 많으니
+search_apis가 준 fields에서 고르고 지어내지 않는다.
+
+**우선주는 별도 종목이다.** scrsItmsKcdNm으로 보통주/우선주를 구분해
+어느 쪽 배당인지 밝힌다.
+
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         basDt, cashDvdnPayDt, cashGrdnDvdnRt, crno, dvdnBasDt, isinCd, isinCdNm, scrsItmsKcd, scrsItmsKcdNm, stckDvdnRcd, stckDvdnRcdNm, stckGenrCashDvdnRt, stckGenrDvdnAmt, stckGenrDvdnRt, stckGrdnDvdnAmt, stckGrdnDvdnRt, stckHndvDt, stckIssuCmpyNm, stckParPrc, stckStacMd, trsnmDptyDcd, trsnmDptyDcdNm
 
