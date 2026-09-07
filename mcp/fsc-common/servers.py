@@ -37,14 +37,22 @@ SERVERS = {
              "ETN은 get_etn_price, ELW는 search_apis로 getELWPriceInfo를 찾아 call_api한다.\n\n"
              "**구성종목·보수·분배금은 없다.** 무엇을 담고 있는지 물으면 이\n"
              "도구로는 답할 수 없다. 괴리율 필드도 없다 — 종가(clpr)와 nav로\n"
-             "직접 계산했다면 계산했다고 밝힌다."},
+             "직접 계산했다면 계산했다고 밝힌다.\n\n"
+             "**기초지수는 기초자산이 아니다.** bssIdxClpr는 그 ETF가 추종하도록\n"
+             "설계된 지수이지 원자재 현물 가격이 아니다. 통화와 현선물 구조가\n"
+             "달라 수익률이 크게 갈리고 부호가 반대인 구간도 생긴다.\n"
+             "**'실제 금값 대비' 같은 질문에 기초지수로 답하지 않는다.**\n"
+             "국내 현물 시세는 GetGeneralProductInfoService에 따로 있다\n"
+             "(search_apis로 확인한다)."},
      {"name": "get_etn_price", "svc": "GetSecuritiesProductInfoService", "op": "getETNPriceInfo",
       "doc": "ETN 시세를 조회한다. 기초지수는 bssIdxIdxNm, 그 종가는 bssIdxClpr,\n"
              "지표가치는 indcVal이다.\n\n"
              "**ETF가 아니다.** ETF는 get_etf_price, ELW는 search_apis로\n"
              "getELWPriceInfo를 찾아 call_api한다.\n\n"
              "괴리는 종가(clpr)와 지표가치(indcVal)의 차이다. 직접 계산했다면\n"
-             "계산했다고 밝힌다 — 응답에 괴리율 필드는 없다."},
+             "계산했다고 밝힌다 — 응답에 괴리율 필드는 없다.\n\n"
+             "**기초지수는 기초자산이 아니다.** 원자재 현물 가격을 물으면\n"
+             "bssIdxClpr로 답하지 말고 GetGeneralProductInfoService를 쓴다."},
      {"name": "get_bond_price", "svc": "GetBondSecuritiesInfoService", "op": "getBondPriceInfo",
       "doc": "채권 시세를 조회한다. 개별 채권의 수익률·가격 흐름을 볼 때 쓴다.\n"
              "종가 clprPrc, 종가수익률 clprBnfRt다.\n\n"
