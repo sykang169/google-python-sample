@@ -144,7 +144,17 @@ SERVERS = {
            "가르는 것이 있으므로, 조회 실패를 '해당 없음'으로 답하지 않도록 주의한다.",
    "tools": [
      {"name": "get_dividend", "svc": "GetStocDiviInfoService_V2", "op": "getDiviInfo_V2",
-      "doc": "주식 배당정보(기준일·금액)를 조회한다. 배당락 처리와 고객 안내의 근거."},
+      "doc": "주식 배당정보(기준일·금액)를 조회한다. 배당락 처리와 고객 안내의 근거.\n\n"
+             "**필터는 isinCd 또는 isinCdNm을 쓴다.** like를 붙인 이름\n"
+             "(likeIsinCdNm 등)은 이 API가 받지 않는데 **오류 없이 무시되고 전체\n"
+             "목록이 돌아온다.** 건수가 수만 단위면 필터가 안 걸린 것이고, 그 결과를\n"
+             "그 종목의 배당으로 읽으면 다른 종목의 배당을 안내하게 된다.\n"
+             "돌아온 행의 isinCd를 조회하려던 종목과 **대조한 뒤** 답한다.\n\n"
+             "기준일은 dvdnBasDt, 현금배당 지급일은 cashDvdnPayDt,\n"
+             "주당 배당금은 stckGenrDvdnAmt다. 이름이 비슷한 필드가 많으니\n"
+             "search_apis가 준 fields에서 고르고 지어내지 않는다.\n\n"
+             "**우선주는 별도 종목이다.** scrsItmsKcdNm으로 보통주/우선주를 구분해\n"
+             "어느 쪽 배당인지 밝힌다."},
      {"name": "get_right_schedule", "svc": "GetStocRighScheService_V2", "op": "getRighExerReasSche_V2",
       "doc": "권리행사 사유별 일정을 조회한다. 청약·행사 업무의 달력."},
      {"name": "check_irregular_stock", "svc": "GetStocTradInfoService_V2", "op": "getIrreRigforSecu_V2",
