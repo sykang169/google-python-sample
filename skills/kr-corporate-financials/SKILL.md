@@ -55,7 +55,8 @@ metadata:
 
 > [!CAUTION]
 > **은행·보험·증권은 위 지표를 그대로 쓰면 안 된다.** 부채가 곧 예수금인
-> 업종이라 부채비율 1,000%가 정상이다. 업권 지표(BIS, NIM, 지급여력)는
+> 업종이라 제조업이라면 위험 신호일 부채비율도 정상이다. 업권 지표(BIS, NIM,
+> 지급여력)는
 > [kr-product-comparison](../kr-product-comparison/SKILL.md)의 금융회사 통계와
 > [kr-insurance](../kr-insurance/SKILL.md)를 쓴다.
 
