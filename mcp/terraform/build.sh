@@ -80,7 +80,8 @@ else
 fi
 
 ALL=(ecos-mcp dart-mcp finlife-mcp
-     fsc-market-mcp fsc-ficc-mcp fsc-research-mcp fsc-equity-ops-mcp fsc-industry-mcp)
+     fsc-market-mcp fsc-ficc-mcp fsc-research-mcp fsc-equity-ops-mcp fsc-industry-mcp
+     fsc-insurance-mcp)
 TARGETS=("${@:-}")
 [[ -z "${TARGETS[0]:-}" ]] && TARGETS=("${ALL[@]}")
 

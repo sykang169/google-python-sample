@@ -2,9 +2,9 @@
  "source": {
   "topics": "https://www.fsc.go.kr/in060301",
   "portal": "https://www.data.go.kr",
-  "collected": "2026-09-01 / 보강 2026-09-06",
+  "collected": "2026-09-01 / 보강 2026-09-06 / 보강 2026-09-07",
   "note": "금융위 주제별 목록과 공공데이터포털 데이터셋 110건을 1:1 매칭. 엔드포인트 전수 확인.",
-  "access_note": "access는 2026-09-06 전수 재확인. 미구현 API의 오퍼레이션 명세는 포털 상세(AJAX /tcs/dss/selectApiDetailFunction.do)에서 수집했다. 요청변수·출력결과까지 담은 전체 명세는 fsc-common/candidates.json에 있다."
+  "access_note": "access는 2026-09-07 전수 재확인. 미구현 API의 오퍼레이션 명세는 포털 상세(AJAX /tcs/dss/selectApiDetailFunction.do)에서 수집했다. 요청변수·출력결과까지 담은 전체 명세는 fsc-common/candidates.json에 있다."
  },
  "call_pattern": "https://{host}/1160100/service/{service}/{operation}?serviceKey=...",
  "apis": [
@@ -96,7 +96,7 @@
     "getPublFundUtilInfo"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -183,7 +183,7 @@
     "getFnCoOutl"
    ],
    "access": "callable",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "호출 가능"
   },
@@ -208,7 +208,7 @@
     "getFnCoExecInfo"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -227,10 +227,12 @@
    "in_use": false,
    "base_url": "https://apis.data.go.kr/1160100/service",
    "operations": [
+    "getFnCoBs_V2",
+    "getFnCoSummFinaStat_V2",
     "getFnCoIs_V2"
    ],
    "access": "callable",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
    "approval": "개발단계",
    "portal_updated": "2026-01-02",
@@ -256,7 +258,7 @@
     "getDepoInsuSubjDepoStat"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -278,7 +280,7 @@
     "getBkrFnCoBasiInfo"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -300,7 +302,7 @@
     "getBkrFnCoBs"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -322,7 +324,7 @@
     "getBkrFnCoIs"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -344,7 +346,7 @@
     "getPublFundSuppCollInfo"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -516,7 +518,7 @@
     "getDepoAvaiWhet_V2"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계",
    "portal_updated": "2026-06-05",
    "access_detail": "활용신청 필요 (미승인)"
@@ -905,7 +907,7 @@
     "getFundIssuCompInfo_V2"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계",
    "portal_updated": "2026-04-20",
    "access_detail": "활용신청 필요 (미승인)"
@@ -928,7 +930,7 @@
     "getFundBrokInfo_V2"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계",
    "portal_updated": "2026-04-20",
    "access_detail": "활용신청 필요 (미승인)"
@@ -953,7 +955,7 @@
     "getUndeAsseInfo"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -977,7 +979,7 @@
     "getCredGradInfo"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -999,7 +1001,7 @@
     "getCallOptiInfo"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -1021,7 +1023,7 @@
     "getPrinAndInteInfo"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -1043,7 +1045,7 @@
     "getOverTheCounTradStat"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -1069,7 +1071,7 @@
     "getUndeAsseLtvDti"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -1094,7 +1096,7 @@
     "getMbsUndeAsseTypeSecuBala"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -1117,7 +1119,7 @@
     "getCallOptiStat"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -1140,7 +1142,7 @@
     "getIssuInteStatStat"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 심의승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -1163,7 +1165,7 @@
     "getMatuRedeInfo"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -1318,11 +1320,13 @@
    "in_use": false,
    "base_url": "https://apis.data.go.kr/1160100/service",
    "operations": [
+    "getStckLnbDetail",
+    "getStckLnbProgress",
     "getStckLnbInvpnDetail"
    ],
    "access": "callable",
-   "access_checked": "2026-09-06",
-   "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+   "access_checked": "2026-09-07",
+   "portal_declared_base_url": "https://apis.data.go.kr/1160100/﻿service",
    "approval": "개발단계",
    "portal_updated": "2025-11-14",
    "access_detail": "호출 가능"
@@ -1356,19 +1360,19 @@
    "fsc_label": "주택연금 가입정보",
    "functions": "주택연금공급 통계조회",
    "function_count_approx": 1,
-   "host": "openapi.fsc.go.kr",
+   "host": "apis.data.go.kr",
    "service": "GetHsgPenInfoService",
    "public_data_pk": "15151172",
    "portal_url": "https://www.data.go.kr/data/15151172/openapi.do",
    "adoption_priority": null,
    "adoption_note": null,
    "in_use": false,
-   "base_url": "http://openapi.fsc.go.kr/service",
+   "base_url": "https://apis.data.go.kr/1160100",
    "operations": [
     "getRmtgJoinInfo"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계",
    "portal_updated": "2025-11-27",
    "access_detail": "활용신청 필요 (미승인)"
@@ -1456,7 +1460,7 @@
     "getLoanSellAsse"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -1478,7 +1482,7 @@
     "getPublDispAsse"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -1500,7 +1504,7 @@
     "getInfoOpenProp"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -1524,7 +1528,7 @@
     "getAgriCoopKeyManaIndi"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -1548,7 +1552,7 @@
     "getForeCoopKeyManaIndi"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -1594,7 +1598,7 @@
     "getInstFinaCompMajoBusiActi"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -1617,7 +1621,7 @@
     "getInveAdviCompFinaInfo"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -1642,7 +1646,7 @@
     "getLeasCompPresReleStat"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -1667,7 +1671,7 @@
     "getLifeInsuCompKeyManaIndi"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -1691,7 +1695,7 @@
     "getMercBankKeyManaIndi"
    ],
    "access": "callable",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "호출 가능"
   },
@@ -1715,7 +1719,7 @@
     "getMutuSaviBankKeyManaIndi"
    ],
    "access": "callable",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "호출 가능"
   },
@@ -1740,7 +1744,7 @@
     "getNewTechVentCapiCompMajoBusiActi"
    ],
    "access": "callable",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "호출 가능"
   },
@@ -1765,7 +1769,7 @@
     "getNonlInsuCompKeyManaIndi"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -1810,7 +1814,7 @@
     "getRealEstaTrusCompKeyManaIndi"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -1877,7 +1881,7 @@
     "getCredCardCompMajoBusiActi"
    ],
    "access": "callable",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "호출 가능"
   },
@@ -1901,7 +1905,7 @@
     "getCredUnioKeyManaIndi"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -1967,7 +1971,7 @@
     "getFinaHoldCompKeyManaIndi"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -1991,7 +1995,7 @@
     "getFishCoopKeyManaIndi"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -2015,7 +2019,7 @@
     "getForeBankBranKeyManaIndi"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계 : 자동승인 / 운영단계 : 자동승인",
    "access_detail": "활용신청 필요 (미승인)"
   },
@@ -2025,22 +2029,23 @@
    "fsc_label": "서민금융지원실적정보",
    "functions": "미소금융지원실적, 햇살론지원실적",
    "function_count_approx": 2,
-   "host": "openapi.fsc.go.kr",
+   "host": "apis.data.go.kr",
    "service": "GetKinfaResultInfoService",
    "public_data_pk": "15094801",
    "portal_url": "https://www.data.go.kr/data/15094801/openapi.do",
    "adoption_priority": null,
    "adoption_note": null,
    "in_use": false,
-   "base_url": "http://openapi.fsc.go.kr/service",
+   "base_url": "https://apis.data.go.kr/1160100/service",
    "operations": [
+    "getMicroCreditInfo",
     "getSunshineLoanInfo"
    ],
-   "access": "unknown",
-   "access_checked": "2026-09-06",
+   "access": "not_applied",
+   "access_checked": "2026-09-07",
    "approval": "개발단계",
    "portal_updated": "2025-07-17",
-   "access_detail": "HTTP 400: {\n  \"OpenAPI_ServiceResponse\": {\n    \"cmmMsgHeader\": {\n      \"errMsg\": \"NO_OPENAPI_SERVICE_ERROR\",\n      \"returnAuthMsg\""
+   "access_detail": "활용신청 필요 (미승인)"
   },
   {
    "topic": "금융회사통계정보",
@@ -2048,19 +2053,24 @@
    "fsc_label": "자산운용사 영업활동통계정보",
    "functions": "증권거래현황, 파생상품거래현황외 4개 기능",
    "function_count_approx": 5,
-   "host": "openapi.fsc.go.kr",
+   "host": "apis.data.go.kr",
    "service": "GetFSSaleActInfoService",
    "public_data_pk": "15139266",
    "portal_url": "https://www.data.go.kr/data/15139266/openapi.do",
    "adoption_priority": null,
    "adoption_note": null,
    "in_use": false,
-   "base_url": "http://openapi.fsc.go.kr/service",
+   "base_url": "https://apis.data.go.kr/1160100/service",
    "operations": [
+    "getScrtDlngPresInfo",
+    "getDrvpDlngPresInfo",
+    "getInvdCminPresInfo",
+    "getInvdCntrPresInfo",
+    "getInvdPptPresInfo",
     "getInvdPptOperPresInfo"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계",
    "portal_updated": "2025-07-17",
    "access_detail": "활용신청 필요 (미승인)"
@@ -2071,19 +2081,26 @@
    "fsc_label": "투자자문사 영업 및 경영지표통계정보",
    "functions": "자산건전성 분류, 고정이하 자산비율, 증권거래현황외 5개 기능",
    "function_count_approx": 7,
-   "host": "openapi.fsc.go.kr",
+   "host": "apis.data.go.kr",
    "service": "GetFSSaleManaIndInfoService",
    "public_data_pk": "15139267",
    "portal_url": "https://www.data.go.kr/data/15139267/openapi.do",
    "adoption_priority": null,
    "adoption_note": null,
    "in_use": false,
-   "base_url": "http://openapi.fsc.go.kr/service",
+   "base_url": "https://apis.data.go.kr/1160100/service",
    "operations": [
+    "getSndnCsfInfo",
+    "getBlsbAstRatoInfo",
+    "getScrtDlngPresInfo",
+    "getDrvpDlngPresInfo",
+    "getInvdCminPresInfo",
+    "getInvdCntrPresInfo",
+    "getInvdPptPresInfo",
     "getInvdPptOperPresInfo"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계",
    "portal_updated": "2025-07-17",
    "access_detail": "활용신청 필요 (미승인)"
@@ -2094,19 +2111,19 @@
    "fsc_label": "사회적금융지원정보",
    "functions": "사회적금융 한눈에 정보서비스",
    "function_count_approx": 1,
-   "host": "openapi.fsc.go.kr",
+   "host": "apis.data.go.kr",
    "service": "GetFSSocialFinanSupInfoService",
    "public_data_pk": "15139269",
    "portal_url": "https://www.data.go.kr/data/15139269/openapi.do",
    "adoption_priority": null,
    "adoption_note": null,
    "in_use": false,
-   "base_url": "http://openapi.fsc.go.kr/service",
+   "base_url": "https://apis.data.go.kr/1160100/service",
    "operations": [
     "getScfinInfoSvcInfo"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계",
    "portal_updated": "2025-07-17",
    "access_detail": "활용신청 필요 (미승인)"
@@ -2306,7 +2323,7 @@
     "getInsuranceInfo"
    ],
    "access": "callable",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "portal_declared_base_url": "https://openapi.fsc.go.kr/service",
    "approval": "개발단계",
    "portal_updated": "2025-11-14",
@@ -2318,19 +2335,19 @@
    "fsc_label": "변액보험기본정보",
    "functions": "변액보험펀드별정보",
    "function_count_approx": 1,
-   "host": "openapi.fsc.go.kr",
+   "host": "apis.data.go.kr",
    "service": "GetVariableInsuranceInfoService",
    "public_data_pk": "15094793",
    "portal_url": "https://www.data.go.kr/data/15094793/openapi.do",
    "adoption_priority": null,
    "adoption_note": null,
    "in_use": false,
-   "base_url": "http://openapi.fsc.go.kr/service",
+   "base_url": "https://apis.data.go.kr/1160100/service",
    "operations": [
     "getFundInfo"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계",
    "portal_updated": "2026-01-02",
    "access_detail": "활용신청 필요 (미승인)"
@@ -2341,19 +2358,19 @@
    "fsc_label": "서민금융상품기본정보",
    "functions": "서민금융한눈에",
    "function_count_approx": 1,
-   "host": "openapi.fsc.go.kr",
+   "host": "apis.data.go.kr",
    "service": "GetSmallLoanFinanceInstituteInfoService",
    "public_data_pk": "15094787",
    "portal_url": "https://www.data.go.kr/data/15094787/openapi.do",
    "adoption_priority": null,
    "adoption_note": null,
    "in_use": false,
-   "base_url": "http://openapi.fsc.go.kr/service",
+   "base_url": "https://apis.data.go.kr/1160100/service",
    "operations": [
     "getOrdinaryFinanceInfo"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계",
    "portal_updated": "2025-07-17",
    "access_detail": "활용신청 필요 (미승인)"
@@ -2364,19 +2381,21 @@
    "fsc_label": "자동자보험가입정보",
    "functions": "자동차보험 계약정보, 자동차보험 손해상황, 자동차보험 피해자정보",
    "function_count_approx": 3,
-   "host": "openapi.fsc.go.kr",
+   "host": "apis.data.go.kr",
    "service": "GetFPAtmbInsujoinInfoService",
    "public_data_pk": "15124891",
    "portal_url": "https://www.data.go.kr/data/15124891/openapi.do",
    "adoption_priority": null,
    "adoption_note": null,
    "in_use": false,
-   "base_url": "http://openapi.fsc.go.kr/service",
+   "base_url": "https://apis.data.go.kr/1160100/service",
    "operations": [
+    "getContractInfo",
+    "getLosCircumstance",
     "getVictimInfo"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계",
    "portal_updated": "2025-11-05",
    "access_detail": "활용신청 필요 (미승인)"
@@ -2387,19 +2406,20 @@
    "fsc_label": "생명보험가입정보",
    "functions": "우리나라 국민 보험가입 현황, 개인연금보험 가입정보",
    "function_count_approx": 2,
-   "host": "openapi.fsc.go.kr",
+   "host": "apis.data.go.kr",
    "service": "GetFPLifeInsuJoinInfoService",
    "public_data_pk": "15124892",
    "portal_url": "https://www.data.go.kr/data/15124892/openapi.do",
    "adoption_priority": null,
    "adoption_note": null,
    "in_use": false,
-   "base_url": "http://openapi.fsc.go.kr/service",
+   "base_url": "https://apis.data.go.kr/1160100/service",
    "operations": [
+    "getLifeInsuJoinStatus",
     "getIndividualAnnuityInsuInfo"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계",
    "portal_updated": "2025-07-17",
    "access_detail": "활용신청 필요 (미승인)"
@@ -2410,19 +2430,19 @@
    "fsc_label": "일반손해보험가입정보",
    "functions": "기업성 재물(재산종합) 보험가입정보",
    "function_count_approx": 1,
-   "host": "openapi.fsc.go.kr",
+   "host": "apis.data.go.kr",
    "service": "GetFPPptInsuJoinInfoService",
    "public_data_pk": "15124894",
    "portal_url": "https://www.data.go.kr/data/15124894/openapi.do",
    "adoption_priority": null,
    "adoption_note": null,
    "in_use": false,
-   "base_url": "http://openapi.fsc.go.kr/service",
+   "base_url": "https://apis.data.go.kr/1160100/service",
    "operations": [
     "getPropertyInsuJoinInfo"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계",
    "portal_updated": "2025-07-17",
    "access_detail": "활용신청 필요 (미승인)"
@@ -2433,19 +2453,19 @@
    "fsc_label": "자동차보험 피해자 통계정보",
    "functions": "자동차보험 피해자 월간통계정보",
    "function_count_approx": 1,
-   "host": "openapi.fsc.go.kr",
+   "host": "apis.data.go.kr",
    "service": "GetAutoInsVicInfoService",
    "public_data_pk": "15151234",
    "portal_url": "https://www.data.go.kr/data/15151234/openapi.do",
    "adoption_priority": null,
    "adoption_note": null,
    "in_use": false,
-   "base_url": "http://openapi.fsc.go.kr/service",
+   "base_url": "https://apis.data.go.kr/1160100",
    "operations": [
     "getAutoInsVicMonthInfo"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계",
    "portal_updated": "2025-11-27",
    "access_detail": "활용신청 필요 (미승인)"
@@ -2456,19 +2476,21 @@
    "fsc_label": "생명보험 사고원인정보",
    "functions": "생명보험 10대사인 정보, 생명보험 5대 암사인 정보, 생명보험 5대 암발생 정보",
    "function_count_approx": 3,
-   "host": "openapi.fsc.go.kr",
+   "host": "apis.data.go.kr",
    "service": "GetLifeAccInfoService",
    "public_data_pk": "15151237",
    "portal_url": "https://www.data.go.kr/data/15151237/openapi.do",
    "adoption_priority": null,
    "adoption_note": null,
    "in_use": false,
-   "base_url": "http://openapi.fsc.go.kr/service",
+   "base_url": "https://apis.data.go.kr/1160100",
    "operations": [
+    "getLfinsTop10DthInfo",
+    "getLfinsTop5CancDthInfo",
     "getLfinsTop5CancOccrInfo"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계",
    "portal_updated": "2025-11-27",
    "access_detail": "활용신청 필요 (미승인)"
@@ -2479,19 +2501,20 @@
    "fsc_label": "개인사업자기본정보",
    "functions": "개인사업자개요정보조회, 개인사업자휴폐업정보조회",
    "function_count_approx": 2,
-   "host": "openapi.fsc.go.kr",
+   "host": "apis.data.go.kr",
    "service": "GetSBProfileInfoService",
    "public_data_pk": "15108168",
    "portal_url": "https://www.data.go.kr/data/15108168/openapi.do",
    "adoption_priority": null,
    "adoption_note": null,
    "in_use": false,
-   "base_url": "http://openapi.fsc.go.kr/service",
+   "base_url": "https://apis.data.go.kr/1160100/service",
    "operations": [
+    "getOtlInfo",
     "getCsdoStatus"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계",
    "portal_updated": "2025-07-17",
    "access_detail": "활용신청 필요 (미승인)"
@@ -2502,19 +2525,21 @@
    "fsc_label": "개인사업자재무정보",
    "functions": "개인사업자재무정보조회, 개인사업자매출액정보조회, 개인사업자부채정보조회",
    "function_count_approx": 3,
-   "host": "openapi.fsc.go.kr",
+   "host": "apis.data.go.kr",
    "service": "GetSBFinanceInfoService",
    "public_data_pk": "15108171",
    "portal_url": "https://www.data.go.kr/data/15108171/openapi.do",
    "adoption_priority": null,
    "adoption_note": null,
    "in_use": false,
-   "base_url": "http://openapi.fsc.go.kr/service",
+   "base_url": "https://apis.data.go.kr/1160100/service",
    "operations": [
+    "getFnafInfo",
+    "getSlsInfo",
     "getDbtInfo"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계",
    "portal_updated": "2025-07-17",
    "access_detail": "활용신청 필요 (미승인)"
@@ -2525,19 +2550,20 @@
    "fsc_label": "개인사업자금융정보",
    "functions": "개인사업자보증잔액정보조회, 개인사업자예금대출정보조회",
    "function_count_approx": 2,
-   "host": "openapi.fsc.go.kr",
+   "host": "apis.data.go.kr",
    "service": "GetSBBankingInfoService",
    "public_data_pk": "15108175",
    "portal_url": "https://www.data.go.kr/data/15108175/openapi.do",
    "adoption_priority": null,
    "adoption_note": null,
    "in_use": false,
-   "base_url": "http://openapi.fsc.go.kr/service",
+   "base_url": "https://apis.data.go.kr/1160100/service",
    "operations": [
+    "getGrnBalInfo",
     "getDpstLoanInfo"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계",
    "portal_updated": "2025-07-17",
    "access_detail": "활용신청 필요 (미승인)"
@@ -2548,19 +2574,19 @@
    "fsc_label": "개인사업자평가정보",
    "functions": "개인사업자평가정보조회",
    "function_count_approx": 1,
-   "host": "openapi.fsc.go.kr",
+   "host": "apis.data.go.kr",
    "service": "GetSBCreditInfoService",
    "public_data_pk": "15108177",
    "portal_url": "https://www.data.go.kr/data/15108177/openapi.do",
    "adoption_priority": null,
    "adoption_note": null,
    "in_use": false,
-   "base_url": "http://openapi.fsc.go.kr/service",
+   "base_url": "https://apis.data.go.kr/1160100/service",
    "operations": [
     "getEvlInfo"
    ],
    "access": "not_applied",
-   "access_checked": "2026-09-06",
+   "access_checked": "2026-09-07",
    "approval": "개발단계",
    "portal_updated": "2025-07-17",
    "access_detail": "활용신청 필요 (미승인)"
@@ -2571,22 +2597,22 @@
    "fsc_label": "침수차량진위확인",
    "functions": "침수여부",
    "function_count_approx": 1,
-   "host": "openapi.fsc.go.kr",
+   "host": "apis.data.go.kr",
    "service": "GetASLundService",
    "public_data_pk": "15124895",
    "portal_url": "https://www.data.go.kr/data/15124895/openapi.do",
    "adoption_priority": null,
    "adoption_note": null,
    "in_use": false,
-   "base_url": "http://openapi.fsc.go.kr/service",
+   "base_url": "https://apis.data.go.kr/1160100/service",
    "operations": [
     "getAutomobileLundinfo"
    ],
-   "access": "unknown",
-   "access_checked": "2026-09-06",
+   "access": "not_applied",
+   "access_checked": "2026-09-07",
    "approval": "개발단계",
    "portal_updated": "2025-07-17",
-   "access_detail": "HTTP 400: {\n  \"OpenAPI_ServiceResponse\": {\n    \"cmmMsgHeader\": {\n      \"errMsg\": \"NO_OPENAPI_SERVICE_ERROR\",\n      \"returnAuthMsg\""
+   "access_detail": "활용신청 필요 (미승인)"
   }
  ]
 }

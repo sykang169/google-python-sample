@@ -1832,6 +1832,75 @@
   "base_url": "https://apis.data.go.kr/1160100/service",
   "public_data_pk": "15059597",
   "operations": {
+   "getExecRemuStat": {
+    "fields": [
+     "basDt",
+     "crno",
+     "rgstDrtrCnt",
+     "rgstDrtrTrmrAmt",
+     "rgstDrtrAvgRmrAmt",
+     "rgstDrtrRmkCtt",
+     "otdrCnt",
+     "otdrTrmrAmt",
+     "otdrAvgRmrAmt",
+     "otdrRmkCtt",
+     "corpAudtNopeCnt",
+     "audpnTrmrAmt",
+     "audpnAvgRmrAmt",
+     "audtRmkCtt"
+    ],
+    "param_style": "resultType",
+    "total_count": 28997
+   },
+   "getExecutivesInfo": {
+    "fields": [
+     "basDt",
+     "crno",
+     "dataSqno",
+     "exutFnm",
+     "exutBornYm",
+     "exutJbttNm",
+     "rgstExutYn",
+     "rgstExutCtt",
+     "fltmsvYn",
+     "fltmsvCtt",
+     "exutChrgBzwrNm",
+     "exutMainCrrCtt",
+     "ownOnskCnt",
+     "ownPfstCnt",
+     "exutHdfTermCtt",
+     "exutJbttXpryDt",
+     "sexCd",
+     "sexCdNm",
+     "exutOwnOnskCnt",
+     "exutOwnPfstCnt"
+    ],
+    "param_style": "resultType",
+    "total_count": 965576
+   },
+   "getReprDireInfo": {
+    "fields": [
+     "basDt",
+     "crno",
+     "corpNm",
+     "ceoFnm",
+     "sexCd",
+     "sexCdNm",
+     "ceoBornYm",
+     "ceoJbttNm",
+     "rgstExutYn",
+     "fltmsvYn",
+     "ceoChrgBzwrCtt",
+     "ceoMainCrrCtt",
+     "ownOnskCnt",
+     "ownPfstCnt",
+     "maxSthdRltNm",
+     "ceoHdfTermCtt",
+     "ceoTrmXpryDt"
+    ],
+    "param_style": "resultType",
+    "total_count": 37064
+   },
    "getStockholderInfo": {
     "fields": [
      "basDt",

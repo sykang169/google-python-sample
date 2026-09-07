@@ -93,10 +93,10 @@ locals {
     }
   }
 
-  # 금융위 공공데이터 서버 5종. 데스크별로 나뉘어 있을 뿐 구조가 같고,
+  # 금융위 공공데이터 서버 6종. 데스크별로 나뉘어 있을 뿐 구조가 같고,
   # 공공데이터포털 인증키는 계정당 하나이므로 STOCK_API_KEY를 공유한다
   # (승인은 API마다 따로 받지만 키 문자열은 같다).
-  fsc_servers = ["market", "ficc", "research", "equity-ops", "industry"]
+  fsc_servers = ["market", "ficc", "research", "equity-ops", "industry", "insurance"]
 
   fsc_services = {
     for name in local.fsc_servers : "fsc-${name}-mcp" => {
@@ -108,7 +108,7 @@ locals {
     }
   }
 
-  # 배포 대상 전체. 기관별 4종 + 금융위 데스크별 5종.
+  # 배포 대상 전체. 기관별 3종 + 금융위 데스크별 6종.
   # 리전은 여기서 붙인다. 서비스가 region을 직접 들고 있으면 그것이 우선한다.
   # 서비스가 region을 직접 들고 있으면 그것을 쓰고, 없으면 기본값을 붙인다.
   services = merge(

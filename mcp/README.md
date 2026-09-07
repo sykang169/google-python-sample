@@ -19,7 +19,7 @@
 >
 > | 층 | 무엇을 담당하나 | 어디에 있나 |
 > |---|---|---|
-> | MCP 서버 8종 | 데이터를 가져온다 | 이 디렉터리 — [배포하기](#배포하기) |
+> | MCP 서버 9종 | 데이터를 가져온다 | 이 디렉터리 — [배포하기](#배포하기) |
 > | 시스템 지시 | 답변 기준과 규제 가드레일을 세운다 | [`SYSTEM_PROMPT.md`](./SYSTEM_PROMPT.md) |
 > | 스킬 8종 | 가져온 데이터를 어떻게 읽어야 하는지 알려준다 | [`../skills`](../skills) |
 >
@@ -44,20 +44,22 @@
 | [`fsc-market-mcp-server`](./fsc-market-mcp-server) | 금융위 — 주식·지수·ETF/ETN·채권·수익증권·종목마스터 | 11 |
 | [`fsc-ficc-mcp-server`](./fsc-ficc-mcp-server) | 금융위 — 채권 발행조건·이자일정·CP/CD | 8 |
 | [`fsc-equity-ops-mcp-server`](./fsc-equity-ops-mcp-server) | 금융위 — 배당·권리일정·대차·REPO | 7 |
-| [`fsc-industry-mcp-server`](./fsc-industry-mcp-server) | 금융위 — 펀드·증권사·업계통계 | 7 |
-| [`fsc-research-mcp-server`](./fsc-research-mcp-server) | 금융위 — 재무제표·기업개요·계열사 | 6 |
+| [`fsc-industry-mcp-server`](./fsc-industry-mcp-server) | 금융위 — 펀드·증권사·은행지표·업계통계 | 8 |
+| [`fsc-research-mcp-server`](./fsc-research-mcp-server) | 금융위 — 재무제표·기업개요·계열사·임원 | 7 |
+| [`fsc-insurance-mcp-server`](./fsc-insurance-mcp-server) | 금융위 — 실손보험료·생보/손보 재무·변액보험 | 8 |
 
-금융위 5종은 [`fsc-common`](./fsc-common)의 공용 클라이언트를 공유합니다.
+금융위 6종은 [`fsc-common`](./fsc-common)의 공용 클라이언트를 공유합니다.
 `sync.py`가 각 서버 디렉터리로 복사하므로 사본을 직접 고치지 마세요.
 
 ```
 Gemini Enterprise
-  └─ Custom MCP 데이터 스토어 8개
+  └─ Custom MCP 데이터 스토어 9개
        │  Discovery Engine 서비스 에이전트 신원으로 호출
        ↓
   Cloud Run (비공개 — 인터넷에 열지 않습니다)
        ├─ ecos-mcp   ├─ dart-mcp   ├─ finlife-mcp
-       └─ fsc-market / fsc-ficc / fsc-equity-ops / fsc-industry / fsc-research
+       └─ fsc-market / fsc-ficc / fsc-equity-ops / fsc-industry
+          / fsc-research / fsc-insurance
             └─ Secret Manager (서버별 전용 서비스 계정으로 격리)
 ```
 
@@ -70,7 +72,7 @@ Gemini Enterprise
 - **Google Cloud 프로젝트** — 결제가 활성화되어 있어야 합니다
 - **Gemini Enterprise 앱** — 이미 만들어져 있어야 합니다
 - **로컬 도구** — `gcloud`, `terraform`(1.5 이상), `python3`
-- **API 키 4개** — 아래에서 발급받습니다 (금융위 5종은 주식시세 키를 공유합니다)
+- **API 키 4개** — 아래에서 발급받습니다 (금융위 6종은 주식시세 키를 공유합니다)
 
 ### API 키 발급
 
@@ -242,16 +244,23 @@ disable_custom_mcp_org_policy_override = true
 ### 8. Gemini Enterprise에 연결합니다
 
 ```bash
-./connect_ge.sh            # 데이터 커넥터 8개를 만듭니다
+./connect_ge.sh            # 데이터 커넥터 9개를 만듭니다
 ./connect_ge.sh --status   # 상태를 확인합니다
 ```
+
+> **보험 서버는 활용신청이 더 필요합니다.** `fsc-insurance-mcp`가 쓰는 API 9종 중
+> 실손보험정보만 바로 호출되고, 나머지 8종은 각각 data.go.kr에서 활용신청을 해야
+> 합니다(전부 자동승인이라 신청하면 바로 열립니다). 신청 전에는 그 도구들이
+> `resultCode 30`을 돌려줍니다. 목록과 신청 링크는
+> [`fsc-insurance-mcp-server/README.md`](./fsc-insurance-mcp-server/README.md)에
+> 있고, 현재 상태는 `python3 mcp/fsc-common/check_access.py insurance`로 봅니다.
 
 ### 9. 콘솔에서 도구를 활성화합니다
 
 **이 단계를 빠뜨리기 쉽습니다.** 데이터 스토어를 만들어도 도구는 하나도 켜져
 있지 않습니다.
 
-데이터 스토어 8개 각각에 대해:
+데이터 스토어 9개 각각에 대해:
 
 ```
 Gemini Enterprise → 데이터 스토어 → 해당 항목 선택 → Actions 탭
@@ -267,7 +276,7 @@ Gemini Enterprise → 데이터 스토어 → 해당 항목 선택 → Actions �
 ./connect_ge.sh --status
 ```
 
-여덟 개 모두 `state=ACTIVE`이고 `tools`와 `enabled` 숫자가 같으면 완료입니다.
+아홉 개 모두 `state=ACTIVE`이고 `tools`와 `enabled` 숫자가 같으면 완료입니다.
 
 ```
   mcp-ecos              state=ACTIVE tools=6  enabled=6
@@ -275,9 +284,10 @@ Gemini Enterprise → 데이터 스토어 → 해당 항목 선택 → Actions �
   mcp-finlife           state=ACTIVE tools=6  enabled=6
   mcp-fsc-market        state=ACTIVE tools=11 enabled=11
   mcp-fsc-ficc          state=ACTIVE tools=8  enabled=8
-  mcp-fsc-research      state=ACTIVE tools=6  enabled=6
+  mcp-fsc-research      state=ACTIVE tools=7  enabled=7
   mcp-fsc-equity-ops    state=ACTIVE tools=7  enabled=7
-  mcp-fsc-industry      state=ACTIVE tools=7  enabled=7
+  mcp-fsc-industry      state=ACTIVE tools=8  enabled=8
+  mcp-fsc-insurance     state=ACTIVE tools=8  enabled=8
 ```
 
 이제 Gemini Enterprise 채팅에서 질문해 보세요.
@@ -375,7 +385,7 @@ cd ../terraform && ./build.sh dart-mcp && terraform apply
 못합니다. 게다가 사업보고서 본문은 텍스트만 80만 자여서 통째로 반환할 수도
 없습니다. 목차를 주는 `get_disclosure_outline`과 고른 항목만 주는
 `get_disclosure_section` 두 개를 따로 두었습니다(dart-mcp는 6개).
-여덟 서버를 합쳐도 도구 57개입니다.
+아홉 서버를 합쳐도 도구 67개입니다.
 
 **집계는 서버에서 처리합니다.** "임원이 몇 명인가" 같은 질문에서 모델이 JSON
 수십 행을 직접 세면 틀립니다(실제로 틀렸습니다). DART 응답에 건수와 범주형 필드
@@ -384,7 +394,7 @@ cd ../terraform && ./build.sh dart-mcp && terraform apply
 **조인도 서버에서 처리합니다.** FINLIFE는 상품 정보와 금리를 별도 배열로
 주는데, 서버가 합쳐서 상품 하나에 금리 옵션이 붙은 형태로 반환합니다.
 
-**모두 조회 전용입니다.** 55개 도구 전부 `readOnlyHint`가 붙어 있어 Gemini
+**모두 조회 전용입니다.** 67개 도구 전부 `readOnlyHint`가 붙어 있어 Gemini
 Enterprise가 사용자 확인 없이 호출합니다.
 
 ---
@@ -427,7 +437,7 @@ mcp/
 │   ├── assets/             빌드 시점에 준비하는 카탈로그와 회사 인덱스
 │   └── build_assets.py     자산 생성 스크립트
 ├── finlife-mcp-server/     금융상품 금리
-├── fsc-common/             금융위 5종의 공용 클라이언트 (사본의 원본)
+├── fsc-common/             금융위 6종의 공용 클라이언트 (사본의 원본)
 │   ├── servers.py          서버 정의 — 여기를 고치고 sync.py를 돌립니다
 │   └── catalog.json        금융위 API 카탈로그
 ├── fsc-market-mcp-server/       시세·종목마스터

@@ -7,7 +7,7 @@
 
 저장소 루트에서 실행한다.
 
-  python3 mcp/fsc-common/collect_operations.py <출력.json> [public_data_pk ...]
+  python3 mcp/fsc-common/collect_operations.py <출력.json> [--built] [public_data_pk ...]
 
 이미 수집된 서비스는 건너뛰므로 중간에 끊겨도 다시 돌리면 이어간다.
 """
@@ -105,11 +105,48 @@ def fetch_operation(client: httpx.Client, pk: str, detail_pk: str,
 
 
 
+def _resolve(node, defs: dict, depth: int = 0):
+    """$ref를 정의로 바꾼다. 순환 참조를 대비해 깊이를 제한한다."""
+    if depth > 10 or not isinstance(node, dict):
+        return {}
+    ref = node.get("$ref")
+    if ref:
+        return _resolve(defs.get(ref.rsplit("/", 1)[-1], {}), defs, depth + 1)
+    return node
+
+
+def _item_fields(schema, defs: dict, depth: int = 0) -> list[str]:
+    """응답 스키마를 따라 내려가 item 하나의 필드 이름을 모은다.
+
+    최상위는 header/body뿐이라 그대로 쓰면 쓸모가 없다. 실제로 필터 파라미터가
+    되는 것은 item의 속성이다. 정의 이름이 API마다 접두사가 붙어(FnCoBs_item)
+    이름 규칙 대신 구조를 따라간다.
+    """
+    if depth > 10:
+        return []
+    node = _resolve(schema, defs, depth)
+    if node.get("type") == "array" and node.get("items"):
+        return _item_fields(node["items"], defs, depth + 1)
+    for key, sub in (node.get("properties") or {}).items():
+        if key == "item" or key.endswith("_item"):
+            resolved = _resolve(sub, defs, depth)
+            if resolved.get("properties"):
+                return list(resolved["properties"])
+        found = _item_fields(sub, defs, depth + 1)
+        if found:
+            return found
+    return []
+
+
 def _from_swagger(page: str) -> list[dict] | None:
     """새 포털 템플릿(PRDE02)은 Swagger 2.0 명세를 페이지에 그대로 심어 둔다.
 
     구 템플릿의 select + AJAX 경로와 달리 오퍼레이션 목록이 HTML에 없어서,
-    이쪽을 먼저 본다. 파라미터 필수 여부와 설명까지 들어 있어 더 정확하다.
+    이쪽을 먼저 본다.
+
+    오퍼레이션 목록은 swaggerOprtinVOs가 아니라 paths에서 가져온다. VOs는
+    일부만 실려 오는 경우가 있다(금융회사재무신용정보는 paths에 3개인데 VOs에는
+    1개뿐이다). 파라미터 설명은 VOs에만 있으므로 operationId로 맞춰 채운다.
     """
     m = re.search(r"const swaggerJson = `(.*?)`;", page, re.S)
     if not m:
@@ -119,65 +156,46 @@ def _from_swagger(page: str) -> list[dict] | None:
     except json.JSONDecodeError:
         return None
 
+    paths = spec.get("paths") or {}
+    host = (spec.get("host") or "").rstrip("/")
+    if not paths or not host:
+        return None
+
+    defs = spec.get("definitions") or {}
+    base_url, _, service = host.rpartition("/")
     skip = {"numOfRows", "pageNo", "resultType", "_type", "serviceKey",
             "resultCode", "resultMsg", "totalCount"}
+
+    vos = {vo.get("operationId"): vo for vo in spec.get("swaggerOprtinVOs", [])}
     ops = []
-    for vo in spec.get("swaggerOprtinVOs", []):
-        url = vo.get("oprtinUrl", "")
-        base_url, _, operation = url.rpartition("/")
-        base_url, _, service = base_url.rpartition("/")
+    for path, methods in paths.items():
+        operation = path.lstrip("/")
+        vo = vos.get(operation, {})
+        schema = (methods.get("get", {}).get("responses", {})
+                  .get("200", {}).get("schema", {}))
+        fields = [f for f in _item_fields(schema, defs) if f not in skip]
+
         params = [{"ko": p.get("paramtrDc", ""), "name": p["paramtrNm"],
                    "required": p.get("paramtrDivision") == "필수",
                    "sample": p.get("paramtrBassValue", ""),
                    "desc": p.get("paramtrDc", "")}
                   for p in vo.get("reqList", []) if p["paramtrNm"] not in skip]
-        fields = [r["paramtrNm"] for r in vo.get("resList", [])
-                  if r.get("paramtrNm") and r["paramtrNm"] not in skip]
         names = {p["paramtrNm"] for p in vo.get("reqList", [])}
-        style = "_type" if "_type" in names else (
-            "resultType" if "resultType" in names else "xml")
+        style = "_type" if "_type" in names else "resultType"
+
         ops.append({
-            "operation": vo.get("operationId") or operation,
+            "operation": operation,
             "ko_name": vo.get("oprtinNm", ""),
             "desc": vo.get("oprtinDc", ""),
-            "base_url": base_url,
+            "base_url": f"https://{base_url}",
             "service_from_url": service,
-            "alt_host": spec.get("host", ""),
+            "alt_host": (vo.get("oprtinUrl", "").rsplit("/", 2)[0]
+                         if vo.get("oprtinUrl") else ""),
             "approval": "",
             "param_style": style,
             "params": params,
             "fields": fields,
             "source": "swagger",
-        })
-    if ops:
-        return ops
-
-    # 오퍼레이션 상세(swaggerOprtinVOs)가 비어 있어도 paths와 host에는 남아 있다.
-    # 이때 host는 '.../1160100/GetFundInfoService_V2'처럼 /service/가 빠진 형태로
-    # 오는 경우가 있어, 그대로 쓰면 resultCode 12가 난다. 두 갈래를 다 남긴다.
-    host = (spec.get("host") or "").rstrip("/")
-    if not host or not spec.get("paths"):
-        return None
-    base, _, service = host.rpartition("/")
-    for path, methods in spec["paths"].items():
-        operation = path.lstrip("/")
-        schema = (methods.get("get", {}).get("responses", {})
-                  .get("200", {}).get("schema", {}))
-        item = (schema.get("properties", {}).get("body", {})
-                .get("properties", {}).get("items", {})
-                .get("properties", {}).get("item", {}).get("properties", {}))
-        ops.append({
-            "operation": operation,
-            "ko_name": "",
-            "desc": (spec.get("info") or {}).get("description", "")[:200],
-            "base_url": f"https://{base}",
-            "service_from_url": service,
-            "alt_host": host,
-            "approval": "",
-            "param_style": "resultType",
-            "params": [],
-            "fields": [k for k in item if k not in skip],
-            "source": "swagger-paths",
         })
     return ops or None
 
@@ -242,7 +260,13 @@ def main(argv: list[str]) -> int:
     built = set(json.loads(
         (pathlib.Path("mcp/fsc-common/catalog.json")).read_text(encoding="utf-8")))
 
-    todo = [a for a in survey if a["service"] not in built]
+    # 기본은 아직 채택하지 않은 API다. --built를 주면 이미 서버로 나간 것도 본다
+    # (초기 수집이 첫 오퍼레이션만 담은 적이 있어, 빠진 게 없는지 대조할 때 쓴다).
+    if "--built" in targets:
+        targets = [t for t in targets if t != "--built"]
+        todo = list(survey)
+    else:
+        todo = [a for a in survey if a["service"] not in built]
     if targets:
         todo = [a for a in todo if a["public_data_pk"] in targets]
 

@@ -394,52 +394,6 @@
    }
   }
  },
- "GetFnCoFinaStatCredInfoService_V2": {
-  "name": "금융회사재무신용정보",
-  "topic": "금융회사정보",
-  "adoption_priority": 2,
-  "adoption_note": "금융회사 재무제표 3종",
-  "access": "callable",
-  "approval": "개발단계",
-  "base_url": "https://apis.data.go.kr/1160100/service",
-  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
-  "spec_source": "swagger",
-  "public_data_pk": "15059594",
-  "operations": {
-   "getFnCoIs_V2": {
-    "ko_name": "금융회사손익계산서조회",
-    "desc": "기준일자, 법인등록번호, 사업연도를 통하여 재무제표구분코드, 계정과목명, 당기계정과목금액, 전기계정과목금액등을 조회하는 금융회사손익계산서조회 기능",
-    "param_style": "resultType",
-    "params": [
-     {
-      "ko": "작업 또는 거래의 기준이 되는 일자(년월일)",
-      "name": "basDt",
-      "required": false,
-      "sample": "20181231",
-      "desc": "작업 또는 거래의 기준이 되는 일자(년월일)"
-     },
-     {
-      "ko": "법인등록번호",
-      "name": "crno",
-      "required": false,
-      "sample": "1201110234469",
-      "desc": "법인등록번호"
-     },
-     {
-      "ko": "법인에 대해 법령이 규정한 1회계기간으로서 법인세의 과세기간",
-      "name": "bizYear",
-      "required": false,
-      "sample": "2018",
-      "desc": "법인에 대해 법령이 규정한 1회계기간으로서 법인세의 과세기간"
-     }
-    ],
-    "fields": [
-     "FnCoIs_header",
-     "FnCoIs_body"
-    ]
-   }
-  }
- },
  "GetFnCoDepoInsuInfoService": {
   "name": "금융회사부보정보",
   "topic": "금융회사정보",
@@ -776,107 +730,6 @@
      "spraccRtrvEtcAmt",
      "spraccRtrvSumAmt",
      "pblfndRmkCtt"
-    ]
-   }
-  }
- },
- "GetStocDepoInfoService_V2": {
-  "name": "주식등록예탁가능정보",
-  "topic": "자본시장정보",
-  "adoption_priority": null,
-  "adoption_note": null,
-  "access": "not_applied",
-  "approval": "개발단계",
-  "base_url": "https://apis.data.go.kr/1160100",
-  "portal_declared_base_url": "https://apis.data.go.kr/1160100",
-  "spec_source": "swagger-paths",
-  "public_data_pk": "15059607",
-  "operations": {
-   "getDepoAvaiWhet_V2": {
-    "ko_name": "",
-    "desc": "주식등록예탁가능정보는 특정 주식이 한국예탁결제원에 등록 및 예탁이 가능한지 여부를 확인할 수 있는 데이터입니다.\\n\\n기준일자, 종목번호, 발행회사명 등을 기준으로, 등록예탁 가능여부, 예탁가능일자, 등록구분, 상장구분, 발행주식수, 액면가, 발행시장 등의 정보를 제공합니다.\\n\\n<데이터 조회 시 유의사항>\\n파라미터 없이 조회 시 데이터 조회 시간이 오",
-    "param_style": "resultType",
-    "params": [],
-    "fields": [
-     "basDt",
-     "crno",
-     "stckIssuCmpyNm",
-     "isinCd",
-     "isinCdNm",
-     "scrsItmsKcd",
-     "scrsItmsKcdNm",
-     "stckIssuFrmtNm",
-     "itmsShrtnCd",
-     "dpsgRegDt",
-     "dpsgRegCanDt",
-     "lstgDcd",
-     "lstgDcdNm",
-     "lstgDt",
-     "rbfLstgDcd",
-     "rbfLstgDcdNm",
-     "stckNcirRcd",
-     "stckNcirRcdNm",
-     "lstgAbolDt",
-     "afrpItmsNm"
-    ]
-   }
-  }
- },
- "GetFundInfoService_V2": {
-  "name": "크라우드펀딩정보",
-  "topic": "자본시장정보",
-  "adoption_priority": null,
-  "adoption_note": null,
-  "access": "not_applied",
-  "approval": "개발단계",
-  "base_url": "https://apis.data.go.kr/1160100",
-  "portal_declared_base_url": "https://apis.data.go.kr/1160100",
-  "spec_source": "swagger-paths",
-  "public_data_pk": "15059613",
-  "operations": {
-   "getFundIssuCompInfo_V2": {
-    "ko_name": "",
-    "desc": "크라우드펀딩정보는 온라인소액투자중개업자를 통해 자금을 조달한 크라우드펀딩 발행사의 정보를 제공하는 데이터입니다. 발행사명, 대표자명, 발행금액, 발행일자, 증권종류, 증권수량, 발행사 업종, 소재지 등의 정보가 포함됩니다.\\n\\n이 데이터는 1개 오퍼레이션으로 구성되어 있습니다.\\n오퍼레이션은 다음과 같습니다.\\n\\n① 크라우드펀딩 발행사정보 조회 : 발행",
-    "param_style": "resultType",
-    "params": [],
-    "fields": [
-     "basDt",
-     "fundIssuCmpyNm",
-     "fundTofrAmt",
-     "fundOffrSttgDt",
-     "fundOffrEdDt",
-     "fundSbscAmt",
-     "fundSbscRt",
-     "fundInvsCnt",
-     "fundIssuCmpyRprsBzcNm"
-    ]
-   }
-  }
- },
- "GetFundBrokInfoService_V2": {
-  "name": "크라우드펀딩중개업자정보",
-  "topic": "자본시장정보",
-  "adoption_priority": null,
-  "adoption_note": null,
-  "access": "not_applied",
-  "approval": "개발단계",
-  "base_url": "https://apis.data.go.kr/1160100",
-  "portal_declared_base_url": "https://apis.data.go.kr/1160100",
-  "spec_source": "swagger-paths",
-  "public_data_pk": "15043360",
-  "operations": {
-   "getFundBrokInfo_V2": {
-    "ko_name": "",
-    "desc": "크라우드펀딩중개업자정보는 기준일자와 업체명을 기준으로 크라우드펀딩 중개업자의 기본 현황과 발행 실적을 제공하는 데이터입니다. \\n\\n주요 제공 항목에는 중개업자명, 일련번호, 기준일자, 유가증권구분코드 및 명칭, 크라우드펀딩 발행금액 등이 포함되며, 중개업자별로 시점별 발행 현황을 확인할 수 있습니다. \\n\\n이 데이터는 기업의 비상장 자금조달 및 초기 투",
-    "param_style": "resultType",
-    "params": [],
-    "fields": [
-     "basDt",
-     "fundBrkrSqno",
-     "fundBrkrNm",
-     "scrsDcd",
-     "scrsDcdNm",
-     "fundIssuAmt"
     ]
    }
   }
@@ -1808,140 +1661,6 @@
      "scrsIssuAmt",
      "scrsRdptAmt",
      "scrsIssuBal"
-    ]
-   }
-  }
- },
- "GetCMStckLnbInfoService": {
-  "name": "주식대차거래정보",
-  "topic": "자본시장정보",
-  "adoption_priority": null,
-  "adoption_note": null,
-  "access": "callable",
-  "approval": "개발단계",
-  "base_url": "https://apis.data.go.kr/1160100/service",
-  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
-  "spec_source": "swagger",
-  "public_data_pk": "15124865",
-  "operations": {
-   "getStckLnbInvpnDetail": {
-    "ko_name": "﻿참여자별주식대차거래내역",
-    "desc": "참여자별 주식대차거래내역의 ﻿기준일자, 참여자구분, 참여자구분상세, 대여자체결규모, 대여자비중, 차입자체결규모, 차입자비중 정보 제공",
-    "param_style": "resultType",
-    "params": [
-     {
-      "ko": "기준일자",
-      "name": "basDt",
-      "required": false,
-      "sample": "20231005",
-      "desc": "기준일자"
-     },
-     {
-      "ko": "기준일자보다크거나같은데이터",
-      "name": "beginBasDt",
-      "required": false,
-      "sample": "20231005",
-      "desc": "기준일자보다크거나같은데이터"
-     },
-     {
-      "ko": "기준일자보다작은데이터",
-      "name": "endBasDt",
-      "required": false,
-      "sample": "20231006",
-      "desc": "기준일자보다작은데이터"
-     },
-     {
-      "ko": "기준일자값이검색값을포함하는데이터",
-      "name": "likeBasDt",
-      "required": true,
-      "sample": "20231005",
-      "desc": "기준일자값이검색값을포함하는데이터"
-     },
-     {
-      "ko": "참여자구분명",
-      "name": "invpnClsfNm",
-      "required": false,
-      "sample": "내국인",
-      "desc": "참여자구분명"
-     },
-     {
-      "ko": "참여자구분상세명",
-      "name": "invpnClsfDtlNm",
-      "required": false,
-      "sample": "자산운용",
-      "desc": "참여자구분상세명"
-     }
-    ],
-    "fields": [
-     "header",
-     "body"
-    ]
-   }
-  }
- },
- "GetHsgPenInfoService": {
-  "name": "주택연금 가입정보",
-  "topic": "자본시장정보",
-  "adoption_priority": null,
-  "adoption_note": null,
-  "access": "not_applied",
-  "approval": "개발단계",
-  "base_url": "http://openapi.fsc.go.kr/service",
-  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
-  "spec_source": "swagger",
-  "public_data_pk": "15151172",
-  "operations": {
-   "getRmtgJoinInfo": {
-    "ko_name": "주택연금공급 통계조회",
-    "desc": "기준연월, 주택연금가입지역분류코드, 지역명, 당월공급총건수, 당월공급총액 조회기능",
-    "param_style": "resultType",
-    "params": [
-     {
-      "ko": "기준연월",
-      "name": "basYm",
-      "required": false,
-      "sample": "",
-      "desc": "기준연월"
-     },
-     {
-      "ko": "기준연월보다크거나같은데이터",
-      "name": "beginBasYm",
-      "required": false,
-      "sample": "",
-      "desc": "기준연월보다크거나같은데이터"
-     },
-     {
-      "ko": "기준연월보다작은데이터",
-      "name": "endBasYm",
-      "required": false,
-      "sample": "",
-      "desc": "기준연월보다작은데이터"
-     },
-     {
-      "ko": "기준연월값이검색값을포함하는데이터",
-      "name": "likeBasYm",
-      "required": false,
-      "sample": "",
-      "desc": "기준연월값이검색값을포함하는데이터"
-     },
-     {
-      "ko": "주택연금가입지역분류코드",
-      "name": "rmtgJoinAreaCcd",
-      "required": false,
-      "sample": "",
-      "desc": "주택연금가입지역분류코드"
-     },
-     {
-      "ko": "지역명",
-      "name": "areaNm",
-      "required": false,
-      "sample": "",
-      "desc": "지역명"
-     }
-    ],
-    "fields": [
-     "header",
-     "body"
     ]
    }
   }
@@ -4106,18 +3825,405 @@
    }
   }
  },
+ "GetFnCoFinaStatCredInfoService_V2": {
+  "name": "금융회사재무신용정보",
+  "topic": "금융회사정보",
+  "adoption_priority": 2,
+  "adoption_note": "금융회사 재무제표 3종",
+  "access": "callable",
+  "approval": "개발단계",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
+  "spec_source": "swagger",
+  "public_data_pk": "15059594",
+  "operations": {
+   "getFnCoBs_V2": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "basDt",
+     "crno",
+     "bizYear",
+     "fnclDcd",
+     "fnclDcdNm",
+     "acitId",
+     "acitNm",
+     "thqrAcitAmt",
+     "crtmAcitAmt",
+     "lsqtAcitAmt",
+     "pvtrAcitAmt",
+     "bpvtrAcitAmt",
+     "curCd"
+    ]
+   },
+   "getFnCoSummFinaStat_V2": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "basDt",
+     "crno",
+     "bizYear",
+     "rptCd",
+     "rptCdNm",
+     "fnclDcd",
+     "fnclDcdNm",
+     "fncoSaleAmt",
+     "fncoBzopPft",
+     "iclsPalClcAmt",
+     "fncoCrtmNpf",
+     "fncoTastAmt",
+     "enpTdbtAmt",
+     "fncoTcptAmt",
+     "fncoCptlAmt",
+     "fncoDebtRto",
+     "curCd"
+    ]
+   },
+   "getFnCoIs_V2": {
+    "ko_name": "금융회사손익계산서조회",
+    "desc": "기준일자, 법인등록번호, 사업연도를 통하여 재무제표구분코드, 계정과목명, 당기계정과목금액, 전기계정과목금액등을 조회하는 금융회사손익계산서조회 기능",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "작업 또는 거래의 기준이 되는 일자(년월일)",
+      "name": "basDt",
+      "required": false,
+      "sample": "20181231",
+      "desc": "작업 또는 거래의 기준이 되는 일자(년월일)"
+     },
+     {
+      "ko": "법인등록번호",
+      "name": "crno",
+      "required": false,
+      "sample": "1201110234469",
+      "desc": "법인등록번호"
+     },
+     {
+      "ko": "법인에 대해 법령이 규정한 1회계기간으로서 법인세의 과세기간",
+      "name": "bizYear",
+      "required": false,
+      "sample": "2018",
+      "desc": "법인에 대해 법령이 규정한 1회계기간으로서 법인세의 과세기간"
+     }
+    ],
+    "fields": [
+     "basDt",
+     "crno",
+     "bizYear",
+     "fnclDcd",
+     "fnclDcdNm",
+     "acitId",
+     "acitNm",
+     "thqrAcitAmt",
+     "crtmAcitAmt",
+     "lsqtAcitAmt",
+     "pvtrAcitAmt",
+     "bpvtrAcitAmt",
+     "curCd"
+    ]
+   }
+  }
+ },
+ "GetStocDepoInfoService_V2": {
+  "name": "주식등록예탁가능정보",
+  "topic": "자본시장정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계",
+  "base_url": "https://apis.data.go.kr/1160100",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100",
+  "spec_source": "swagger",
+  "public_data_pk": "15059607",
+  "operations": {
+   "getDepoAvaiWhet_V2": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "basDt",
+     "crno",
+     "stckIssuCmpyNm",
+     "isinCd",
+     "isinCdNm",
+     "scrsItmsKcd",
+     "scrsItmsKcdNm",
+     "stckIssuFrmtNm",
+     "itmsShrtnCd",
+     "dpsgRegDt",
+     "dpsgRegCanDt",
+     "lstgDcd",
+     "lstgDcdNm",
+     "lstgDt",
+     "rbfLstgDcd",
+     "rbfLstgDcdNm",
+     "stckNcirRcd",
+     "stckNcirRcdNm",
+     "lstgAbolDt",
+     "afrpItmsNm"
+    ]
+   }
+  }
+ },
+ "GetFundInfoService_V2": {
+  "name": "크라우드펀딩정보",
+  "topic": "자본시장정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계",
+  "base_url": "https://apis.data.go.kr/1160100",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100",
+  "spec_source": "swagger",
+  "public_data_pk": "15059613",
+  "operations": {
+   "getFundIssuCompInfo_V2": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "basDt",
+     "fundIssuCmpyNm",
+     "fundTofrAmt",
+     "fundOffrSttgDt",
+     "fundOffrEdDt",
+     "fundSbscAmt",
+     "fundSbscRt",
+     "fundInvsCnt",
+     "fundIssuCmpyRprsBzcNm"
+    ]
+   }
+  }
+ },
+ "GetFundBrokInfoService_V2": {
+  "name": "크라우드펀딩중개업자정보",
+  "topic": "자본시장정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계",
+  "base_url": "https://apis.data.go.kr/1160100",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100",
+  "spec_source": "swagger",
+  "public_data_pk": "15043360",
+  "operations": {
+   "getFundBrokInfo_V2": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "basDt",
+     "fundBrkrSqno",
+     "fundBrkrNm",
+     "scrsDcd",
+     "scrsDcdNm",
+     "fundIssuAmt"
+    ]
+   }
+  }
+ },
+ "GetCMStckLnbInfoService": {
+  "name": "주식대차거래정보",
+  "topic": "자본시장정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "callable",
+  "approval": "개발단계",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/﻿service",
+  "spec_source": "swagger",
+  "public_data_pk": "15124865",
+  "operations": {
+   "getStckLnbDetail": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "basDt",
+     "mrktClsfNm",
+     "stckItmsNm",
+     "stckItmsCd",
+     "cclStckCnt",
+     "rdptStckCnt",
+     "balnStckCnt",
+     "balnStckAmt"
+    ]
+   },
+   "getStckLnbProgress": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "basDt",
+     "cclStckCnt",
+     "rdptStckCnt",
+     "balnStckCnt",
+     "balnStckAmt"
+    ]
+   },
+   "getStckLnbInvpnDetail": {
+    "ko_name": "﻿참여자별주식대차거래내역",
+    "desc": "참여자별 주식대차거래내역의 ﻿기준일자, 참여자구분, 참여자구분상세, 대여자체결규모, 대여자비중, 차입자체결규모, 차입자비중 정보 제공",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준일자",
+      "name": "basDt",
+      "required": false,
+      "sample": "20231005",
+      "desc": "기준일자"
+     },
+     {
+      "ko": "기준일자보다크거나같은데이터",
+      "name": "beginBasDt",
+      "required": false,
+      "sample": "20231005",
+      "desc": "기준일자보다크거나같은데이터"
+     },
+     {
+      "ko": "기준일자보다작은데이터",
+      "name": "endBasDt",
+      "required": false,
+      "sample": "20231006",
+      "desc": "기준일자보다작은데이터"
+     },
+     {
+      "ko": "기준일자값이검색값을포함하는데이터",
+      "name": "likeBasDt",
+      "required": true,
+      "sample": "20231005",
+      "desc": "기준일자값이검색값을포함하는데이터"
+     },
+     {
+      "ko": "참여자구분명",
+      "name": "invpnClsfNm",
+      "required": false,
+      "sample": "내국인",
+      "desc": "참여자구분명"
+     },
+     {
+      "ko": "참여자구분상세명",
+      "name": "invpnClsfDtlNm",
+      "required": false,
+      "sample": "자산운용",
+      "desc": "참여자구분상세명"
+     }
+    ],
+    "fields": [
+     "basDt",
+     "invpnClsfNm",
+     "invpnClsfDtlNm",
+     "lndeCclStckAmt",
+     "lndeCclStckAmtRto",
+     "borCclStckAmt",
+     "borCclStckAmtRto"
+    ]
+   }
+  }
+ },
+ "GetHsgPenInfoService": {
+  "name": "주택연금 가입정보",
+  "topic": "자본시장정보",
+  "adoption_priority": null,
+  "adoption_note": null,
+  "access": "not_applied",
+  "approval": "개발단계",
+  "base_url": "https://apis.data.go.kr/1160100",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100",
+  "spec_source": "swagger",
+  "public_data_pk": "15151172",
+  "operations": {
+   "getRmtgJoinInfo": {
+    "ko_name": "주택연금공급 통계조회",
+    "desc": "기준연월, 주택연금가입지역분류코드, 지역명, 당월공급총건수, 당월공급총액 조회기능",
+    "param_style": "resultType",
+    "params": [
+     {
+      "ko": "기준연월",
+      "name": "basYm",
+      "required": false,
+      "sample": "",
+      "desc": "기준연월"
+     },
+     {
+      "ko": "기준연월보다크거나같은데이터",
+      "name": "beginBasYm",
+      "required": false,
+      "sample": "",
+      "desc": "기준연월보다크거나같은데이터"
+     },
+     {
+      "ko": "기준연월보다작은데이터",
+      "name": "endBasYm",
+      "required": false,
+      "sample": "",
+      "desc": "기준연월보다작은데이터"
+     },
+     {
+      "ko": "기준연월값이검색값을포함하는데이터",
+      "name": "likeBasYm",
+      "required": false,
+      "sample": "",
+      "desc": "기준연월값이검색값을포함하는데이터"
+     },
+     {
+      "ko": "주택연금가입지역분류코드",
+      "name": "rmtgJoinAreaCcd",
+      "required": false,
+      "sample": "",
+      "desc": "주택연금가입지역분류코드"
+     },
+     {
+      "ko": "지역명",
+      "name": "areaNm",
+      "required": false,
+      "sample": "",
+      "desc": "지역명"
+     }
+    ],
+    "fields": [
+     "thmmSplyTamt",
+     "basYm",
+     "rmtgJoinAreaCcd",
+     "areaNm",
+     "thmmSplyTcnt"
+    ]
+   }
+  }
+ },
  "GetKinfaResultInfoService": {
   "name": "서민금융지원실적정보",
   "topic": "금융회사통계정보",
   "adoption_priority": null,
   "adoption_note": null,
-  "access": "unknown",
+  "access": "not_applied",
   "approval": "개발단계",
-  "base_url": "http://openapi.fsc.go.kr/service",
-  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
   "spec_source": "swagger",
   "public_data_pk": "15094801",
   "operations": {
+   "getMicroCreditInfo": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "basYm",
+     "lnCcnt",
+     "lnAmt",
+     "fileWrtDt"
+    ]
+   },
    "getSunshineLoanInfo": {
     "ko_name": "햇살론지원실적",
     "desc": "서민금융진흥원에서 제공하는 서민금융지원실적 관련 정보미소금융지원실적, 햇살론지원실적에 대한 오퍼레이션을 제공한다.",
@@ -4195,8 +4301,12 @@
      }
     ],
     "fields": [
-     "header",
-     "body"
+     "basYm",
+     "grnPrdCtg",
+     "grnPrdNm",
+     "grnCcnt",
+     "grnAmt",
+     "fileWrtDt"
     ]
    }
   }
@@ -4208,11 +4318,81 @@
   "adoption_note": null,
   "access": "not_applied",
   "approval": "개발단계",
-  "base_url": "http://openapi.fsc.go.kr/service",
-  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
   "spec_source": "swagger",
   "public_data_pk": "15139266",
   "operations": {
+   "getScrtDlngPresInfo": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "sttsItemAmt",
+     "basYm",
+     "fncoCd",
+     "fncoNm",
+     "sttsItemCd",
+     "sttsItemNm"
+    ]
+   },
+   "getDrvpDlngPresInfo": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "sttsItemAmt",
+     "basYm",
+     "fncoCd",
+     "fncoNm",
+     "sttsItemCd",
+     "sttsItemNm"
+    ]
+   },
+   "getInvdCminPresInfo": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "sttsItemAmt",
+     "basYm",
+     "fncoCd",
+     "fncoNm",
+     "sttsItemCd",
+     "sttsItemNm"
+    ]
+   },
+   "getInvdCntrPresInfo": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "sttsItemAmt",
+     "basYm",
+     "fncoCd",
+     "fncoNm",
+     "sttsItemCd",
+     "sttsItemNm"
+    ]
+   },
+   "getInvdPptPresInfo": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "sttsItemAmt",
+     "basYm",
+     "fncoCd",
+     "fncoNm",
+     "sttsItemCd",
+     "sttsItemNm"
+    ]
+   },
    "getInvdPptOperPresInfo": {
     "ko_name": "투자일임 재산운용현황",
     "desc": "기준연월, 금융회사코드, 금융회사명, 통계항목코드, 통계항목명, 통계항목국내금액, 통계항목해외금액 조회기능",
@@ -4276,8 +4456,13 @@
      }
     ],
     "fields": [
-     "header",
-     "body"
+     "sttsItemOvseAmt",
+     "basYm",
+     "fncoCd",
+     "fncoNm",
+     "sttsItemCd",
+     "sttsItemNm",
+     "sttsItemDmstAmt"
     ]
    }
   }
@@ -4289,11 +4474,116 @@
   "adoption_note": null,
   "access": "not_applied",
   "approval": "개발단계",
-  "base_url": "http://openapi.fsc.go.kr/service",
-  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
   "spec_source": "swagger",
   "public_data_pk": "15139267",
   "operations": {
+   "getSndnCsfInfo": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "sumAmt",
+     "basYm",
+     "fncoCd",
+     "fncoNm",
+     "sttsItemCd",
+     "sttsItemNm",
+     "nrmAmt",
+     "atntAmt",
+     "fixAmt",
+     "dtflAmt",
+     "esloAmt"
+    ]
+   },
+   "getBlsbAstRatoInfo": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "blsbRato",
+     "basYm",
+     "fncoCd",
+     "fncoNm",
+     "sttsItemCd",
+     "sttsItemNm",
+     "csfTrgtAmt",
+     "blsbAmt"
+    ]
+   },
+   "getScrtDlngPresInfo": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "sttsItemAmt",
+     "basYm",
+     "fncoCd",
+     "fncoNm",
+     "sttsItemCd",
+     "sttsItemNm"
+    ]
+   },
+   "getDrvpDlngPresInfo": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "sttsItemAmt",
+     "basYm",
+     "fncoCd",
+     "fncoNm",
+     "sttsItemCd",
+     "sttsItemNm"
+    ]
+   },
+   "getInvdCminPresInfo": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "sttsItemAmt",
+     "basYm",
+     "fncoCd",
+     "fncoNm",
+     "sttsItemCd",
+     "sttsItemNm"
+    ]
+   },
+   "getInvdCntrPresInfo": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "sttsItemAmt",
+     "basYm",
+     "fncoCd",
+     "fncoNm",
+     "sttsItemCd",
+     "sttsItemNm"
+    ]
+   },
+   "getInvdPptPresInfo": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "sttsItemAmt",
+     "basYm",
+     "fncoCd",
+     "fncoNm",
+     "sttsItemCd",
+     "sttsItemNm"
+    ]
+   },
    "getInvdPptOperPresInfo": {
     "ko_name": "투자일임 재산운용현황",
     "desc": "기준연월, 금융회사코드, 금융회사명, 통계항목코드, 통계항목명, 통계항목국내금액, 통계항목해외금액 조회기능",
@@ -4357,8 +4647,13 @@
      }
     ],
     "fields": [
-     "header",
-     "body"
+     "sttsItemOvseAmt",
+     "basYm",
+     "fncoCd",
+     "fncoNm",
+     "sttsItemCd",
+     "sttsItemNm",
+     "sttsItemDmstAmt"
     ]
    }
   }
@@ -4370,8 +4665,8 @@
   "adoption_note": null,
   "access": "not_applied",
   "approval": "개발단계",
-  "base_url": "http://openapi.fsc.go.kr/service",
-  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
   "spec_source": "swagger",
   "public_data_pk": "15139269",
   "operations": {
@@ -4431,8 +4726,19 @@
      }
     ],
     "fields": [
-     "header",
-     "body"
+     "refCn",
+     "basYm",
+     "sprtBizNm",
+     "sprtTrgtNm",
+     "sprtTrgtDtlCn",
+     "sprtMthdCn",
+     "sprvsnInstNm",
+     "operInstNm",
+     "bizOtlCn",
+     "offrSchdlCn",
+     "offrSchdlDtlCn",
+     "rfrcCn",
+     "aplyMthdCn"
     ]
    }
   }
@@ -4445,7 +4751,7 @@
   "access": "callable",
   "approval": "개발단계",
   "base_url": "https://apis.data.go.kr/1160100/service",
-  "portal_declared_base_url": "https://openapi.fsc.go.kr/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
   "spec_source": "swagger",
   "public_data_pk": "15094797",
   "operations": {
@@ -4547,8 +4853,16 @@
      }
     ],
     "fields": [
-     "header",
-     "body"
+     "ofrInstNm",
+     "basDt",
+     "cmpyCd",
+     "cmpyNm",
+     "ptrn",
+     "mog",
+     "prdNm",
+     "age",
+     "mlInsRt",
+     "fmlInsRt"
     ]
    }
   }
@@ -4560,8 +4874,8 @@
   "adoption_note": null,
   "access": "not_applied",
   "approval": "개발단계",
-  "base_url": "http://openapi.fsc.go.kr/service",
-  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
   "spec_source": "swagger",
   "public_data_pk": "15094793",
   "operations": {
@@ -4642,8 +4956,13 @@
      }
     ],
     "fields": [
-     "header",
-     "body"
+     "cmpyCd",
+     "cmpyNm",
+     "fndNm",
+     "fndCd",
+     "basDt",
+     "basprc",
+     "nPptAmt"
     ]
    }
   }
@@ -4655,8 +4974,8 @@
   "adoption_note": null,
   "access": "not_applied",
   "approval": "개발단계",
-  "base_url": "http://openapi.fsc.go.kr/service",
-  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
   "spec_source": "swagger",
   "public_data_pk": "15094787",
   "operations": {
@@ -4786,8 +5105,53 @@
      }
     ],
     "fields": [
-     "header",
-     "body"
+     "mgmDln",
+     "prdCtg2",
+     "fileWrtDt",
+     "cv19SuprCtg",
+     "cv19SuprCtn",
+     "cv19SuprTgtDtlCtn",
+     "prdExisYn",
+     "cv19Rfrc",
+     "prdCtg",
+     "prdNm",
+     "rltSite",
+     "tgtFltr",
+     "hdlInstDtlVw",
+     "rsdAreaPamtEqltIstm",
+     "suprTgtDtlCond",
+     "age",
+     "incm",
+     "rsdArea",
+     "crdtSc",
+     "anin",
+     "housHoldCnt",
+     "housAr",
+     "lnTgtHous",
+     "rfrcCnpl",
+     "grnInst",
+     "jnMthd",
+     "rpymdCfe",
+     "lnIcdcst",
+     "ovItrYr",
+     "prftAddIrtCond",
+     "etcRefSbjc",
+     "hdlInst",
+     "cnpl",
+     "basYm",
+     "snq",
+     "finPrdNm",
+     "lnLmt",
+     "irtCtg",
+     "irt",
+     "maxTotLnTrm",
+     "maxDfrmTrm",
+     "maxRdptTrm",
+     "rdptMthd",
+     "usge",
+     "trgt",
+     "instCtg",
+     "ofrInstNm"
     ]
    }
   }
@@ -4799,11 +5163,43 @@
   "adoption_note": null,
   "access": "not_applied",
   "approval": "개발단계",
-  "base_url": "http://openapi.fsc.go.kr/service",
-  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
   "spec_source": "swagger",
   "public_data_pk": "15124891",
   "operations": {
+   "getContractInfo": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "isuCmpyOfrYm",
+     "isuItmsNm",
+     "mogClsfNm",
+     "sexNm",
+     "aggr",
+     "atmbPlorNm",
+     "kncrNm",
+     "joinCnt",
+     "elpsInpm"
+    ]
+   },
+   "getLosCircumstance": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "losAmt",
+     "isuCmpyOfrYm",
+     "isuItmsNm",
+     "mogClsfNm",
+     "kncrNm",
+     "injPtlCnt",
+     "dthTotlCnt"
+    ]
+   },
    "getVictimInfo": {
     "ko_name": "자동차사고 피해자정보",
     "desc": "자동차사고 피해자정보의 기준년월, 사망부상구분, 장애여부, 부상급수, 장애급수, 인원수 정보 제공",
@@ -4867,8 +5263,12 @@
      }
     ],
     "fields": [
-     "header",
-     "body"
+     "atmbAcdnCnlsYm",
+     "dthInjClsfNm",
+     "impYn",
+     "injLvlcntCd",
+     "impLvlcntCd",
+     "nope"
     ]
    }
   }
@@ -4880,11 +5280,26 @@
   "adoption_note": null,
   "access": "not_applied",
   "approval": "개발단계",
-  "base_url": "http://openapi.fsc.go.kr/service",
-  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
   "spec_source": "swagger",
   "public_data_pk": "15124892",
   "operations": {
+   "getLifeInsuJoinStatus": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "isuKindNm",
+     "joinCnt",
+     "joinRto",
+     "sttsAccmlTrgtYr",
+     "areaNm",
+     "sexNm",
+     "rchnAggr"
+    ]
+   },
    "getIndividualAnnuityInsuInfo": {
     "ko_name": "﻿개인연금보험 가입정보",
     "desc": "개인연금보험 가입정보의 ﻿기준년도, 도달연령, 세제적격, 납입방법, 모집형태, 납입기간, 가입건수 정보 제공",
@@ -4955,8 +5370,13 @@
      }
     ],
     "fields": [
-     "header",
-     "body"
+     "sttsAccmlTrgtYr",
+     "rchnAggr",
+     "taxPrqlYn",
+     "pymtMthNm",
+     "offrTyNm",
+     "yerUnitPymtTerm",
+     "joinCnt"
     ]
    }
   }
@@ -4968,8 +5388,8 @@
   "adoption_note": null,
   "access": "not_applied",
   "approval": "개발단계",
-  "base_url": "http://openapi.fsc.go.kr/service",
-  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
   "spec_source": "swagger",
   "public_data_pk": "15124894",
   "operations": {
@@ -5022,8 +5442,11 @@
      }
     ],
     "fields": [
-     "header",
-     "body"
+     "sttsAccmlTrgtYr",
+     "mogClsfNm",
+     "objcClsfNm",
+     "cntrCnt",
+     "inpm"
     ]
    }
   }
@@ -5035,8 +5458,8 @@
   "adoption_note": null,
   "access": "not_applied",
   "approval": "개발단계",
-  "base_url": "http://openapi.fsc.go.kr/service",
-  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "base_url": "https://apis.data.go.kr/1160100",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100",
   "spec_source": "swagger",
   "public_data_pk": "15151234",
   "operations": {
@@ -5103,8 +5526,13 @@
      }
     ],
     "fields": [
-     "header",
-     "body"
+     "basYm",
+     "dthInjClsfNm",
+     "impYn",
+     "injLvlcntCd",
+     "impLvlcntCd",
+     "nope",
+     "avgPn1PesnAmt"
     ]
    }
   }
@@ -5116,11 +5544,41 @@
   "adoption_note": null,
   "access": "not_applied",
   "approval": "개발단계",
-  "base_url": "http://openapi.fsc.go.kr/service",
-  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "base_url": "https://apis.data.go.kr/1160100",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100",
   "spec_source": "swagger",
   "public_data_pk": "15151237",
   "operations": {
+   "getLfinsTop10DthInfo": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "basYr",
+     "sexCd",
+     "dthAggr",
+     "dthCausRnkn",
+     "kcdNm",
+     "kcdCd",
+     "depeNopeCnt"
+    ]
+   },
+   "getLfinsTop5CancDthInfo": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "basYr",
+     "sexCd",
+     "dthAggr",
+     "dthCausRnkn",
+     "kcdNm",
+     "kcdCd",
+     "depeNopeCnt"
+    ]
+   },
    "getLfinsTop5CancOccrInfo": {
     "ko_name": "생명보험 5대 암발생 정보",
     "desc": "기준연도, 성별코드, 암발생연령대, 암발생순위, 한국표준질병사인분류명, 한국표준질병사인분류코드, 암발생인원수 조회기능",
@@ -5170,8 +5628,13 @@
      }
     ],
     "fields": [
-     "header",
-     "body"
+     "basYr",
+     "sexCd",
+     "cancOccrAggr",
+     "cancOccrRnkn",
+     "kcdNm",
+     "kcdCd",
+     "cancOccrNopeCnt"
     ]
    }
   }
@@ -5183,11 +5646,27 @@
   "adoption_note": null,
   "access": "not_applied",
   "approval": "개발단계",
-  "base_url": "http://openapi.fsc.go.kr/service",
-  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
   "spec_source": "swagger",
   "public_data_pk": "15108168",
   "operations": {
+   "getOtlInfo": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "basYm",
+     "rprSexNm",
+     "rprAggrNm",
+     "estbYr",
+     "bizAreaNm",
+     "bizBzcCd",
+     "bizBzcCdNm",
+     "empeCntNm"
+    ]
+   },
    "getCsdoStatus": {
     "ko_name": "개인사업자휴폐업정보조회",
     "desc": "개인사업자의 휴업, 폐업 정보 제공",
@@ -5202,8 +5681,15 @@
      }
     ],
     "fields": [
-     "header",
-     "body"
+     "rprSexNm",
+     "rprAggrNm",
+     "estbYr",
+     "bizAreaNm",
+     "bizBzcCd",
+     "bizBzcCdNm",
+     "empeCntNm",
+     "csdoClsfNm",
+     "basYm"
     ]
    }
   }
@@ -5215,11 +5701,52 @@
   "adoption_note": null,
   "access": "not_applied",
   "approval": "개발단계",
-  "base_url": "http://openapi.fsc.go.kr/service",
-  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
   "spec_source": "swagger",
   "public_data_pk": "15108171",
   "operations": {
+   "getFnafInfo": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "basYm",
+     "rprSexNm",
+     "rprAggrNm",
+     "estbYr",
+     "bizAreaNm",
+     "bizBzcCd",
+     "bizBzcCdNm",
+     "empeCntNm",
+     "fnafBasYr",
+     "cptlAmt",
+     "saleAmt",
+     "bzopPftAmt",
+     "crtmNpfAmt",
+     "astTsumAmt",
+     "debtTsumAmt"
+    ]
+   },
+   "getSlsInfo": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "bizAreaNm",
+     "fnafBasYr",
+     "saleAmt",
+     "bizBzcCd",
+     "basYm",
+     "rprSexNm",
+     "rprAggrNm",
+     "estbYr",
+     "bizBzcCdNm",
+     "empeCntNm"
+    ]
+   },
    "getDbtInfo": {
     "ko_name": "개인사업자부채정보조회",
     "desc": "개인사업자의 부채총계 정보 제공",
@@ -5269,8 +5796,16 @@
      }
     ],
     "fields": [
-     "header",
-     "body"
+     "basYm",
+     "rprSexNm",
+     "rprAggrNm",
+     "estbYr",
+     "bizAreaNm",
+     "bizBzcCd",
+     "bizBzcCdNm",
+     "empeCntNm",
+     "fnafBasYr",
+     "debtTsumAmt"
     ]
    }
   }
@@ -5282,11 +5817,30 @@
   "adoption_note": null,
   "access": "not_applied",
   "approval": "개발단계",
-  "base_url": "http://openapi.fsc.go.kr/service",
-  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
   "spec_source": "swagger",
   "public_data_pk": "15108175",
   "operations": {
+   "getGrnBalInfo": {
+    "ko_name": "",
+    "desc": "",
+    "param_style": "resultType",
+    "params": [],
+    "fields": [
+     "fctfndLoanYn",
+     "basYm",
+     "rprSexNm",
+     "bizBzcCdNm",
+     "empeCntNm",
+     "grnBal",
+     "wrkfndLoanYn",
+     "rprAggrNm",
+     "estbYr",
+     "bizAreaNm",
+     "bizBzcCd"
+    ]
+   },
    "getDpstLoanInfo": {
     "ko_name": "개인사업자예금대출정보조회",
     "desc": "개인사업자의 예금평잔, 대출평잔 등 예금대출 정보 제공",
@@ -5350,8 +5904,18 @@
      }
     ],
     "fields": [
-     "header",
-     "body"
+     "basYm",
+     "rprSexNm",
+     "rprAggrNm",
+     "fctfndLoanYn",
+     "empeCntNm",
+     "depAbl",
+     "loanAbl",
+     "wrkfndLoanYn",
+     "estbYr",
+     "bizAreaNm",
+     "bizBzcCd",
+     "bizBzcCdNm"
     ]
    }
   }
@@ -5363,8 +5927,8 @@
   "adoption_note": null,
   "access": "not_applied",
   "approval": "개발단계",
-  "base_url": "http://openapi.fsc.go.kr/service",
-  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
   "spec_source": "swagger",
   "public_data_pk": "15108177",
   "operations": {
@@ -5410,8 +5974,15 @@
      }
     ],
     "fields": [
-     "header",
-     "body"
+     "estbYr",
+     "bizAreaNm",
+     "bizBzcCd",
+     "bizBzcCdNm",
+     "empeCntNm",
+     "crEvlGdNm",
+     "rprAggrNm",
+     "rprSexNm",
+     "basYm"
     ]
    }
   }
@@ -5421,10 +5992,10 @@
   "topic": "진위서비스",
   "adoption_priority": null,
   "adoption_note": null,
-  "access": "unknown",
+  "access": "not_applied",
   "approval": "개발단계",
-  "base_url": "http://openapi.fsc.go.kr/service",
-  "portal_declared_base_url": "http://openapi.fsc.go.kr/service",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "portal_declared_base_url": "https://apis.data.go.kr/1160100/service",
   "spec_source": "swagger",
   "public_data_pk": "15124895",
   "operations": {
@@ -5477,8 +6048,10 @@
      }
     ],
     "fields": [
-     "header",
-     "body"
+     "dtaWrtDt",
+     "acdnOccrDtm",
+     "acdnKindNm",
+     "nowVhclNo"
     ]
    }
   }

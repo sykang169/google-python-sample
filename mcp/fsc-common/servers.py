@@ -1,4 +1,4 @@
-"""5개 FSC 서버의 정의. sync.py가 이걸 읽어 server.py를 생성한다.
+"""6개 FSC 서버의 정의. sync.py가 이걸 읽어 server.py를 생성한다.
 
 각 서버는 공통 도구 2개(search_apis / call_api)에 더해, 그 데스크가 가장 자주
 쓰는 경로를 감싼 편의 도구를 갖는다. 편의 도구는 실측한 스키마에 근거한다.
@@ -104,6 +104,10 @@ SERVERS = {
       "doc": "기업 개요를 조회한다. 법인등록번호(crno) 확정의 출발점."},
      {"name": "get_affiliates", "svc": "GetCorpBasicInfoService_V2", "op": "getAffiliate_V2",
       "doc": "계열회사 목록을 조회한다. 지배구조 맵을 그릴 때 쓴다."},
+     {"name": "get_executives", "svc": "GetCorpGoveInfoService", "op": "getExecutivesInfo",
+      "doc": "임원 현황을 조회한다. 사외이사 수 같은 지배구조 질문의 근거.\n\n"
+             "**행을 세는 것은 서버가 한다.** 응답의 건수와 범주 분포를 쓰고,\n"
+             "JSON을 직접 세지 않는다. 보수는 search_apis로 getExecRemuStat을 찾는다."},
      {"name": "get_disclosure", "svc": "GetDiscInfoService_V2", "op": "getDiviDiscInfo_V2",
       "doc": "배당 공시를 조회한다. 이 서비스에는 유상증자·합병 등 32종의 공시\n"
              "오퍼레이션이 있으므로, 다른 공시는 search_apis로 찾아 call_api로 실행한다."},
@@ -136,6 +140,57 @@ SERVERS = {
       "doc": "REPO 금리를 조회한다. 단기 조달비용의 기준."},
    ],
  },
+ "insurance": {
+   "prompts": [
+     ('40대 남성 실손보험료 회사별로 비교해줘', 'get_medical_insurance_premium — 담보·유형을 맞춘다'),
+     ('생보사 지급여력 지표 보여줘', 'get_life_insurer_indicators'),
+     ('손해보험사 경과손해율 어떻게 돼?', 'get_nonlife_insurer_business'),
+     ('삼성생명 총자산 얼마야?', 'get_life_insurer_financials'),
+     ('변액보험 펀드 기준가 알려줘', 'get_variable_insurance_fund'),
+     ('자동차보험 사고 피해자 통계 있어?', "search_apis('자동차') + call_api"),
+   ],
+   "title": "보험",
+   "desc": "실손보험 기준보험료, 생보·손보사 재무와 경영지표, 변액보험 펀드, 보험 가입·사고 통계",
+   "hint": "보험료는 회사가 실제로 청구하는 값이 아니라 공시 기준 보험료다. 담보·유형·연령·성별이 "
+           "같아야 비교가 성립하며, 조건이 다르면 숫자가 달라도 우열이 아니다. "
+           "업권 지표는 생보와 손보의 계정 체계가 달라 서로 직접 빼지 않는다.",
+   "tools": [
+     {"name": "get_medical_insurance_premium", "svc": "GetMedicalReimbursementInsuranceInfoService",
+      "op": "getInsuranceInfo",
+      "doc": "실손의료보험 기준보험료를 조회한다. 회사·담보·유형·연령·성별로 갈린다.\n\n"
+             "mlInsRt가 남성, fmlInsRt가 여성 보험료다(원). 한 회사가 담보(mog)마다\n"
+             "다른 행으로 나오므로 **행 하나를 그 회사 보험료로 읽으면 안 된다.**\n"
+             "회사를 비교하려면 ptrn(유형)과 mog(담보)를 고정하고 같은 조합끼리 본다.\n"
+             "값이 0인 행이 섞여 있는데 미판매 담보이지 무료가 아니다.\n\n"
+             "age는 '40' 같은 숫자다('40세'가 아니다). cmpyNm은 'KB손보',\n"
+             "'메리츠화재'처럼 줄인 이름이라 법인명으로 찾으면 0건이 나온다."},
+     {"name": "get_life_insurer_financials", "svc": "GetLifeInsuCompInfoService",
+      "op": "getLifeInsuCompFinaInfo",
+      "doc": "생명보험사 재무현황(요약 재무상태표)을 조회한다.\n\n"
+             "보험사는 보험계약 준비금이 부채의 대부분이다. 제조업 기준으로 부채비율을\n"
+             "읽으면 결론이 뒤집힌다. 계정은 astSmryStfnpsAcitCdNm으로 구분한다.\n"
+             "기준년월(basYm)이 필수에 가깝다 — 없으면 최신 분기가 나온다."},
+     {"name": "get_life_insurer_indicators", "svc": "GetLifeInsuCompInfoService",
+      "op": "getLifeInsuCompKeyManaIndi",
+      "doc": "생명보험사 주요경영지표를 조회한다. 지급여력·수익성 등 업권 지표.\n\n"
+             "지표 종류는 cpaqItemCdNm에 들어 있다. 재무제표로는 보이지 않는\n"
+             "건전성 맥락이 여기 있다."},
+     {"name": "get_nonlife_insurer_financials", "svc": "GetNonlInsuCompInfoService",
+      "op": "getNonlInsuCompFinaInfo",
+      "doc": "손해보험사 재무현황을 조회한다.\n\n"
+             "생보와 계정 체계가 달라 같은 표에 놓고 빼지 않는다."},
+     {"name": "get_nonlife_insurer_business", "svc": "GetNonlInsuCompInfoService",
+      "op": "getNonlInsuCompMajoBusiActi",
+      "doc": "손해보험사 주요영업활동을 조회한다. 보종별 경과손해율이 핵심이다.\n\n"
+             "isuKindElpsLosRatDcdNm이 보종, 같은 접두사의 금액 필드가 그 값이다.\n"
+             "손해율은 보종마다 정상 범위가 다르다."},
+     {"name": "get_variable_insurance_fund", "svc": "GetVariableInsuranceInfoService",
+      "op": "getFundInfo",
+      "doc": "변액보험 펀드별 기준가와 순자산을 조회한다.\n\n"
+             "변액보험은 투자성 상품이라 원금이 보장되지 않는다. 수익률을 제시할 때\n"
+             "사업비 차감 전후를 구분하지 않고 단정하지 않는다."},
+   ],
+ },
  "industry": {
    "prompts": [
      ('우리 수수료가 경쟁사 대비 어디쯤이야?', 'get_brokerage_fee — 거래금액 구간을 맞춘다'),
@@ -154,8 +209,21 @@ SERVERS = {
      {"name": "get_fund_sales", "svc": "GetFdSaleInfoService_V2", "op": "getCustFundSaleInfo_V2",
       "doc": "펀드 판매현황을 조회한다. 판매기관·고객유형·펀드유형별 점유율을 본다."},
      {"name": "get_securities_firm_stats", "svc": "GetSecuCompInfoService", "op": "getSecuCompGeneInfo",
-      "doc": "증권사 일반현황을 조회한다. 재무·경영지표는 search_apis로 같은 서비스의\n"
-             "다른 오퍼레이션을 찾는다."},
+      "doc": "증권사 일반현황(임직원·점포 등)을 조회한다.\n\n"
+             "같은 서비스의 다른 오퍼레이션은 이름과 내용이 어긋나므로 주의한다\n"
+             "(search_apis로 접근한다).\n"
+             "  getSecuCompFinaInfo    '재무현황'이지만 실제로는 **주석항목**이다\n"
+             "                         (채무보증·대차/대주·대손상각채권). 재무제표가 아니다\n"
+             "  getSecuCompKeyManaIndi '주요경영지표'지만 **유동성비율**만 들어 있다\n"
+             "  getSecuCompMajoBusiActi 금융투자상품 수탁수수료 항목별 실적\n\n"
+             "**증권사의 자기자본·순이익·ROE는 이 저장소의 어떤 도구로도 나오지 않는다.**\n"
+             "금융위 재무제표 API에도 DART 재무제표 API에도 증권사가 없다(실측 확인).\n"
+             "요청받으면 없다고 답하고 추정하지 않는다."},
+     {"name": "get_bank_stats", "svc": "GetDomeBankInfoService", "op": "getDomeBankKeyManaIndi",
+      "doc": "국내은행 주요경영지표를 조회한다. BIS비율·연체율 같은 건전성 지표.\n\n"
+             "재무제표로는 보이지 않는 업권 지표다. 예금 금리를 비교할 때 그 은행이\n"
+             "어떤 상태인지 함께 봐야 하면 여기를 쓴다.\n"
+             "재무현황은 search_apis로 getDomeBankFinaInfo를 찾는다."},
      {"name": "get_brokerage_fee", "svc": "GetOfficialNoticeInfoService", "op": "getStockTradingFeeInfo",
       "doc": "증권사 주식거래 수수료 공시를 조회한다. 가격 경쟁 포지션 확인용."},
      {"name": "get_kofia_stat", "svc": "GetKofiaStatisticsInfoService", "op": "getCMAStatus",

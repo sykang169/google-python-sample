@@ -2242,6 +2242,75 @@
   "base_url": "https://apis.data.go.kr/1160100/service",
   "public_data_pk": "15059597",
   "operations": {
+   "getExecRemuStat": {
+    "fields": [
+     "basDt",
+     "crno",
+     "rgstDrtrCnt",
+     "rgstDrtrTrmrAmt",
+     "rgstDrtrAvgRmrAmt",
+     "rgstDrtrRmkCtt",
+     "otdrCnt",
+     "otdrTrmrAmt",
+     "otdrAvgRmrAmt",
+     "otdrRmkCtt",
+     "corpAudtNopeCnt",
+     "audpnTrmrAmt",
+     "audpnAvgRmrAmt",
+     "audtRmkCtt"
+    ],
+    "param_style": "resultType",
+    "total_count": 28997
+   },
+   "getExecutivesInfo": {
+    "fields": [
+     "basDt",
+     "crno",
+     "dataSqno",
+     "exutFnm",
+     "exutBornYm",
+     "exutJbttNm",
+     "rgstExutYn",
+     "rgstExutCtt",
+     "fltmsvYn",
+     "fltmsvCtt",
+     "exutChrgBzwrNm",
+     "exutMainCrrCtt",
+     "ownOnskCnt",
+     "ownPfstCnt",
+     "exutHdfTermCtt",
+     "exutJbttXpryDt",
+     "sexCd",
+     "sexCdNm",
+     "exutOwnOnskCnt",
+     "exutOwnPfstCnt"
+    ],
+    "param_style": "resultType",
+    "total_count": 965576
+   },
+   "getReprDireInfo": {
+    "fields": [
+     "basDt",
+     "crno",
+     "corpNm",
+     "ceoFnm",
+     "sexCd",
+     "sexCdNm",
+     "ceoBornYm",
+     "ceoJbttNm",
+     "rgstExutYn",
+     "fltmsvYn",
+     "ceoChrgBzwrCtt",
+     "ceoMainCrrCtt",
+     "ownOnskCnt",
+     "ownPfstCnt",
+     "maxSthdRltNm",
+     "ceoHdfTermCtt",
+     "ceoTrmXpryDt"
+    ],
+    "param_style": "resultType",
+    "total_count": 37064
+   },
    "getStockholderInfo": {
     "fields": [
      "basDt",
@@ -3941,6 +4010,21 @@
   "base_url": "https://apis.data.go.kr/1160100/service",
   "public_data_pk": "15061320",
   "operations": {
+   "getSecuCompFinaInfo": {
+    "fields": [
+     "title",
+     "astSmryStfnpsAcitAmt",
+     "astSmryStfnpsAcitCd",
+     "astSmryStfnpsAcitCdNm",
+     "astSmryStfnpsAcitCmpsRto",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
    "getSecuCompGeneInfo": {
     "fields": [
      "basYm",
@@ -3950,6 +4034,49 @@
      "xcsmCnt",
      "xcsmDcd",
      "xcsmDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getSecuCompKeyManaIndi": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "lqdtItemCd",
+     "lqdtItemCdNm",
+     "lqdtItemValCtt"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getSecuCompMajoBusiActi": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "scrsTrTcotCfeMrktClsfCmtlAmt",
+     "scrsTrTcotCfeMrktClsfThqrAmt",
+     "scrsTrTcotCfeMrktDcd",
+     "scrsTrTcotCfeMrktDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getSecuCompPresReleStat": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "froprNcptRtoItemCd",
+     "froprNcptRtoItemCdNm",
+     "froprNcptRtoItemVal"
     ],
     "param_style": "resultType",
     "total_count": null
@@ -4121,6 +4248,18 @@
   "base_url": "https://apis.data.go.kr/1160100",
   "public_data_pk": "15094799",
   "operations": {
+   "getDerivationLinkedSecuritiesRepaymentAtMidtermRate_V2": {
+    "fields": [
+     "year",
+     "half",
+     "prdCtg",
+     "rt",
+     "basDt",
+     "cpnyNm"
+    ],
+    "param_style": "resultType",
+    "total_count": 4908
+   },
    "getForiegnSecuritiesInvestmentInfo_V2": {
     "fields": [
      "basDt",
@@ -4144,6 +4283,21 @@
   "base_url": "https://apis.data.go.kr/1160100/service",
   "public_data_pk": "15061325",
   "operations": {
+   "getAsseManaCompFinaInfo": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "smryStfnpsAcitAmt",
+     "smryStfnpsAcitCd",
+     "smryStfnpsAcitCdNm",
+     "smryStfnpsAcitCmpsRto"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
    "getAsseManaCompGeneInfo": {
     "fields": [
      "basYm",
@@ -4153,6 +4307,20 @@
      "xcsmCnt",
      "xcsmDcd",
      "xcsmDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getAsseManaCompKeyManaIndi": {
+    "fields": [
+     "title",
+     "basYm",
+     "cpaqLqdtItemCd",
+     "cpaqLqdtItemCdNm",
+     "cpaqLqdtItemVal",
+     "crno",
+     "fncoCd",
+     "fncoNm"
     ],
     "param_style": "resultType",
     "total_count": null
@@ -4168,6 +4336,21 @@
   "base_url": "https://apis.data.go.kr/1160100/service",
   "public_data_pk": "15061304",
   "operations": {
+   "getDomeBankFinaInfo": {
+    "fields": [
+     "title",
+     "basYm",
+     "bnkAstItemAcitAmt",
+     "bnkAstItemAcitCd",
+     "bnkAstItemAcitCdNm",
+     "bnkAstItemAcitCmpsRto",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
    "getDomeBankGeneInfo": {
     "fields": [
      "basYm",
@@ -4177,6 +4360,34 @@
      "xcsmCnt",
      "xcsmDcd",
      "xcsmDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getDomeBankKeyManaIndi": {
+    "fields": [
+     "title",
+     "basYm",
+     "cpaqItemClsfVal",
+     "cpaqItemDcd",
+     "cpaqItemDcdNm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getDomeBankMajoBusiActi": {
+    "fields": [
+     "title",
+     "basYm",
+     "bzopSclItemAmt",
+     "bzopSclItemDcd",
+     "bzopSclItemDcdNm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
     ],
     "param_style": "resultType",
     "total_count": null
@@ -4822,6 +5033,26 @@
     ],
     "param_style": "xml",
     "total_count": "251"
+   },
+   "getFnCoDebeConvDiscInfo_V2": {
+    "fields": [],
+    "param_style": "resultType",
+    "total_count": 4
+   },
+   "getFnCoDebeInheDiscInfo_V2": {
+    "fields": [],
+    "param_style": "resultType",
+    "total_count": 3
+   },
+   "getFnCoDiviCombDiscInfo_V2": {
+    "fields": [],
+    "param_style": "resultType",
+    "total_count": 7
+   },
+   "getFnCoDiviDiscInfo_V2": {
+    "fields": [],
+    "param_style": "resultType",
+    "total_count": 1884
    },
    "getFnCoEbRighIssuDiscInfo_V2": {
     "fields": [
@@ -5623,6 +5854,21 @@
   "base_url": "https://apis.data.go.kr/1160100/service",
   "public_data_pk": "15061357",
   "operations": {
+   "getFutuCompFinaInfo": {
+    "fields": [
+     "title",
+     "astSmryStfnpsAcitAmt",
+     "astSmryStfnpsAcitCd",
+     "astSmryStfnpsAcitCdNm",
+     "astSmryStfnpsAcitCmpsRto",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
    "getFutuCompGeneInfo": {
     "fields": [
      "basYm",
@@ -5632,6 +5878,49 @@
      "xcsmPresCnt",
      "xcsmPresDcd",
      "xcsmPresDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getFutuCompKeyManaIndi": {
+    "fields": [
+     "title",
+     "basYm",
+     "cpaqBzopNcptRatCtt",
+     "cpaqDcd",
+     "cpaqDcdNm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getFutuCompMajoBusiActi": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "finIvsPrdCsgnCfeItemCd",
+     "finIvsPrdCsgnCfeItemCdNm",
+     "finIvsPrdCsgnCfeItemCfeAmt",
+     "finIvsPrdCsgnCfeItemTrAmt",
+     "fncoCd",
+     "fncoNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getFutuCompPresReleStat": {
+    "fields": [
+     "title",
+     "basYm",
+     "cpaqNcptItemClsfVal",
+     "cpaqNcptItemDcd",
+     "cpaqNcptItemDcdNm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
     ],
     "param_style": "resultType",
     "total_count": null
@@ -5647,6 +5936,20 @@
   "base_url": "https://apis.data.go.kr/1160100/service",
   "public_data_pk": "15061288",
   "operations": {
+   "getDeriBusiTrusBusi": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "drvpTrClsfAmt",
+     "drvpTrDcd",
+     "drvpTrDcdNm",
+     "fncoCd",
+     "fncoNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
    "getDeriBusiTrusExclTota": {
     "fields": [
      "basYm",
@@ -5683,6 +5986,448 @@
      "nopeCnt",
      "nopeDcd",
      "nopeDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getTrusBusiInsu": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "nopeCnt",
+     "nopeDcd",
+     "nopeDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getTrusBusiRealEstaTrus": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "nopeCnt",
+     "nopeDcd",
+     "nopeDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getTrusBusiSecu": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "nopeCnt",
+     "nopeDcd",
+     "nopeDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getTrusBusiTrusFee": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "trstRmrAmt",
+     "trstRmrDcd",
+     "trstRmrDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getTrusBusiTrusInfo": {
+    "fields": [
+     "title",
+     "basYm",
+     "cnfmUnitNm",
+     "crno",
+     "fncoBzdsClsfNm",
+     "fncoBzdsFncoNm",
+     "fncoBzdsNm",
+     "fncoCd"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   }
+  }
+ },
+ "GetMedicalReimbursementInsuranceInfoService": {
+  "name": "실손보험정보",
+  "server": "insurance",
+  "desk": "보험·계리",
+  "tier": "core",
+  "purpose": "실손보험 담보·유형·성별·연령대별 기준보험료. 상품 비교의 출발점",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "public_data_pk": "15094797",
+  "operations": {
+   "getInsuranceInfo": {
+    "fields": [
+     "ofrInstNm",
+     "basDt",
+     "cmpyCd",
+     "cmpyNm",
+     "ptrn",
+     "mog",
+     "prdNm",
+     "age",
+     "mlInsRt",
+     "fmlInsRt"
+    ],
+    "param_style": "resultType",
+    "total_count": 374299
+   }
+  }
+ },
+ "GetLifeInsuCompInfoService": {
+  "name": "금융통계생명보험정보",
+  "server": "insurance",
+  "desk": "보험·계리",
+  "tier": "core",
+  "purpose": "생명보험사 일반현황·재무·주요영업활동·경영지표. 업권 지표",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "public_data_pk": "15061306",
+  "operations": {
+   "getLifeInsuCompFinaInfo": {
+    "fields": [
+     "title",
+     "astSmryStfnpsAcitAmt",
+     "astSmryStfnpsAcitCd",
+     "astSmryStfnpsAcitCdNm",
+     "astSmryStfnpsAcitCmpsRto",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getLifeInsuCompGeneInfo": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "xcsmPlnpnCnt",
+     "xcsmPlnpnDcd",
+     "xcsmPlnpnDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getLifeInsuCompKeyManaIndi": {
+    "fields": [
+     "title",
+     "basYm",
+     "cpaqItemAmt",
+     "cpaqItemCd",
+     "cpaqItemCdNm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getLifeInsuCompMajoBusiActi": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "spacsbClsfThqrAmt",
+     "spacsbClsfThqrCcnt",
+     "spacsbDcd",
+     "spacsbDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   }
+  }
+ },
+ "GetNonlInsuCompInfoService": {
+  "name": "금융통계손해보험정보",
+  "server": "insurance",
+  "desk": "보험·계리",
+  "tier": "core",
+  "purpose": "손해보험사 일반현황·재무·주요영업활동·경영지표. 업권 지표",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "public_data_pk": "15061307",
+  "operations": {
+   "getNonlInsuCompFinaInfo": {
+    "fields": [
+     "title",
+     "astSmryStfnpsAcitAmt",
+     "astSmryStfnpsAcitCd",
+     "astSmryStfnpsAcitCdNm",
+     "astSmryStfnpsAcitCmpsRto",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getNonlInsuCompGeneInfo": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "xcsmPlnpnCnt",
+     "xcsmPlnpnDcd",
+     "xcsmPlnpnDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getNonlInsuCompKeyManaIndi": {
+    "fields": [
+     "title",
+     "basYm",
+     "cpaqItemCd",
+     "cpaqItemCdNm",
+     "cpaqItemValCtt",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getNonlInsuCompMajoBusiActi": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "isuKindElpsLosRatClsfAmt",
+     "isuKindElpsLosRatDcd",
+     "isuKindElpsLosRatDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   }
+  }
+ },
+ "GetVariableInsuranceInfoService": {
+  "name": "변액보험기본정보",
+  "server": "insurance",
+  "desk": "보험·계리",
+  "tier": "useful",
+  "purpose": "변액보험 펀드 정보. 투자성 보험의 운용 대상",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "public_data_pk": "15094793",
+  "operations": {
+   "getFundInfo": {
+    "fields": [
+     "cmpyCd",
+     "cmpyNm",
+     "fndNm",
+     "fndCd",
+     "basDt",
+     "basprc",
+     "nPptAmt"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   }
+  }
+ },
+ "GetFPLifeInsuJoinInfoService": {
+  "name": "생명보험가입정보",
+  "server": "insurance",
+  "desk": "보험·계리",
+  "tier": "useful",
+  "purpose": "생명보험 가입 통계. 개인연금 등 상품별 가입 현황",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "public_data_pk": "15124892",
+  "operations": {
+   "getIndividualAnnuityInsuInfo": {
+    "fields": [
+     "sttsAccmlTrgtYr",
+     "rchnAggr",
+     "taxPrqlYn",
+     "pymtMthNm",
+     "offrTyNm",
+     "yerUnitPymtTerm",
+     "joinCnt"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getLifeInsuJoinStatus": {
+    "fields": [
+     "isuKindNm",
+     "joinCnt",
+     "joinRto",
+     "sttsAccmlTrgtYr",
+     "areaNm",
+     "sexNm",
+     "rchnAggr"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   }
+  }
+ },
+ "GetFPPptInsuJoinInfoService": {
+  "name": "일반손해보험가입정보",
+  "server": "insurance",
+  "desk": "보험·계리",
+  "tier": "useful",
+  "purpose": "일반손해보험 가입 통계",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "public_data_pk": "15124894",
+  "operations": {
+   "getPropertyInsuJoinInfo": {
+    "fields": [
+     "sttsAccmlTrgtYr",
+     "mogClsfNm",
+     "objcClsfNm",
+     "cntrCnt",
+     "inpm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   }
+  }
+ },
+ "GetFPAtmbInsujoinInfoService": {
+  "name": "자동차보험가입정보",
+  "server": "insurance",
+  "desk": "보험·계리",
+  "tier": "useful",
+  "purpose": "자동차보험 가입 통계",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "public_data_pk": "15124891",
+  "operations": {
+   "getContractInfo": {
+    "fields": [
+     "isuCmpyOfrYm",
+     "isuItmsNm",
+     "mogClsfNm",
+     "sexNm",
+     "aggr",
+     "atmbPlorNm",
+     "kncrNm",
+     "joinCnt",
+     "elpsInpm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getLosCircumstance": {
+    "fields": [
+     "losAmt",
+     "isuCmpyOfrYm",
+     "isuItmsNm",
+     "mogClsfNm",
+     "kncrNm",
+     "injPtlCnt",
+     "dthTotlCnt"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getVictimInfo": {
+    "fields": [
+     "atmbAcdnCnlsYm",
+     "dthInjClsfNm",
+     "impYn",
+     "injLvlcntCd",
+     "impLvlcntCd",
+     "nope"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   }
+  }
+ },
+ "GetAutoInsVicInfoService": {
+  "name": "자동차보험 피해자 통계정보",
+  "server": "insurance",
+  "desk": "보험·계리",
+  "tier": "useful",
+  "purpose": "자동차보험 피해자 통계. 손해율 맥락",
+  "base_url": "https://apis.data.go.kr/1160100",
+  "public_data_pk": "15151234",
+  "operations": {
+   "getAutoInsVicMonthInfo": {
+    "fields": [
+     "basYm",
+     "dthInjClsfNm",
+     "impYn",
+     "injLvlcntCd",
+     "impLvlcntCd",
+     "nope",
+     "avgPn1PesnAmt"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   }
+  }
+ },
+ "GetLifeAccInfoService": {
+  "name": "생명보험 사고원인정보",
+  "server": "insurance",
+  "desk": "보험·계리",
+  "tier": "useful",
+  "purpose": "생명보험 사고원인 통계",
+  "base_url": "https://apis.data.go.kr/1160100",
+  "public_data_pk": "15151237",
+  "operations": {
+   "getLfinsTop10DthInfo": {
+    "fields": [
+     "basYr",
+     "sexCd",
+     "dthAggr",
+     "dthCausRnkn",
+     "kcdNm",
+     "kcdCd",
+     "depeNopeCnt"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getLfinsTop5CancDthInfo": {
+    "fields": [
+     "basYr",
+     "sexCd",
+     "dthAggr",
+     "dthCausRnkn",
+     "kcdNm",
+     "kcdCd",
+     "depeNopeCnt"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getLfinsTop5CancOccrInfo": {
+    "fields": [
+     "basYr",
+     "sexCd",
+     "cancOccrAggr",
+     "cancOccrRnkn",
+     "kcdNm",
+     "kcdCd",
+     "cancOccrNopeCnt"
     ],
     "param_style": "resultType",
     "total_count": null

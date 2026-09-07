@@ -4,7 +4,7 @@
 
 설계
 ----
-이 데스크가 다루는 API는 7종 / 오퍼레이션 45개다. 전부 도구로 펼치면
+이 데스크가 다루는 API는 7종 / 오퍼레이션 48개다. 전부 도구로 펼치면
 tools/list가 커져 다른 MCP 서버와 함께 붙일 때 컨텍스트를 잡아먹으므로,
 자주 쓰는 경로만 이름 있는 도구로 내고 나머지는 search_apis + call_api로 연다.
 (dart-mcp-server와 같은 점진적 공개 방식이다.)
@@ -137,6 +137,24 @@ def get_affiliates(params: dict | None = None, rows: int = 20, page: int = 1) ->
         page: 페이지 번호.
     """
     return fsc_core.call(CATALOG, 'GetCorpBasicInfoService_V2', 'getAffiliate_V2', params, rows, page)
+
+
+@mcp.tool(annotations=READ_ONLY)
+def get_executives(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
+    """임원 현황을 조회한다. 사외이사 수 같은 지배구조 질문의 근거.
+
+**행을 세는 것은 서버가 한다.** 응답의 건수와 범주 분포를 쓰고,
+JSON을 직접 세지 않는다. 보수는 search_apis로 getExecRemuStat을 찾는다.
+
+    필터로 쓸 수 있는 필드(응답 필드와 같다):
+        basDt, crno, dataSqno, exutFnm, exutBornYm, exutJbttNm, rgstExutYn, rgstExutCtt, fltmsvYn, fltmsvCtt, exutChrgBzwrNm, exutMainCrrCtt, ownOnskCnt, ownPfstCnt, exutHdfTermCtt, exutJbttXpryDt, sexCd, sexCdNm, exutOwnOnskCnt, exutOwnPfstCnt
+
+    Args:
+        params: 필터 딕셔너리 (예: {"basDt": "20260831"}). 비우면 최신부터 반환한다.
+        rows: 페이지당 건수 (최대 권장 100).
+        page: 페이지 번호.
+    """
+    return fsc_core.call(CATALOG, 'GetCorpGoveInfoService', 'getExecutivesInfo', params, rows, page)
 
 
 @mcp.tool(annotations=READ_ONLY)

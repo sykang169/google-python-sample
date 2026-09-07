@@ -1,0 +1,374 @@
+{
+ "GetMedicalReimbursementInsuranceInfoService": {
+  "name": "실손보험정보",
+  "server": "insurance",
+  "desk": "보험·계리",
+  "tier": "core",
+  "purpose": "실손보험 담보·유형·성별·연령대별 기준보험료. 상품 비교의 출발점",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "public_data_pk": "15094797",
+  "operations": {
+   "getInsuranceInfo": {
+    "fields": [
+     "ofrInstNm",
+     "basDt",
+     "cmpyCd",
+     "cmpyNm",
+     "ptrn",
+     "mog",
+     "prdNm",
+     "age",
+     "mlInsRt",
+     "fmlInsRt"
+    ],
+    "param_style": "resultType",
+    "total_count": 374299
+   }
+  }
+ },
+ "GetLifeInsuCompInfoService": {
+  "name": "금융통계생명보험정보",
+  "server": "insurance",
+  "desk": "보험·계리",
+  "tier": "core",
+  "purpose": "생명보험사 일반현황·재무·주요영업활동·경영지표. 업권 지표",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "public_data_pk": "15061306",
+  "operations": {
+   "getLifeInsuCompFinaInfo": {
+    "fields": [
+     "title",
+     "astSmryStfnpsAcitAmt",
+     "astSmryStfnpsAcitCd",
+     "astSmryStfnpsAcitCdNm",
+     "astSmryStfnpsAcitCmpsRto",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getLifeInsuCompGeneInfo": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "xcsmPlnpnCnt",
+     "xcsmPlnpnDcd",
+     "xcsmPlnpnDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getLifeInsuCompKeyManaIndi": {
+    "fields": [
+     "title",
+     "basYm",
+     "cpaqItemAmt",
+     "cpaqItemCd",
+     "cpaqItemCdNm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getLifeInsuCompMajoBusiActi": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "spacsbClsfThqrAmt",
+     "spacsbClsfThqrCcnt",
+     "spacsbDcd",
+     "spacsbDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   }
+  }
+ },
+ "GetNonlInsuCompInfoService": {
+  "name": "금융통계손해보험정보",
+  "server": "insurance",
+  "desk": "보험·계리",
+  "tier": "core",
+  "purpose": "손해보험사 일반현황·재무·주요영업활동·경영지표. 업권 지표",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "public_data_pk": "15061307",
+  "operations": {
+   "getNonlInsuCompFinaInfo": {
+    "fields": [
+     "title",
+     "astSmryStfnpsAcitAmt",
+     "astSmryStfnpsAcitCd",
+     "astSmryStfnpsAcitCdNm",
+     "astSmryStfnpsAcitCmpsRto",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getNonlInsuCompGeneInfo": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "xcsmPlnpnCnt",
+     "xcsmPlnpnDcd",
+     "xcsmPlnpnDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getNonlInsuCompKeyManaIndi": {
+    "fields": [
+     "title",
+     "basYm",
+     "cpaqItemCd",
+     "cpaqItemCdNm",
+     "cpaqItemValCtt",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getNonlInsuCompMajoBusiActi": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "isuKindElpsLosRatClsfAmt",
+     "isuKindElpsLosRatDcd",
+     "isuKindElpsLosRatDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   }
+  }
+ },
+ "GetVariableInsuranceInfoService": {
+  "name": "변액보험기본정보",
+  "server": "insurance",
+  "desk": "보험·계리",
+  "tier": "useful",
+  "purpose": "변액보험 펀드 정보. 투자성 보험의 운용 대상",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "public_data_pk": "15094793",
+  "operations": {
+   "getFundInfo": {
+    "fields": [
+     "cmpyCd",
+     "cmpyNm",
+     "fndNm",
+     "fndCd",
+     "basDt",
+     "basprc",
+     "nPptAmt"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   }
+  }
+ },
+ "GetFPLifeInsuJoinInfoService": {
+  "name": "생명보험가입정보",
+  "server": "insurance",
+  "desk": "보험·계리",
+  "tier": "useful",
+  "purpose": "생명보험 가입 통계. 개인연금 등 상품별 가입 현황",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "public_data_pk": "15124892",
+  "operations": {
+   "getIndividualAnnuityInsuInfo": {
+    "fields": [
+     "sttsAccmlTrgtYr",
+     "rchnAggr",
+     "taxPrqlYn",
+     "pymtMthNm",
+     "offrTyNm",
+     "yerUnitPymtTerm",
+     "joinCnt"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getLifeInsuJoinStatus": {
+    "fields": [
+     "isuKindNm",
+     "joinCnt",
+     "joinRto",
+     "sttsAccmlTrgtYr",
+     "areaNm",
+     "sexNm",
+     "rchnAggr"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   }
+  }
+ },
+ "GetFPPptInsuJoinInfoService": {
+  "name": "일반손해보험가입정보",
+  "server": "insurance",
+  "desk": "보험·계리",
+  "tier": "useful",
+  "purpose": "일반손해보험 가입 통계",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "public_data_pk": "15124894",
+  "operations": {
+   "getPropertyInsuJoinInfo": {
+    "fields": [
+     "sttsAccmlTrgtYr",
+     "mogClsfNm",
+     "objcClsfNm",
+     "cntrCnt",
+     "inpm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   }
+  }
+ },
+ "GetFPAtmbInsujoinInfoService": {
+  "name": "자동차보험가입정보",
+  "server": "insurance",
+  "desk": "보험·계리",
+  "tier": "useful",
+  "purpose": "자동차보험 가입 통계",
+  "base_url": "https://apis.data.go.kr/1160100/service",
+  "public_data_pk": "15124891",
+  "operations": {
+   "getContractInfo": {
+    "fields": [
+     "isuCmpyOfrYm",
+     "isuItmsNm",
+     "mogClsfNm",
+     "sexNm",
+     "aggr",
+     "atmbPlorNm",
+     "kncrNm",
+     "joinCnt",
+     "elpsInpm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getLosCircumstance": {
+    "fields": [
+     "losAmt",
+     "isuCmpyOfrYm",
+     "isuItmsNm",
+     "mogClsfNm",
+     "kncrNm",
+     "injPtlCnt",
+     "dthTotlCnt"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getVictimInfo": {
+    "fields": [
+     "atmbAcdnCnlsYm",
+     "dthInjClsfNm",
+     "impYn",
+     "injLvlcntCd",
+     "impLvlcntCd",
+     "nope"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   }
+  }
+ },
+ "GetAutoInsVicInfoService": {
+  "name": "자동차보험 피해자 통계정보",
+  "server": "insurance",
+  "desk": "보험·계리",
+  "tier": "useful",
+  "purpose": "자동차보험 피해자 통계. 손해율 맥락",
+  "base_url": "https://apis.data.go.kr/1160100",
+  "public_data_pk": "15151234",
+  "operations": {
+   "getAutoInsVicMonthInfo": {
+    "fields": [
+     "basYm",
+     "dthInjClsfNm",
+     "impYn",
+     "injLvlcntCd",
+     "impLvlcntCd",
+     "nope",
+     "avgPn1PesnAmt"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   }
+  }
+ },
+ "GetLifeAccInfoService": {
+  "name": "생명보험 사고원인정보",
+  "server": "insurance",
+  "desk": "보험·계리",
+  "tier": "useful",
+  "purpose": "생명보험 사고원인 통계",
+  "base_url": "https://apis.data.go.kr/1160100",
+  "public_data_pk": "15151237",
+  "operations": {
+   "getLfinsTop10DthInfo": {
+    "fields": [
+     "basYr",
+     "sexCd",
+     "dthAggr",
+     "dthCausRnkn",
+     "kcdNm",
+     "kcdCd",
+     "depeNopeCnt"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getLfinsTop5CancDthInfo": {
+    "fields": [
+     "basYr",
+     "sexCd",
+     "dthAggr",
+     "dthCausRnkn",
+     "kcdNm",
+     "kcdCd",
+     "depeNopeCnt"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getLfinsTop5CancOccrInfo": {
+    "fields": [
+     "basYr",
+     "sexCd",
+     "cancOccrAggr",
+     "cancOccrRnkn",
+     "kcdNm",
+     "kcdCd",
+     "cancOccrNopeCnt"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   }
+  }
+ }
+}

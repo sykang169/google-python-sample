@@ -16,10 +16,10 @@ Gemini Enterprise의 Custom MCP Server 데이터 스토어로 쓴다.
 | `fsc-equity-ops-mcp-server` | 금융위 | 배당·권리일정·사고주권·대차·REPO |
 | `fsc-industry-mcp-server` | 금융위 | 펀드·퇴직연금·증권사 지표·수수료·금투협 통계 |
 
-## fsc-* 5종의 구조
+## fsc-* 6종의 구조
 
-금융위원회가 개방한 API 110종 중 증권사 업무에 쓰이는 50종
-(오퍼레이션 175개)을 데스크별로 나눈 것이다. 전부를 도구로 펼치면
+금융위원회가 개방한 API 110종 중 증권사·보험 업무에 쓰이는 59종
+(오퍼레이션 222개)을 데스크별로 나눈 것이다. 전부를 도구로 펼치면
 `tools/list`가 커져 다른 서버와 함께 붙일 때 컨텍스트를 잡아먹으므로,
 자주 쓰는 26개만 이름 있는 도구로 내고 나머지는
 `search_apis` → `call_api`로 연다(dart-mcp-server와 같은 점진적 공개).
@@ -27,8 +27,8 @@ Gemini Enterprise의 Custom MCP Server 데이터 스토어로 쓴다.
 ```
 fsc-common/           ← 원본. 여기만 고친다
   fsc_core.py           공용 클라이언트 (호출·재시도·응답 정규화)
-  catalog.json          50 서비스 × 175 오퍼레이션 + 실측 응답 필드
-  candidates.json       아직 안 붙인 60 서비스 × 119 오퍼레이션
+  catalog.json          59 서비스 × 222 오퍼레이션 + 실측 응답 필드
+  candidates.json       아직 안 붙인 60 서비스 × 145 오퍼레이션
   servers.py            5개 서버의 도구 정의
   sync.py               서버 디렉터리 생성/갱신
   check_access.py       배포된 API의 승인 여부 확인
@@ -60,6 +60,13 @@ python3 sync.py market     # 하나만
 > 포털 상세 페이지에도 요청변수·출력결과 표가 있다. 처음에는 없는 줄 알았는데,
 > 페이지 HTML에는 첫 오퍼레이션만 실리고 나머지는 AJAX로 따로 오기 때문이었다.
 > `collect_operations.py`가 그 경로를 쓴다.
+>
+> **이 착각 때문에 카탈로그가 서비스마다 첫 오퍼레이션만 담고 있었다.** 11개
+> 서비스에서 29개가 빠져 있었고(증권사·은행 통계의 재무·경영지표, 임원 정보,
+> 신탁 6종 등), 이미 승인된 API인데 도구로도 `search_apis`로도 닿지 않았다.
+> 2026-09-07에 `--built`로 대조해 채웠다. 그중 응답하지 않는 2개
+> (`getOptionsPriceInfo`, `getStocIssuStat_V3`)는 넣지 않았다 — 타임아웃이
+> 공유 회로 차단기를 열어 나머지 서버까지 멈추기 때문이다.
 
 ## 아직 채택하지 않은 60종
 
@@ -88,7 +95,7 @@ STOCK_API_KEY=... python3 mcp/fsc-common/check_candidates.py \
 
 ## 인증키
 
-공공데이터포털 인증키는 **계정당 하나**(`STOCK_API_KEY`)이고 fsc-* 5종이 공유한다.
+공공데이터포털 인증키는 **계정당 하나**(`STOCK_API_KEY`)이고 fsc-* 6종이 공유한다.
 다만 **승인은 API마다 따로** 받는다 — 미승인 API는 같은 키로도 `resultCode 30`이 난다.
 
 키는 디코딩 형태(`+`, `/`, `=` 포함)를 그대로 쓴다. 미리 퍼센트 인코딩하면

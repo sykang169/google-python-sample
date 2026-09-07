@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""5개 FSC MCP 서버 디렉터리를 생성/갱신한다.
+"""6개 FSC MCP 서버 디렉터리를 생성/갱신한다.
 
 fsc_core.py와 catalog.json은 여기가 원본이고, 각 서버 디렉터리로 복사된다.
 빌드 컨텍스트가 서버 디렉터리 하나이므로(build.sh의 gcloud builds submit)
 공유 모듈을 심볼릭 링크로 둘 수 없어 복사한다.
 
-  python3 sync.py          # 5개 전부 생성
+  python3 sync.py          # 6개 전부 생성
   python3 sync.py market   # 하나만
 """
 from __future__ import annotations
@@ -27,6 +27,8 @@ SKILL_OF = {
     "research": "kr-corporate-financials",
     "equity-ops": "kr-equity-operations",
     "industry": "kr-product-comparison",
+    # 보험 도메인 스킬은 아직 없다. 서버만 있고 짝이 없는 상태를 숨기지 않는다.
+    "insurance": None,
 }
 
 REQUIREMENTS = "mcp==1.27.0\nhttpx==0.28.1\nuvicorn==0.35.0\n"
@@ -172,8 +174,7 @@ README = """# fsc-{server}-mcp-server
 금융위원회가 공공데이터포털에 개방한 API 중 **{title}** 계열
 {n_svc}종(오퍼레이션 {n_op}개)을 MCP 도구로 노출한다.
 
-- 짝이 되는 스킬: [`{skill}`](../../skills/{skill}/SKILL.md)
-- Cloud Run 서비스명: `fsc-{server}-mcp`
+{skill_line}- Cloud Run 서비스명: `fsc-{server}-mcp`
 
 ## 이런 질문에 답한다
 
@@ -196,10 +197,11 @@ README = """# fsc-{server}-mcp-server
 ## 필요한 data.go.kr 활용신청
 
 인증키는 공공데이터포털 계정당 **하나**(`STOCK_API_KEY`)이고 이 저장소의 fsc-*
-서버 5종이 공유한다. 다만 **승인은 API마다 따로** 받아야 하며, 미승인 API는
-같은 키로도 `resultCode 30`이 난다.
+서버 6종이 공유한다. 다만 **승인은 API마다 따로** 받아야 하며, 미승인 API는
+같은 키로도 `resultCode 30`이 난다(HTTP 403과 함께 오기도 한다).
 
-이 서버를 쓰려면 아래 {n_svc}건을 각각 활용신청해야 한다.
+이 서버가 도는 데 필요한 것은 아래 {n_svc}건이고, **각각 따로 승인되어 있어야
+한다.** 이미 승인된 것도 있을 수 있으니 아래 명령으로 먼저 확인한다.
 
 | 서비스 | 이름 | 활용신청 |
 | --- | --- | --- |
@@ -284,9 +286,13 @@ def build(server: str) -> pathlib.Path:
         f'[신청](https://www.data.go.kr/data/{v["public_data_pk"]}/openapi.do) |'
         for s, v in sorted(subset.items(), key=lambda x: x[1]["name"]))
     prompt_rows = "\n".join(f'| "{q}" | {how} |' for q, how in spec["prompts"])
+    skill = SKILL_OF[server]
+    skill_line = (f"- 짝이 되는 스킬: [`{skill}`](../../skills/{skill}/SKILL.md)\n"
+                  if skill else
+                  "- 짝이 되는 스킬: 아직 없다. 이 데스크의 도메인 규칙은 시스템 지시로만 걸린다\n")
     (out / "README.md").write_text(README.format(
         server=server, title=spec["title"], desc=spec["desc"], hint=spec["hint"],
-        skill=SKILL_OF[server], n_svc=n_svc, n_op=n_op,
+        skill_line=skill_line, n_svc=n_svc, n_op=n_op,
         tool_rows=tool_rows, api_rows=api_rows, prompt_rows=prompt_rows), encoding="utf-8")
     return out
 
