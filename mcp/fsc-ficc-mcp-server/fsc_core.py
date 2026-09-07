@@ -384,6 +384,52 @@ def _param_warning(fields: list[str], params: dict[str, Any] | None) -> str | No
     )
 
 
+
+# 필터가 실제로 걸렸는지 건수로 확인한다. 이름 검사(_param_warning)만으로는
+# like<필드> 형태를 잡을 수 없다 — 필드가 실재하면 그 변형도 유효하다고 볼
+# 수밖에 없는데, 상류가 받지 않는 변형이 섞여 있다. 그때 전체 목록이 돌아오고
+# 오류는 나지 않는다.
+FILTER_CHECK = os.environ.get("FSC_FILTER_CHECK", "1") != "0"
+
+# 카탈로그의 total_count는 수집 시점 값이라 조금씩 낡는다. 정확 일치 판정에는
+# 못 쓰고, "의심스러운가"를 가리는 싼 1차 관문으로만 쓴다.
+SUSPECT_RATIO = 0.9
+SUSPECT_MIN_ROWS = 1000
+
+
+def _unfiltered_total(catalog: dict[str, Any], service: str, operation: str) -> int | None:
+    """필터 없이 부른 전체 건수. 캐시를 타므로 오퍼레이션당 사실상 1회다."""
+    try:
+        base = call(catalog, service, operation, None, rows=1, page=1, _check_filter=False)
+    except FscError:
+        return None
+    return base.get("total_count")
+
+
+def _filter_effective(catalog, service, operation, params, total) -> str | None:
+    """필터를 줬는데 전체가 돌아왔으면 경고 문구를 만든다."""
+    if not FILTER_CHECK or not params or total is None:
+        return None
+    real = [k for k, v in params.items() if v not in (None, "")]
+    if not real:
+        return None
+    hint = ((catalog.get(service) or {}).get("operations", {})
+            .get(operation, {}) or {}).get("total_count")
+    suspect = (total >= hint * SUSPECT_RATIO) if hint else (total >= SUSPECT_MIN_ROWS)
+    if not suspect:
+        return None
+    base = _unfiltered_total(catalog, service, operation)
+    if base is None or total != base:
+        return None
+    return (
+        f"필터가 걸리지 않았습니다 — {', '.join(real)}를 줬는데 전체 {total}건이 "
+        "그대로 돌아왔습니다(필터 없이 부른 결과와 같습니다). 이 API가 받지 않는 "
+        "파라미터는 오류 없이 무시됩니다. **아래 rows를 그 대상의 값으로 읽지 "
+        "마세요.** search_apis가 돌려준 fields의 이름을 그대로 쓰고, 결과 행의 "
+        "식별자가 조회하려던 대상과 같은지 대조하세요."
+    )
+
+
 def call(
     catalog: dict[str, Any],
     service: str,
@@ -391,6 +437,7 @@ def call(
     params: dict[str, Any] | None = None,
     rows: int = 20,
     page: int = 1,
+    _check_filter: bool = True,
 ) -> dict:
     """카탈로그에 있는 오퍼레이션을 실행하고 응답을 정규화한다.
 
@@ -524,16 +571,29 @@ def call(
             raise
 
         payload = (data.get("response") or {}).get("body") or {}
+        total = payload.get("totalCount")
+        try:
+            total = int(total) if total is not None else None
+        except (TypeError, ValueError):
+            total = None
         result = {
-            "total_count": payload.get("totalCount"),
+            "total_count": total,
             "page_no": payload.get("pageNo"),
             "num_of_rows": payload.get("numOfRows"),
             "rows": _dig_items(payload),
         }
-        if warning:
-            result["warning"] = warning
         _throttle.record_success()
         _cache.put(cache_key, result)
+
+        # 캐시에 넣은 뒤에 확인한다. 경고는 호출자의 파라미터에 달린 것이라
+        # 같은 응답을 공유하는 다른 호출에 섞이면 안 된다.
+        notes = [w for w in (warning,) if w]
+        if _check_filter:
+            eff = _filter_effective(catalog, service, operation, params, total)
+            if eff:
+                notes.append(eff)
+        if notes:
+            result = dict(result, warning=" / ".join(notes))
         return result
 
     if connect_failed:
