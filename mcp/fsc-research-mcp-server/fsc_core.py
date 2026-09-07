@@ -26,6 +26,7 @@
 
 from __future__ import annotations
 
+import datetime
 import json
 import logging
 import os
@@ -358,6 +359,45 @@ def _known_params(fields: list[str]) -> set[str]:
     return ok
 
 
+def _inclusive_end(params: dict[str, Any] | None) -> tuple[dict[str, Any] | None, str | None]:
+    """종료일을 포함 구간으로 바꾼다.
+
+    이 API의 기간 필터는 **시작일은 포함하고 종료일은 제외한다.** 비대칭인데
+    오류도 경고도 없어서, 사용자가 지정한 마지막 날이 조용히 사라진다. 그날이
+    급등락일이면 최고·최저·수익률이 모두 달라진다.
+
+    부르는 쪽은 예외 없이 포함 구간을 기대하므로 여기서 하루를 더해 맞춘다.
+    보정했다는 사실은 응답에 실어 보내 추적할 수 있게 한다.
+
+    오퍼레이션이나 필드 이름을 알 필요가 없다. `end~`로 시작하는 파라미터의
+    **값이 날짜 형태(YYYYMMDD)일 때만** 손댄다. 월 단위(YYYYMM)나 날짜가
+    아닌 값은 그대로 둔다 — 같은 규칙이 적용된다는 근거가 없다.
+    """
+    if not params:
+        return params, None
+    out, moved = dict(params), []
+    for k, v in params.items():
+        if not k.startswith("end") or v in (None, ""):
+            continue
+        text = str(v).strip()
+        if len(text) != 8 or not text.isdigit():
+            continue
+        try:
+            d = datetime.date(int(text[:4]), int(text[4:6]), int(text[6:]))
+        except ValueError:
+            continue
+        nxt = (d + datetime.timedelta(days=1)).strftime("%Y%m%d")
+        out[k] = nxt
+        moved.append(f"{k} {text}")
+    if not moved:
+        return params, None
+    return out, (
+        "종료일을 포함해서 조회했습니다 — 이 API는 종료일을 제외하므로 "
+        + ", ".join(moved)
+        + "에 하루를 더해 보냈습니다. 결과에 그날이 포함됩니다."
+    )
+
+
 def _param_warning(fields: list[str], params: dict[str, Any] | None) -> str | None:
     """모르는 파라미터 이름을 잡아낸다.
 
@@ -462,6 +502,7 @@ def call(
         )
 
     warning = _param_warning(op_spec.get("fields") or [], params)
+    params, end_note = _inclusive_end(params)
 
     query: dict[str, Any] = {"serviceKey": API_KEY, "numOfRows": rows, "pageNo": page}
     style = op_spec.get("param_style", "resultType")
@@ -587,7 +628,7 @@ def call(
 
         # 캐시에 넣은 뒤에 확인한다. 경고는 호출자의 파라미터에 달린 것이라
         # 같은 응답을 공유하는 다른 호출에 섞이면 안 된다.
-        notes = [w for w in (warning,) if w]
+        notes = [w for w in (warning, end_note) if w]
         if _check_filter:
             eff = _filter_effective(catalog, service, operation, params, total)
             if eff:
