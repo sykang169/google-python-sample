@@ -12,7 +12,7 @@
 
 | 질문 | 어떻게 |
 | --- | --- |
-| "우리 수수료가 경쟁사 대비 어디쯤이야?" | get_brokerage_fee — 거래금액 구간을 맞춘다 |
+| "우리 수수료가 경쟁사 대비 어디쯤이야?" | get_brokerage_fee — ctg='변경후'로 거른다 |
 | "펀드 판매 점유율 순위 보여줘" | get_fund_sales — 모집단을 밝힌다 |
 | "업계 ELS 발행 규모 알려줘" | search_apis('ELS') + call_api |
 | "IRP 라인업에 넣을 펀드 후보" | get_fund_code + search_apis('퇴직연금') |
