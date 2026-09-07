@@ -367,12 +367,19 @@ fsc-insurance get_medical_insurance_premium      회사·상품·담보별 기�
 > "생보사 지급여력 지표를 회사별로 보여줘"
 
 ```
-fsc-insurance get_insurer_indicators(sector="생명보험")   업권 경영지표
-fsc-insurance get_insurer_financials(sector="생명보험")   요약 재무상태표
+fsc-insurance get_insurer_indicators(sector="생명보험",
+                params={"title": "생보_주요경영지표_자본적정성"})   지급여력
+fsc-insurance get_insurer_financials(sector="생명보험",
+                params={"title": "생보_재무현황_요약재무상태표(자산-전체)"})
 ```
 
 **정확도의 조건**
 
+- **`title`을 반드시 줍니다.** 한 오퍼레이션 안에 여러 통계표가 들어 있고
+  `title`이 그중 하나를 고릅니다. 주지 않으면 임의의 표가 오는데 오류가 아니라
+  정상 응답이라 알아채기 어렵습니다. 실측으로 `title` 없이 부르면 생명보험은
+  **대출채권 연체액**, 손해보험은 **지급여력비율**이 돌아옵니다 — 그대로
+  비교하면 연체액과 지급여력을 나란히 놓게 됩니다.
 - **생보와 손보를 같은 표에 놓지 않습니다.** 계정 체계가 달라 업권을 섞은 순위는
   의미가 없습니다.
 - 지표 값이 담기는 필드가 업권마다 다릅니다 — 생보는 `cpaqItemAmt`, 손보는
@@ -380,7 +387,8 @@ fsc-insurance get_insurer_financials(sector="생명보험")   요약 재무상�
 - 보험사는 보험계약 준비금이 부채의 대부분이라 제조업 기준 부채비율로 평가하지
   않습니다.
 
-**답에 담기는 것** — 업권을 나눈 지표 표, 지표 정의, 기준년월.
+**답에 담기는 것** — 어느 `title`로 조회했는지, 업권을 나눈 지표 표, 지표 정의,
+기준년월.
 
 ## 경영관리 · 전략
 

@@ -13,9 +13,9 @@
 | 질문 | 어떻게 |
 | --- | --- |
 | "40대 남성 실손보험료 회사별로 비교해줘" | get_medical_insurance_premium — 담보·유형을 맞춘다 |
-| "생보사 지급여력 지표 보여줘" | get_insurer_indicators(sector='생명보험') |
-| "손해보험사 경과손해율 어떻게 돼?" | get_nonlife_insurer_business |
-| "삼성생명 총자산 얼마야?" | get_insurer_financials(sector='생명보험') |
+| "생보사 지급여력 지표 보여줘" | get_insurer_indicators — title에 '자본적정성'을 준다 |
+| "손해보험사 경과손해율 어떻게 돼?" | get_nonlife_insurer_business — 2019년까지만 있다 |
+| "삼성생명 총자산 얼마야?" | get_insurer_financials — title에 '요약재무상태표'를 준다 |
 | "변액보험 펀드 기준가 알려줘" | get_variable_insurance_fund |
 | "자동차보험 사고 피해자 통계 있어?" | search_apis('자동차') + call_api |
 
@@ -26,9 +26,9 @@
 | `search_apis` | 이 서버가 다루는 오퍼레이션 검색. 응답 필드(=필터 파라미터)까지 반환 |
 | `call_api` | 찾은 오퍼레이션 실행 |
 | `get_medical_insurance_premium` | 실손의료보험 기준보험료를 조회한다. 회사·담보·유형·연령·성별로 갈린다. |
-| `get_insurer_financials` | 보험사 재무현황(요약 재무상태표)을 조회한다. 생보·손보 응답 형식이 같다. |
-| `get_insurer_indicators` | 보험사 주요경영지표를 조회한다. 지급여력·수익성 등 업권 지표. |
-| `get_nonlife_insurer_business` | 손해보험사 주요영업활동을 조회한다. 보종별 경과손해율이 핵심이다. |
+| `get_insurer_financials` | 보험사 재무현황을 조회한다. |
+| `get_insurer_indicators` | 보험사 주요경영지표(지급여력 등)를 조회한다. |
+| `get_nonlife_insurer_business` | 손해보험사 보종별 경과손해율을 조회한다. |
 | `get_variable_insurance_fund` | 변액보험 펀드별 기준가와 순자산을 조회한다. |
 
 이름 있는 도구는 자주 쓰는 경로만 감싼 것이다. 나머지는 `search_apis` →

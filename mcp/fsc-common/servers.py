@@ -147,9 +147,9 @@ SERVERS = {
  "insurance": {
    "prompts": [
      ('40대 남성 실손보험료 회사별로 비교해줘', 'get_medical_insurance_premium — 담보·유형을 맞춘다'),
-     ('생보사 지급여력 지표 보여줘', "get_insurer_indicators(sector='생명보험')"),
-     ('손해보험사 경과손해율 어떻게 돼?', 'get_nonlife_insurer_business'),
-     ('삼성생명 총자산 얼마야?', "get_insurer_financials(sector='생명보험')"),
+     ('생보사 지급여력 지표 보여줘', "get_insurer_indicators — title에 '자본적정성'을 준다"),
+     ('손해보험사 경과손해율 어떻게 돼?', 'get_nonlife_insurer_business — 2019년까지만 있다'),
+     ('삼성생명 총자산 얼마야?', "get_insurer_financials — title에 '요약재무상태표'를 준다"),
      ('변액보험 펀드 기준가 알려줘', 'get_variable_insurance_fund'),
      ('자동차보험 사고 피해자 통계 있어?', "search_apis('자동차') + call_api"),
    ],
@@ -171,28 +171,39 @@ SERVERS = {
      {"name": "get_insurer_financials",
       "route": {"생명보험": ("GetLifeInsuCompInfoService", "getLifeInsuCompFinaInfo"),
                 "손해보험": ("GetNonlInsuCompInfoService", "getNonlInsuCompFinaInfo")},
-      "doc": "보험사 재무현황(요약 재무상태표)을 조회한다. 생보·손보 응답 형식이 같다.\n\n"
-             "보험사는 보험계약 준비금이 부채의 대부분이다. 제조업 기준으로 부채비율을\n"
-             "읽으면 결론이 뒤집힌다. 계정은 astSmryStfnpsAcitCdNm으로 구분한다.\n"
-             "기준년월(basYm)이 필수에 가깝다 — 없으면 최신 분기가 나온다.\n\n"
-             "**생보와 손보는 계정 체계가 달라 같은 표에 놓고 빼지 않는다.**\n"
-             "업권을 섞어 순위를 매기지 않는다."},
+      "doc": "보험사 재무현황을 조회한다.\n\n"
+             "**title을 반드시 준다.** 이 API는 한 오퍼레이션 안에 여러 통계표가\n"
+             "들어 있고 title이 그중 하나를 고른다. 안 주면 임의의 표가 나오는데,\n"
+             "오류가 아니라 정상 응답이라 알아채기 어렵다(실측: title 없이 부르면\n"
+             "생명보험은 대손충당금, 손해보험은 요약재무상태표가 나온다 — 그대로\n"
+             "비교하면 다른 것을 비교하게 된다).\n"
+             "  요약재무상태표  생보_재무현황_요약재무상태표(자산-전체)\n"
+             "                  손보_재무현황_요약재무상태표(자산-전체)\n"
+             "형식은 <업권>_<현황>_<세부표>다. 다른 표는 search_apis로 확인한다.\n\n"
+             "요약재무상태표를 받으면 계정은 astSmryStfnpsAcitCdNm으로 구분한다.\n"
+             "보험사는 보험계약 준비금이 부채의 대부분이라 제조업 기준으로 부채비율을\n"
+             "읽으면 결론이 뒤집힌다.\n"
+             "**생보와 손보를 같은 표에 놓고 빼지 않는다.**"},
      {"name": "get_insurer_indicators",
       "route": {"생명보험": ("GetLifeInsuCompInfoService", "getLifeInsuCompKeyManaIndi"),
                 "손해보험": ("GetNonlInsuCompInfoService", "getNonlInsuCompKeyManaIndi")},
-      "doc": "보험사 주요경영지표를 조회한다. 지급여력·수익성 등 업권 지표.\n\n"
-             "지표 종류는 cpaqItemCdNm에 들어 있다. 재무제표로는 보이지 않는\n"
-             "건전성 맥락이 여기 있다.\n\n"
-             "**값이 담기는 필드가 업권마다 다르다** — 생명보험은 cpaqItemAmt,\n"
-             "손해보험은 cpaqItemValCtt다. 한쪽 이름만 찾으면 빈 값으로 읽힌다."},
+      "doc": "보험사 주요경영지표(지급여력 등)를 조회한다.\n\n"
+             "**title을 반드시 준다.** 지급여력은 '자본적정성' 표에 있다.\n"
+             "  생보_주요경영지표_자본적정성  /  손보_주요경영지표_자본적정성\n"
+             "title 없이 부르면 생명보험은 대출채권 연체액이 나온다 — 지표가 아니다.\n\n"
+             "지표 이름은 cpaqItemCdNm이고 **값 필드는 업권마다 다르다** —\n"
+             "생명보험은 cpaqItemAmt, 손해보험은 cpaqItemValCtt다. 한쪽 이름만\n"
+             "찾으면 값이 비어 있는 것으로 읽힌다."},
      {"name": "get_nonlife_insurer_business", "svc": "GetNonlInsuCompInfoService",
       "op": "getNonlInsuCompMajoBusiActi",
-      "doc": "손해보험사 주요영업활동을 조회한다. 보종별 경과손해율이 핵심이다.\n\n"
+      "doc": "손해보험사 보종별 경과손해율을 조회한다.\n\n"
+             "**이 표는 2019년 12월이 마지막이다**(실측). 최근 기준년월로 조회하면\n"
+             "0건이 나오는데 오류가 아니라 수록 범위 밖이다. 최신 손해율이 필요하면\n"
+             "이 도구로는 답할 수 없다고 말하고 추정하지 않는다.\n\n"
              "isuKindElpsLosRatDcdNm이 보종, 같은 접두사의 금액 필드가 그 값이다.\n"
              "손해율은 보종마다 정상 범위가 다르다.\n\n"
-             "생명보험 쪽 같은 자리(getLifeInsuCompMajoBusiActi)는 경과손해율이 아니라\n"
-             "**신계약 실적**이라 성격이 다르다. 하나로 묶지 않았다 — 필요하면\n"
-             "search_apis로 찾는다."},
+             "생명보험 쪽 같은 자리(getLifeInsuCompMajoBusiActi)는 해약환급금이라\n"
+             "성격이 다르다. 하나로 묶지 않았다."},
      {"name": "get_variable_insurance_fund", "svc": "GetVariableInsuranceInfoService",
       "op": "getFundInfo",
       "doc": "변액보험 펀드별 기준가와 순자산을 조회한다.\n\n"

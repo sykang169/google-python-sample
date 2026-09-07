@@ -116,14 +116,21 @@ age는 '40' 같은 숫자다('40세'가 아니다). cmpyNm은 'KB손보',
 
 @mcp.tool(annotations=READ_ONLY)
 def get_insurer_financials(sector: str, params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
-    """보험사 재무현황(요약 재무상태표)을 조회한다. 생보·손보 응답 형식이 같다.
+    """보험사 재무현황을 조회한다.
 
-보험사는 보험계약 준비금이 부채의 대부분이다. 제조업 기준으로 부채비율을
-읽으면 결론이 뒤집힌다. 계정은 astSmryStfnpsAcitCdNm으로 구분한다.
-기준년월(basYm)이 필수에 가깝다 — 없으면 최신 분기가 나온다.
+**title을 반드시 준다.** 이 API는 한 오퍼레이션 안에 여러 통계표가
+들어 있고 title이 그중 하나를 고른다. 안 주면 임의의 표가 나오는데,
+오류가 아니라 정상 응답이라 알아채기 어렵다(실측: title 없이 부르면
+생명보험은 대손충당금, 손해보험은 요약재무상태표가 나온다 — 그대로
+비교하면 다른 것을 비교하게 된다).
+  요약재무상태표  생보_재무현황_요약재무상태표(자산-전체)
+                  손보_재무현황_요약재무상태표(자산-전체)
+형식은 <업권>_<현황>_<세부표>다. 다른 표는 search_apis로 확인한다.
 
-**생보와 손보는 계정 체계가 달라 같은 표에 놓고 빼지 않는다.**
-업권을 섞어 순위를 매기지 않는다.
+요약재무상태표를 받으면 계정은 astSmryStfnpsAcitCdNm으로 구분한다.
+보험사는 보험계약 준비금이 부채의 대부분이라 제조업 기준으로 부채비율을
+읽으면 결론이 뒤집힌다.
+**생보와 손보를 같은 표에 놓고 빼지 않는다.**
 
     Args:
         sector: 생명보험/손해보험 중 하나. 업권마다 다른 API로 나뉘어 있을 뿐 형식은 같다.
@@ -144,13 +151,15 @@ def get_insurer_financials(sector: str, params: dict | None = None, rows: int = 
 
 @mcp.tool(annotations=READ_ONLY)
 def get_insurer_indicators(sector: str, params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
-    """보험사 주요경영지표를 조회한다. 지급여력·수익성 등 업권 지표.
+    """보험사 주요경영지표(지급여력 등)를 조회한다.
 
-지표 종류는 cpaqItemCdNm에 들어 있다. 재무제표로는 보이지 않는
-건전성 맥락이 여기 있다.
+**title을 반드시 준다.** 지급여력은 '자본적정성' 표에 있다.
+  생보_주요경영지표_자본적정성  /  손보_주요경영지표_자본적정성
+title 없이 부르면 생명보험은 대출채권 연체액이 나온다 — 지표가 아니다.
 
-**값이 담기는 필드가 업권마다 다르다** — 생명보험은 cpaqItemAmt,
-손해보험은 cpaqItemValCtt다. 한쪽 이름만 찾으면 빈 값으로 읽힌다.
+지표 이름은 cpaqItemCdNm이고 **값 필드는 업권마다 다르다** —
+생명보험은 cpaqItemAmt, 손해보험은 cpaqItemValCtt다. 한쪽 이름만
+찾으면 값이 비어 있는 것으로 읽힌다.
 
     Args:
         sector: 생명보험/손해보험 중 하나. 업권마다 다른 API로 나뉘어 있을 뿐 형식은 같다.
@@ -171,14 +180,17 @@ def get_insurer_indicators(sector: str, params: dict | None = None, rows: int = 
 
 @mcp.tool(annotations=READ_ONLY)
 def get_nonlife_insurer_business(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
-    """손해보험사 주요영업활동을 조회한다. 보종별 경과손해율이 핵심이다.
+    """손해보험사 보종별 경과손해율을 조회한다.
+
+**이 표는 2019년 12월이 마지막이다**(실측). 최근 기준년월로 조회하면
+0건이 나오는데 오류가 아니라 수록 범위 밖이다. 최신 손해율이 필요하면
+이 도구로는 답할 수 없다고 말하고 추정하지 않는다.
 
 isuKindElpsLosRatDcdNm이 보종, 같은 접두사의 금액 필드가 그 값이다.
 손해율은 보종마다 정상 범위가 다르다.
 
-생명보험 쪽 같은 자리(getLifeInsuCompMajoBusiActi)는 경과손해율이 아니라
-**신계약 실적**이라 성격이 다르다. 하나로 묶지 않았다 — 필요하면
-search_apis로 찾는다.
+생명보험 쪽 같은 자리(getLifeInsuCompMajoBusiActi)는 해약환급금이라
+성격이 다르다. 하나로 묶지 않았다.
 
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         title, basYm, crno, fncoCd, fncoNm, isuKindElpsLosRatClsfAmt, isuKindElpsLosRatDcd, isuKindElpsLosRatDcdNm
