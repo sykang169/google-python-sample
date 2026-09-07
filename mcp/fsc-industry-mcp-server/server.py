@@ -171,6 +171,17 @@ def get_bank_stats(params: dict | None = None, rows: int = 20, page: int = 1) ->
 def get_brokerage_fee(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
     """증권사 주식거래 수수료 공시를 조회한다. 가격 경쟁 포지션 확인용.
 
+**ctg로 먼저 거른다. 같은 cfe 필드에 금액과 비율이 섞여 있다.**
+ctg='변경후'는 수수료 금액(원), ctg='변경율'은 변경 비율이다
+(실측: 같은 회사·채널·구간에서 변경후 2450, 변경율 .0041).
+나누지 않고 정렬하면 2,450원과 0.0041을 한 줄에 놓게 된다.
+
+**cfe가 null인 행이 절반 가까이 된다.** 그 채널 미제공이지
+수수료 0이 아니다. 최저가로 읽지 않는다.
+
+비교하려면 trAmt(거래금액 구간, 실측 100·150·200·250·300·350)와
+brofOpnActCtg(은행/증권사 개설, 오프라인/HTS/스마트폰/ARS)를 맞춘다.
+
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         basDt, brofOpnActCtg, bzds, cfe, cmpyNm, ctg, trAmt
 

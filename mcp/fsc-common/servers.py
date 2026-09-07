@@ -219,7 +219,7 @@ SERVERS = {
  },
  "industry": {
    "prompts": [
-     ('우리 수수료가 경쟁사 대비 어디쯤이야?', 'get_brokerage_fee — 거래금액 구간을 맞춘다'),
+     ('우리 수수료가 경쟁사 대비 어디쯤이야?', "get_brokerage_fee — ctg='변경후'로 거른다"),
      ('펀드 판매 점유율 순위 보여줘', 'get_fund_sales — 모집단을 밝힌다'),
      ('업계 ELS 발행 규모 알려줘', "search_apis('ELS') + call_api"),
      ('IRP 라인업에 넣을 펀드 후보', "get_fund_code + search_apis('퇴직연금')"),
@@ -253,7 +253,15 @@ SERVERS = {
              "어떤 상태인지 함께 봐야 하면 여기를 쓴다.\n"
              "재무현황은 search_apis로 getDomeBankFinaInfo를 찾는다."},
      {"name": "get_brokerage_fee", "svc": "GetOfficialNoticeInfoService", "op": "getStockTradingFeeInfo",
-      "doc": "증권사 주식거래 수수료 공시를 조회한다. 가격 경쟁 포지션 확인용."},
+      "doc": "증권사 주식거래 수수료 공시를 조회한다. 가격 경쟁 포지션 확인용.\n\n"
+             "**ctg로 먼저 거른다. 같은 cfe 필드에 금액과 비율이 섞여 있다.**\n"
+             "ctg='변경후'는 수수료 금액(원), ctg='변경율'은 변경 비율이다\n"
+             "(실측: 같은 회사·채널·구간에서 변경후 2450, 변경율 .0041).\n"
+             "나누지 않고 정렬하면 2,450원과 0.0041을 한 줄에 놓게 된다.\n\n"
+             "**cfe가 null인 행이 절반 가까이 된다.** 그 채널 미제공이지\n"
+             "수수료 0이 아니다. 최저가로 읽지 않는다.\n\n"
+             "비교하려면 trAmt(거래금액 구간, 실측 100·150·200·250·300·350)와\n"
+             "brofOpnActCtg(은행/증권사 개설, 오프라인/HTS/스마트폰/ARS)를 맞춘다."},
      {"name": "get_kofia_stat", "svc": "GetKofiaStatisticsInfoService", "op": "getCMAStatus",
       "doc": "금융투자협회 종합통계를 조회한다. CMA 잔고 외에 펀드 순자산·신탁 규모 등은\n"
              "search_apis로 같은 서비스의 다른 오퍼레이션을 찾는다."},
