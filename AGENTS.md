@@ -1,6 +1,6 @@
 # 이 저장소에서 작업할 때
 
-한국 금융 공공데이터를 다루는 MCP 서버 8종과 Agent Skills 8종이 들어 있습니다.
+한국 금융 공공데이터를 다루는 MCP 서버 9종과 Agent Skills 9종이 들어 있습니다.
 `AGENTS.md`는 여러 에이전트 도구가 공통으로 읽는 파일이라, 스킬 기능이 없는
 도구에서도 아래 라우팅은 적용됩니다.
 
@@ -19,6 +19,7 @@ GitHub Copilot 등)는 `skills/`가 연결돼 있으면 알아서 고릅니다. 
 | 재무제표·재무비율·공시·계열사 | [`skills/kr-corporate-financials/SKILL.md`](skills/kr-corporate-financials/SKILL.md) |
 | 예적금·대출 금리, 펀드·수수료·업계 비교 | [`skills/kr-product-comparison/SKILL.md`](skills/kr-product-comparison/SKILL.md) |
 | 배당 기준일·권리일정·사고주권·대차 | [`skills/kr-equity-operations/SKILL.md`](skills/kr-equity-operations/SKILL.md) |
+| 실손보험료·보험사 재무와 지표·변액보험 | [`skills/kr-insurance/SKILL.md`](skills/kr-insurance/SKILL.md) |
 | 날짜·기간·휴장일·배당락·결산월 | [`skills/kr-market-calendar/SKILL.md`](skills/kr-market-calendar/SKILL.md) |
 | 종목·회사를 코드로 확정 (ISIN, 법인번호) | [`skills/kr-entity-resolution/SKILL.md`](skills/kr-entity-resolution/SKILL.md) |
 | 금융 AI 규제·개인정보·감사 로그 설계 | [`skills/kr-financial-ai-compliance/SKILL.md`](skills/kr-financial-ai-compliance/SKILL.md) |
@@ -54,5 +55,5 @@ GitHub Copilot 등)는 `skills/`가 연결돼 있으면 알아서 고릅니다. 
 | --- | --- |
 | [`mcp/README.md`](mcp/README.md) | 서버 배포와 Gemini Enterprise 연결 |
 | [`mcp/SYSTEM_PROMPT.md`](mcp/SYSTEM_PROMPT.md) | 어시스턴트 시스템 지시 초안 |
-| [`mcp/SCENARIOS.md`](mcp/SCENARIOS.md) | 데스크별 질문 시나리오 13개 |
+| [`mcp/SCENARIOS.md`](mcp/SCENARIOS.md) | 데스크별 질문 시나리오 16개 |
 | [`skills/README.md`](skills/README.md) | 스킬 설치·검증·작성 |

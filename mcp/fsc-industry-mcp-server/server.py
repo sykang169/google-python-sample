@@ -4,7 +4,7 @@
 
 설계
 ----
-이 데스크가 다루는 API는 15종 / 오퍼레이션 52개다. 전부 도구로 펼치면
+이 데스크가 다루는 API는 15종 / 오퍼레이션 76개다. 전부 도구로 펼치면
 tools/list가 커져 다른 MCP 서버와 함께 붙일 때 컨텍스트를 잡아먹으므로,
 자주 쓰는 경로만 이름 있는 도구로 내고 나머지는 search_apis + call_api로 연다.
 (dart-mcp-server와 같은 점진적 공개 방식이다.)
@@ -123,8 +123,19 @@ def get_fund_sales(params: dict | None = None, rows: int = 20, page: int = 1) ->
 
 @mcp.tool(annotations=READ_ONLY)
 def get_securities_firm_stats(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
-    """증권사 일반현황을 조회한다. 재무·경영지표는 search_apis로 같은 서비스의
-다른 오퍼레이션을 찾는다.
+    """증권사 일반현황(임직원·점포 등)을 조회한다.
+
+같은 서비스의 다른 오퍼레이션은 이름과 내용이 어긋나므로 주의한다
+(search_apis로 접근한다).
+  getSecuCompFinaInfo    '재무현황'이지만 실제로는 **주석항목**이다
+                         (채무보증·대차/대주·대손상각채권). 재무제표가 아니다
+  getSecuCompKeyManaIndi '주요경영지표'지만 **유동성비율**만 들어 있다
+  getSecuCompMajoBusiActi 금융투자상품 수탁수수료 항목별 실적
+
+**증권사의 자기자본·순이익은 여기가 아니라 DART다.** 금융위 재무제표
+API(GetFinaStatInfoService_V2)에는 증권사가 없어 0건이 나온다
+(같은 키로 삼성전자는 194건, 삼성증권은 0건 — 권한이 아니라 수록 범위다).
+dart-mcp의 fnlttSinglAcnt로 가면 나온다(삼성증권 2024 자본총계 7.3조 확인).
 
     필터로 쓸 수 있는 필드(응답 필드와 같다):
         basYm, crno, fncoCd, fncoNm, xcsmCnt, xcsmDcd, xcsmDcdNm
@@ -135,6 +146,25 @@ def get_securities_firm_stats(params: dict | None = None, rows: int = 20, page: 
         page: 페이지 번호.
     """
     return fsc_core.call(CATALOG, 'GetSecuCompInfoService', 'getSecuCompGeneInfo', params, rows, page)
+
+
+@mcp.tool(annotations=READ_ONLY)
+def get_bank_stats(params: dict | None = None, rows: int = 20, page: int = 1) -> dict:
+    """국내은행 주요경영지표를 조회한다. BIS비율·연체율 같은 건전성 지표.
+
+재무제표로는 보이지 않는 업권 지표다. 예금 금리를 비교할 때 그 은행이
+어떤 상태인지 함께 봐야 하면 여기를 쓴다.
+재무현황은 search_apis로 getDomeBankFinaInfo를 찾는다.
+
+    필터로 쓸 수 있는 필드(응답 필드와 같다):
+        title, basYm, cpaqItemClsfVal, cpaqItemDcd, cpaqItemDcdNm, crno, fncoCd, fncoNm
+
+    Args:
+        params: 필터 딕셔너리 (예: {"basDt": "20260831"}). 비우면 최신부터 반환한다.
+        rows: 페이지당 건수 (최대 권장 100).
+        page: 페이지 번호.
+    """
+    return fsc_core.call(CATALOG, 'GetDomeBankInfoService', 'getDomeBankKeyManaIndi', params, rows, page)
 
 
 @mcp.tool(annotations=READ_ONLY)

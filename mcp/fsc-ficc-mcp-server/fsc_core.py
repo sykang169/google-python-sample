@@ -327,6 +327,7 @@ def _parse_xml(text: str) -> dict:
     }
 
 
+
 def _check_json(data: dict) -> None:
     """HTTP 200과 함께 오는 오류를 잡아낸다."""
     envelope = data.get("OpenAPI_ServiceResponse")
@@ -473,8 +474,19 @@ def call(
             last_error = f"HTTP {resp.status_code}"
             continue
         if resp.status_code >= 400:
-            # 4xx는 재시도해도 같다. 경로나 파라미터가 틀린 경우가 대부분이라
-            # 무엇을 확인해야 하는지 함께 알려 준다.
+            # 4xx는 재시도해도 같다. 다만 게이트웨이가 결과 코드를 HTTP 4xx와
+            # 함께 다른 봉투로 실어 보내는 경우가 있다 — 미승인(30)이 403으로
+            # 오는 식이다. 그걸 "주소를 확인하세요"로 뭉뚱그리면 모델이 미승인을
+            # 경로 오류로 읽고 엉뚱한 곳을 고치려 든다.
+            # 게이트웨이는 결과 코드를 HTTP 4xx와 함께 실어 보내기도 한다 —
+            # 미승인(30)이 403으로 오는 식이다. 봉투가 같으므로 _check_json에
+            # 맡겨 "주소를 확인하세요"가 아니라 실제 코드로 답하게 한다.
+            # 이걸 뭉뚱그리면 모델이 미승인을 경로 오류로 읽고 엉뚱한 데를 고친다.
+            if "OpenAPI_ServiceResponse" in resp.text:
+                try:
+                    _check_json(resp.json())
+                except ValueError:
+                    pass
             raise FscError(
                 f"{service}/{operation} — HTTP {resp.status_code}. "
                 f"호출 주소가 맞는지 확인하세요 (base_url={spec['base_url']}). "

@@ -28,7 +28,8 @@ LOCATION="${GE_LOCATION:-global}"
 BASE="https://discoveryengine.googleapis.com/v1alpha"
 
 ALL=(ecos-mcp dart-mcp finlife-mcp
-     fsc-market-mcp fsc-ficc-mcp fsc-research-mcp fsc-equity-ops-mcp fsc-industry-mcp)
+     fsc-market-mcp fsc-ficc-mcp fsc-research-mcp fsc-equity-ops-mcp fsc-industry-mcp
+     fsc-insurance-mcp)
 
 # 콘솔 목록에 보이는 이름. 목록이 가나다순으로 정렬되므로 주제를 앞에 둔다 —
 # 기관을 앞에 두면 금감원이 공시와 금융상품 두 곳으로 흩어지고, 정작 무엇을
@@ -48,6 +49,7 @@ declare -A DISPLAY_NAME=(
   [fsc-market-mcp]="주식·지수·ETF·채권 시세 — 금융위"
   [fsc-ficc-mcp]="채권·단기금리 — 금융위"
   [fsc-industry-mcp]="펀드·증권업계 — 금융위"
+  [fsc-insurance-mcp]="보험 — 금융위"
 )
 TARGETS=("${@:-}")
 [[ -z "${TARGETS[0]:-}" ]] && TARGETS=("${ALL[@]}")

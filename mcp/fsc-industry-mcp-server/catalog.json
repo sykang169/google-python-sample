@@ -167,6 +167,21 @@
   "base_url": "https://apis.data.go.kr/1160100/service",
   "public_data_pk": "15061320",
   "operations": {
+   "getSecuCompFinaInfo": {
+    "fields": [
+     "title",
+     "astSmryStfnpsAcitAmt",
+     "astSmryStfnpsAcitCd",
+     "astSmryStfnpsAcitCdNm",
+     "astSmryStfnpsAcitCmpsRto",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
    "getSecuCompGeneInfo": {
     "fields": [
      "basYm",
@@ -176,6 +191,49 @@
      "xcsmCnt",
      "xcsmDcd",
      "xcsmDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getSecuCompKeyManaIndi": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "lqdtItemCd",
+     "lqdtItemCdNm",
+     "lqdtItemValCtt"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getSecuCompMajoBusiActi": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "scrsTrTcotCfeMrktClsfCmtlAmt",
+     "scrsTrTcotCfeMrktClsfThqrAmt",
+     "scrsTrTcotCfeMrktDcd",
+     "scrsTrTcotCfeMrktDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getSecuCompPresReleStat": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "froprNcptRtoItemCd",
+     "froprNcptRtoItemCdNm",
+     "froprNcptRtoItemVal"
     ],
     "param_style": "resultType",
     "total_count": null
@@ -347,6 +405,18 @@
   "base_url": "https://apis.data.go.kr/1160100",
   "public_data_pk": "15094799",
   "operations": {
+   "getDerivationLinkedSecuritiesRepaymentAtMidtermRate_V2": {
+    "fields": [
+     "year",
+     "half",
+     "prdCtg",
+     "rt",
+     "basDt",
+     "cpnyNm"
+    ],
+    "param_style": "resultType",
+    "total_count": 4908
+   },
    "getForiegnSecuritiesInvestmentInfo_V2": {
     "fields": [
      "basDt",
@@ -370,6 +440,21 @@
   "base_url": "https://apis.data.go.kr/1160100/service",
   "public_data_pk": "15061325",
   "operations": {
+   "getAsseManaCompFinaInfo": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "smryStfnpsAcitAmt",
+     "smryStfnpsAcitCd",
+     "smryStfnpsAcitCdNm",
+     "smryStfnpsAcitCmpsRto"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
    "getAsseManaCompGeneInfo": {
     "fields": [
      "basYm",
@@ -379,6 +464,20 @@
      "xcsmCnt",
      "xcsmDcd",
      "xcsmDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getAsseManaCompKeyManaIndi": {
+    "fields": [
+     "title",
+     "basYm",
+     "cpaqLqdtItemCd",
+     "cpaqLqdtItemCdNm",
+     "cpaqLqdtItemVal",
+     "crno",
+     "fncoCd",
+     "fncoNm"
     ],
     "param_style": "resultType",
     "total_count": null
@@ -394,6 +493,21 @@
   "base_url": "https://apis.data.go.kr/1160100/service",
   "public_data_pk": "15061304",
   "operations": {
+   "getDomeBankFinaInfo": {
+    "fields": [
+     "title",
+     "basYm",
+     "bnkAstItemAcitAmt",
+     "bnkAstItemAcitCd",
+     "bnkAstItemAcitCdNm",
+     "bnkAstItemAcitCmpsRto",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
    "getDomeBankGeneInfo": {
     "fields": [
      "basYm",
@@ -403,6 +517,34 @@
      "xcsmCnt",
      "xcsmDcd",
      "xcsmDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getDomeBankKeyManaIndi": {
+    "fields": [
+     "title",
+     "basYm",
+     "cpaqItemClsfVal",
+     "cpaqItemDcd",
+     "cpaqItemDcdNm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getDomeBankMajoBusiActi": {
+    "fields": [
+     "title",
+     "basYm",
+     "bzopSclItemAmt",
+     "bzopSclItemDcd",
+     "bzopSclItemDcdNm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
     ],
     "param_style": "resultType",
     "total_count": null
@@ -833,6 +975,26 @@
     ],
     "param_style": "xml",
     "total_count": "251"
+   },
+   "getFnCoDebeConvDiscInfo_V2": {
+    "fields": [],
+    "param_style": "resultType",
+    "total_count": 4
+   },
+   "getFnCoDebeInheDiscInfo_V2": {
+    "fields": [],
+    "param_style": "resultType",
+    "total_count": 3
+   },
+   "getFnCoDiviCombDiscInfo_V2": {
+    "fields": [],
+    "param_style": "resultType",
+    "total_count": 7
+   },
+   "getFnCoDiviDiscInfo_V2": {
+    "fields": [],
+    "param_style": "resultType",
+    "total_count": 1884
    },
    "getFnCoEbRighIssuDiscInfo_V2": {
     "fields": [
@@ -1634,6 +1796,21 @@
   "base_url": "https://apis.data.go.kr/1160100/service",
   "public_data_pk": "15061357",
   "operations": {
+   "getFutuCompFinaInfo": {
+    "fields": [
+     "title",
+     "astSmryStfnpsAcitAmt",
+     "astSmryStfnpsAcitCd",
+     "astSmryStfnpsAcitCdNm",
+     "astSmryStfnpsAcitCmpsRto",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
    "getFutuCompGeneInfo": {
     "fields": [
      "basYm",
@@ -1643,6 +1820,49 @@
      "xcsmPresCnt",
      "xcsmPresDcd",
      "xcsmPresDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getFutuCompKeyManaIndi": {
+    "fields": [
+     "title",
+     "basYm",
+     "cpaqBzopNcptRatCtt",
+     "cpaqDcd",
+     "cpaqDcdNm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getFutuCompMajoBusiActi": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "finIvsPrdCsgnCfeItemCd",
+     "finIvsPrdCsgnCfeItemCdNm",
+     "finIvsPrdCsgnCfeItemCfeAmt",
+     "finIvsPrdCsgnCfeItemTrAmt",
+     "fncoCd",
+     "fncoNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getFutuCompPresReleStat": {
+    "fields": [
+     "title",
+     "basYm",
+     "cpaqNcptItemClsfVal",
+     "cpaqNcptItemDcd",
+     "cpaqNcptItemDcdNm",
+     "crno",
+     "fncoCd",
+     "fncoNm"
     ],
     "param_style": "resultType",
     "total_count": null
@@ -1658,6 +1878,20 @@
   "base_url": "https://apis.data.go.kr/1160100/service",
   "public_data_pk": "15061288",
   "operations": {
+   "getDeriBusiTrusBusi": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "drvpTrClsfAmt",
+     "drvpTrDcd",
+     "drvpTrDcdNm",
+     "fncoCd",
+     "fncoNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
    "getDeriBusiTrusExclTota": {
     "fields": [
      "basYm",
@@ -1694,6 +1928,76 @@
      "nopeCnt",
      "nopeDcd",
      "nopeDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getTrusBusiInsu": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "nopeCnt",
+     "nopeDcd",
+     "nopeDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getTrusBusiRealEstaTrus": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "nopeCnt",
+     "nopeDcd",
+     "nopeDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getTrusBusiSecu": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "nopeCnt",
+     "nopeDcd",
+     "nopeDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getTrusBusiTrusFee": {
+    "fields": [
+     "title",
+     "basYm",
+     "crno",
+     "fncoCd",
+     "fncoNm",
+     "trstRmrAmt",
+     "trstRmrDcd",
+     "trstRmrDcdNm"
+    ],
+    "param_style": "resultType",
+    "total_count": null
+   },
+   "getTrusBusiTrusInfo": {
+    "fields": [
+     "title",
+     "basYm",
+     "cnfmUnitNm",
+     "crno",
+     "fncoBzdsClsfNm",
+     "fncoBzdsFncoNm",
+     "fncoBzdsNm",
+     "fncoCd"
     ],
     "param_style": "resultType",
     "total_count": null

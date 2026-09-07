@@ -56,8 +56,18 @@ metadata:
 > [!CAUTION]
 > **은행·보험·증권은 위 지표를 그대로 쓰면 안 된다.** 부채가 곧 예수금인
 > 업종이라 부채비율 1,000%가 정상이다. 업권 지표(BIS, NIM, 지급여력)는
-> [kr-product-comparison](../kr-product-comparison/SKILL.md)의 금융회사 통계를
-> 쓴다.
+> [kr-product-comparison](../kr-product-comparison/SKILL.md)의 금융회사 통계와
+> [kr-insurance](../kr-insurance/SKILL.md)를 쓴다.
+
+> [!WARNING]
+> **금융회사를 정규화 재무제표 API에서 찾으면 0건이 나온다. 권한 문제가
+> 아니다.** 금융위 재무제표 API(`GetFinaStatInfoService_V2`)는 금융회사를
+> 수록하지 않는다 — 같은 인증키로 삼성전자는 194건, 삼성증권은 0건이다
+> (2026-09 실측). 미승인이면 `resultCode 30`이 났을 것이고, 호출은 성공했다.
+>
+> 0건을 "데이터 없음"이나 "권한 없음"으로 답하지 말고 **DART로 간다.**
+> 상장 금융회사는 DART 단일회사 주요계정(`fnlttSinglAcnt`)에 있다
+> (삼성증권 2024 연결 자본총계 7.32조 확인).
 
 계정 코드 체계와 대표 지표의 상세는
 [references/financial-statements.md](references/financial-statements.md)를 읽는다.
@@ -132,4 +142,5 @@ metadata:
 - [kr-market-calendar](../kr-market-calendar/SKILL.md) — 결산월·공시 제출기한
 - [kr-equity-analysis](../kr-equity-analysis/SKILL.md) — 주가·시가총액
 - [kr-product-comparison](../kr-product-comparison/SKILL.md) — 금융회사 업권 지표
+- [kr-insurance](../kr-insurance/SKILL.md) — 보험사 재무·지표와 실손보험료
 - [kr-financial-ai-compliance](../kr-financial-ai-compliance/SKILL.md) — 투자권유 경계
